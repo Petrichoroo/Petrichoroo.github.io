@@ -1,0 +1,593 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — Activity | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — Activity
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-08 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#activity">Activity</a>
+<ul>
+<li><a href="#%E4%B8%80-%E5%9C%A8-activity-%E4%B8%AD%E4%BD%BF%E7%94%A8-menu">一、在 Activity 中使用 Menu</a></li>
+<li><a href="#%E4%BA%8C-%E4%BD%BF%E7%94%A8-intent-%E5%9C%A8-activity-%E4%B9%8B%E9%97%B4%E7%A9%BF%E6%A2%AD">二、使用 Intent 在 Activity 之间穿梭</a>
+<ul>
+<li><a href="#1-%E4%BD%BF%E7%94%A8%E6%98%BE%E7%A4%BA-intent">1. 使用显示 Intent</a></li>
+<li><a href="#2-%E4%BD%BF%E7%94%A8%E9%9A%90%E5%BC%8F-intent">2. 使用隐式 Intent</a></li>
+<li><a href="#3-%E6%9B%B4%E5%A4%9A%E9%9A%90%E5%BC%8F-intent-%E7%9A%84%E7%94%A8%E6%B3%95">3. 更多隐式 Intent 的用法</a></li>
+<li><a href="#4-%E5%90%91%E4%B8%8B%E4%B8%80%E4%B8%AA-activity-%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE">4. 向下一个 Activity 传递数据</a></li>
+<li><a href="#5-%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE%E7%BB%99%E4%B8%8A%E4%B8%80%E4%B8%AA-activity">5. 返回数据给上一个 Activity</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-activity-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">三、Activity 的生命周期</a>
+<ul>
+<li><a href="#1-%E8%BF%94%E5%9B%9E%E6%A0%88">1. 返回栈</a></li>
+<li><a href="#2-activity-%E7%8A%B6%E6%80%81">2. Activity 状态</a></li>
+<li><a href="#3-activity-%E7%9A%84%E7%94%9F%E5%AD%98%E6%9C%9F">3. Activity 的生存期</a></li>
+<li><a href="#4-activity-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%A4%BA%E6%84%8F%E5%9B%BE">4. Activity 生命周期示意图</a></li>
+<li><a href="#5-activity-%E8%A2%AB%E5%9B%9E%E6%94%B6%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E">5. Activity 被回收了怎么办</a>
+<ul>
+<li><a href="#onsaveinstancestate-%E5%9B%9E%E8%B0%83%E6%96%B9%E6%B3%95">onSaveInstanceState() 回调方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-activity-%E7%9A%84%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F">四、Activity 的启动模式</a>
+<ul>
+<li><a href="#standard">standard</a></li>
+<li><a href="#singletop">singleTop</a></li>
+<li><a href="#singletask">singleTask</a></li>
+<li><a href="#singleinstance">singleInstance</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-activity-%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">五、Activity 的最佳实践</a>
+<ul>
+<li><a href="#%E7%9F%A5%E6%99%93%E5%BD%93%E5%89%8D%E6%98%AF%E5%9C%A8%E5%93%AA%E4%B8%80%E4%B8%AA%E6%B4%BB%E5%8A%A8">知晓当前是在哪一个活动</a></li>
+<li><a href="#%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E9%80%80%E5%87%BA%E7%A8%8B%E5%BA%8F">随时随地退出程序</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8-activity-%E7%9A%84%E6%9C%80%E4%BD%B3%E5%86%99%E6%B3%95">启动 Activity 的最佳写法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="activity">Activity</h1>
+<hr>
+<h2 id="一-在-activity-中使用-menu">一、在 Activity 中使用 Menu</h2>
+<blockquote>
+<p>  当 Activity 中有大量的菜单需要显示时，界面设计就会比较尴尬，Android 给我们提供了一种方式，可以让菜单都能得到展示，还不占用任何屏幕空间。</p>
+</blockquote>
+<ol>
+<li>在<code>res</code>目录下新建一个<code>menu</code>文件夹，并在其下创建 &quot;main&quot; 菜单文件，添加如下内容：</li>
+</ol>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+        &lt;item
+            android:id=&quot;@+id/add_item&quot;
+            android:title=&quot;Add&quot;/&gt;
+        &lt;item
+            android:id=&quot;@+id/remove_item&quot;
+            android:title=&quot;Remove&quot;/&gt;
+    &lt;/menu&gt;
+</code></pre>
+<p>  其中<code>&lt;item&gt;</code>标签用来创建具体的某一个菜单项，然后通过<code>android:id</code>给这个菜单项指定一个唯一的标识符，通过<code>android:title</code>给这个菜单项指定一个名称。<br>
+<img src="https://Petrichoroo.github.io/post-images/1659942645346.png" alt="" loading="lazy"><br>
+2. 在 Activity 中重写 <code>onCreateOptionsMenu() </code>方法</p>
+<pre><code class="language-java">        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            //得到 MenuInflater 对象 调用其 inflate() 方法给当前活动创建菜单
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
+</code></pre>
+<p>  <code>inflate()</code>方法接收两个参数：第一个参数用于指定我们通过哪一个资源文件来创建菜单，这里当然是传入<code>R.menu.main</code>；第二个参数用于指定我们的菜单项将添加到哪一个 Menu 对象当中。<br>
+3. 定义菜单响应事件。在Activity 中重写<code>onOptionsItemSelected()</code>方法</p>
+<pre><code class="language-java">        public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.add_item:
+                    Toast.makeText(this, &quot;You clicked Add&quot;,
+                            Toast.LENGTH_LONG).show();
+                    break;
+                case R.id.remove_item:
+                    Toast.makeText(this, &quot;You clicked Remove&quot;,
+                            Toast.LENGTH_LONG).show();
+                    break;
+                default:
+            }
+            return true;
+        }
+</code></pre>
+<p>  通过调用<code>item.getItemId()</code>来判断点击的是哪一个菜单项，再分别去处理具体逻辑。</p>
+<h2 id="二-使用-intent-在-activity-之间穿梭">二、使用 Intent 在 Activity 之间穿梭</h2>
+<blockquote>
+<p>  Intent是 Android 程序中各组件之间进行交互的一种重要方式，它不仅可以指明当前组件想要执行的动作，还可以在不同组件之间传递数据。Intent 一般可用于启动 Activity 、启动 Service 以及发送广播等场景。</p>
+</blockquote>
+<h3 id="1-使用显示-intent">1. 使用显示 Intent</h3>
+<p>  Intent 有多个构造函数的重载，其中一个是<code>Intent(Context packageContext, Class&lt;?&gt;cls)</code>，其接收两个参数：第一个参数<code>Context</code>要求提供一个启动 Activity 的上下文；第二个参数<code>Class</code>用于指定想要启动的目标 Activity。</p>
+<pre><code class="language-java">        Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+        startActivity(intent);
+</code></pre>
+<h3 id="2-使用隐式-intent">2. 使用隐式 Intent</h3>
+<blockquote>
+<p>  隐式 Intent 指定了一系列更为抽象的<code>action</code>和<code>category</code>等信息，然后交由系统去分析这个 Intent，并帮们找出合适的 Activity 去启动。</p>
+</blockquote>
+<p>  打开<code>AndroidManifest.xml</code>，通过在<code>&lt;activity&gt;</code>标签下配置<code>&lt;intent-filter&gt;</code>的内容，可以指定当前 Activity 能够响应的 action 和 category。</p>
+<pre><code class="language-java">        &lt;activity android:name=&quot;.SecondActivity&quot;&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name=&quot;com.example.activitytest.ACTION_START&quot;/&gt;
+                &lt;category android:name=&quot;android.intent.category.DEFAULT&quot;/&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+</code></pre>
+<p>  只有<code>&lt;action&gt;</code>和<code>&lt;category&gt;</code>中的内容同时匹配 Intent 中指定的 action 和 category 时，这个 Activity 才能响应该 Intent。<br>
+　　修改 FirstActivity 中按钮的点击事件：</p>
+<pre><code class="language-java">        Intent intent = new Intent(&quot;com.example.activitytest.ACTION_START&quot;);
+        startActivity(intent);
+</code></pre>
+<p>  这里使用了 Intent 的另一个构造函数，传入了一个 action 的字符串。需要注意的是，这里只指定了 action，因为在<code>AndroidManifest.xml</code>中定义的<code>android.intent.category.DEFAULT</code>是一种默认的 category，在调用<code>startActivity()</code>方法的时候会自动将这个 category 添加到 Intent 中。<br>
+　　每个 Intent 中只能指定一个 action，但能指定多个 category。修改刚刚的代码：</p>
+<pre><code class="language-java">        Intent intent = new Intent(&quot;com.example.activitytest.ACTION_START&quot;);
+        intent.addCategory(&quot;com.example.activitytest.MY_CATEGORY&quot;);
+        startActivity(intent);
+</code></pre>
+<p>  这里调用<code>addCategory()</code>方法来添加一个我们自定义的 category。记得要在<code>AndroidManifest.xml</code>中给相应活动的<code>&lt;intent-filter&gt;</code>标签中再添加一个自定义 category 的声明。否则会出现没有任何 Activity 可以响应该 Intent 的情况。</p>
+<h3 id="3-更多隐式-intent-的用法">3. 更多隐式 Intent 的用法</h3>
+<p>  当你的应用程序中需要展示一个网页时，这时你没有必要自己去实现一个浏览器，只需要调用系统的浏览器来打开这个网页就行了。</p>
+<pre><code class="language-java">        Intent intent = new Intent(Intent.ACTION_VIEW);    //系统内置动作
+        intent.setData(Uri.parse(&quot;https://www.baidu.com&quot;));
+        startActivity(intent);
+</code></pre>
+<p>  这里指定了 Intent 的 action 是<code>Intent.ACTION_VIEW</code>，这是一个 Android 系统内置的动作。然后通过<code>Uri.parse()</code>方法将一个网址字符串解析成一个 Uri 对象，再调用 Intent 的<code>setData()</code>方法将这个 Uri 对象传递进去。<br>
+　　我们还可以在<code>&lt;intent-filter&gt;</code>标签中再配置一个<code>&lt;data&gt;</code>标签，用于更精确地指定当前 Activity 能够响应的数据。<code>&lt;data&gt;</code>标签中主要可以配置以下内容：</p>
+<ul>
+<li><code>android:scheme</code>。用于指定数据的协议部分，如上例中的 https 部分。</li>
+<li><code>android:host</code>。用于指定数据的主机名部分，如上例中的 www.baidu.com 部分。</li>
+<li><code>android:port</code>。用于指定数据的端口部分，一般紧随在主机名之后。</li>
+<li><code>android:path</code>。用于指定主机名和端口之后的部分，如一段网址中跟在域名之后的内容。</li>
+<li><code>android:mimeType</code>。用于指定可以处理的数据类型，允许使用通配符的方式进行指定。</li>
+</ul>
+<p>  只有当<code>&lt;data&gt;</code>标签中指定的内容和 Intent 中携带的 Data 完全一致时，当前 Activity 才能够响应该 Intent。不过在<code>&lt;data&gt;</code>标签中一般不会指定过多的内容。例如在上面的浏览器示例中，其实只需要指定<code>android:scheme</code>为 https，就可以响应所有 https 协议的 Intent 了。<br>
+　　除了 https 协议外，我们还可以指定很多其他协议，比如<code>geo</code>表示显示地理位置、<code>tel</code>表示拨打电话。</p>
+<pre><code class="language-java">        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(&quot;tel:10086&quot;));
+        startActivity(intent);
+</code></pre>
+<p>  这里指定了 Intent 的 action 是<code>Intent.ACTION_DIAL</code>，这又是一个 Android 系统的内置动作。然后在 data 部分指定了协议是<code>tel</code>，号码是10086。</p>
+<h3 id="4-向下一个-activity-传递数据">4. 向下一个 Activity 传递数据</h3>
+<p>  Intent 中提供了一系列<code>putExtra()</code>方法的重载，可以把想要传递的数据暂存在 Intent 中，启动了另一个活动后，只需要把这些数据再从 Intent 中取出就可以了。<br>
+　　如在 FirstActivity 中发送一个字符串 data ：</p>
+<pre><code class="language-java">        String data = &quot;Hello SecondActivity!&quot;;
+        Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+        intent.putExtra(&quot;extra_data&quot;, data);
+        startActivity(intent);
+</code></pre>
+<p>  <code>putExtra()</code>方法接收两个参数，第一个参数是键，用于后面从 Intent 中取值，第二个参数是传递的数据。<br>
+　　在 SecondActivity 中取出数据 ：</p>
+<pre><code class="language-java">        Intent intent = getIntent();
+        String data = intent.getStringExtra(&quot;extra_data&quot;);
+</code></pre>
+<ul>
+<li>传递字符串，使用<code>getStringExtra()</code>方法来获取传递的数据。</li>
+<li>传递整型数据，使用<code>getIntExtra()</code>方法来获取传递的数据。</li>
+<li>传递布尔型数据，使用<code>getBooleanExtra()</code>方法来获取传递的数据。</li>
+<li>以此类推</li>
+</ul>
+<h3 id="5-返回数据给上一个-activity">5. 返回数据给上一个 Activity</h3>
+<p>  Activity 中有一个<code>startActivityForResult()</code>方法也是用于启动活动的，但这个方法期望在活动销毁的时候能够返回一个结果给上一个活动。<br>
+　　修改 FirstActivity 中按钮的点击事件：</p>
+<pre><code class="language-java">        Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+        startActivityForResult(intent, 1);
+</code></pre>
+<p>  <code>startActivityForResult()</code>方法接收两个参数，第一个参数是 Intent ，第二个参数是请求码，用于在之后的回调中判断数据的来源。<br>
+　　修改 SecondActivity 中返回按钮的点击事件：</p>
+<pre><code class="language-java">        Intent intent = new Intent();
+        intent.putExtra(&quot;data_return&quot;, &quot;Hello FirstActivity!&quot;);
+        setResult(RESULT_OK, intent);
+</code></pre>
+<p>  构建一个 Intent，注意这个 Intent 没有“意图”，只是将传递的数据存放在其中。<code>setResult()</code>方法接收两个参数，第一个参数用于向上一个活动返回处理结果，一般使用<code>RESULT_OK</code>或<code>RESULT_CANCELED</code>这两个值，第二个参数则把带有数据的 Intent 传递回去。<br>
+　　SecondActivity 销毁后，程序回调到上一个活动的<code>onActivityResult()</code>方法中。在 FirstActivity 中重写这个方法来得到返回的数据：</p>
+<pre><code class="language-java">    @Override
+    protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {  //检查 requestCode 的值来判断数据来源
+            case 1:
+                if (resultCode == RESULT_OK) {  //通过 resultCode 的值来判断处理结果是否成功
+                    String returnData = data.getStringExtra(&quot;data_return&quot;);
+                    Log.d(&quot;FirstActivity&quot;, returnData);
+                }
+                break;
+            default:
+        }
+    }
+</code></pre>
+<p>  <code>onActivityResult()</code>方法带有三个参数，第一个参数<code>requestCode</code>，即在启动活动时传入的请求码。第二个参数<code>resultCode</code>，即在返回数据时传入的处理结果。第三个参数<code>data</code>，即携带着返回数据的 Intent。由于在一个活动中有可能调用<code>startActivityForResult()</code>方法去启动很多不同的活动，每一个活动返回的数据都会回调到<code>onActivityResult()</code>这个方法中。<br>
+　　为防止用户通过按下 Back 键返回到上一个活动导致数据无法返回，我们需要重写<code>onBackPressed()</code>方法。</p>
+<pre><code class="language-java">    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra(&quot;data_return&quot;, &quot;Hello FirstActivity!&quot;);
+        setResult(RESULT_OK, intent);  //用于向上一个活动返回数据
+        finish();   //销毁当前活动
+    }
+</code></pre>
+<h2 id="三-activity-的生命周期">三、Activity 的生命周期</h2>
+<h3 id="1-返回栈">1. 返回栈</h3>
+<p>  Android 是使用任务（Task）来管理活动的，一个任务就是一组存放在栈里的活动的集合，这个栈也被称作返回栈（Back Stack）。<br>
+　　栈是一种后进先出的数据结构，在默认情况下，每当我们启动了一个新的活动，它会在返回栈中入栈，并处于栈顶的位置。而每当按下 Back 键或调用<code>finish()</code>方法去销毁一个活动时，处于栈顶的活动会出栈，这时前一个入栈的活动就会重新处于栈顶的位置。系统总是会显示处于栈顶的活动给用户。</p>
+<h3 id="2-activity-状态">2. Activity 状态</h3>
+<blockquote>
+<p>  每个活动在其生命周期中最多可能会有 4 种状态。</p>
+</blockquote>
+<ul>
+<li>运行状态<br>
+　　当一个 Activity 位于返回栈的栈顶时，Activity 就处于运行状态。</li>
+<li>暂停状态<br>
+　　当一个 Activity 不再处于栈顶位置，但仍然可见时，Activity 就进入了暂停状态。之所以可见是因为并不是每一个 Activity 都会占满整个屏幕，比如对话框形式的 Activity 只会占用屏幕中间的部分区域。处于暂停状态的 Activity 仍然是完全存活着的，只有在内存极低的情况下，系统才会去考虑回收这种 Activity。</li>
+<li>停止状态<br>
+　　当一个 Activity 不再处于栈顶位置，并且完全不可见的时候，就进入了停止状态。系统仍然会为这种 Activity 保存相应的状态和成员变量，但是这并不是完全可靠的，当其他地方需要内存时，处于停止状态的 Activity 有可能会被系统回收。</li>
+<li>销毁状态<br>
+　　一个 Activity 从返回栈中移除后就变成了销毁状态。系统最倾向于回收这种状态的Activity，以保证手机的内存充足。</li>
+</ul>
+<h3 id="3-activity-的生存期">3. Activity 的生存期</h3>
+<blockquote>
+<p>  Activity 类中定义了 7 个回调方法，覆盖了活动生命周期的每一个环节。</p>
+</blockquote>
+<ul>
+<li>
+<p><code>onCreate()</code><br>
+　　在 Activity 第一次被创建的时候调用。你应该在这个方法中完成 Activity 的初始化操作，比如加载布局、绑定事件等。</p>
+</li>
+<li>
+<p><code>onStart()</code><br>
+　　这个方法在 Activity 由不可见变为可见的时候调用。</p>
+</li>
+<li>
+<p><code>onResume()</code><br>
+　　这个方法在 Activity 准备好和用户进行交互的时候调用。此时的 Activity 一定位于返回栈的栈顶，并且处于运行状态。</p>
+</li>
+<li>
+<p><code>onPause()</code><br>
+　　这个方法在系统准备去启动或者恢复另一个 Activity 的时候调用。通常会在这个方法中将一些消耗 CPU 的资源释放掉，以及保存一些关键数据，但这个方法的执行速度一定要快，不然会影响到新的栈顶 Activity 的使用。</p>
+</li>
+<li>
+<p><code>onStop()</code><br>
+　　这个方法在 Activity 完全不可见的时候调用。它和<code>onPause()</code>方法的主要区别在于，若启动的新 Activity 是一个对话框式的 Activity，则<code>onPause()</code>方法会得到执行，而<code>onStop()</code>方法并不会执行。</p>
+</li>
+<li>
+<p><code>onDestroy()</code><br>
+　　这个方法在 Activity 被销毁之前调用，之后 Activity 的状态将变为销毁状态。</p>
+</li>
+<li>
+<p><code>onRestart()</code><br>
+　　这个方法在 Activity 由停止状态变为运行状态之前调用，也就是 Activity 被重新启动了。<br>
+  以上7个方法中除了<code>onRestart()</code>方法，其他都是两两相对的，从而又可以将 Activity 分为以下3种生存期。</p>
+</li>
+<li>
+<p>完整生存期<br>
+　　Activity 在<code>onCreate()</code>方法和<code>onDestroy()</code>方法之间所经历的就是完整生存期。一般情况下，一个 Activity 会在<code>onCreate()</code>方法中完成各种初始化操作，而在<code>onDestroy()</code>方法中完成释放内存的操作。</p>
+</li>
+<li>
+<p>可见生存期<br>
+　　Activity 在<code>onStart()</code>方法和<code>onStop()</code>方法之间所经历的就是可见生存期。<br>
+　　在可见生存期内，Activity 对于用户总是可见的，即便有可能无法和用户进行交互。我们可以通过这两个方法合理地管理那些对用户可见的资源。</p>
+</li>
+<li>
+<p>前台生存期<br>
+　　Activity 在<code>onResume()</code>方法和<code>onPause()</code>方法之间所经历的就是前台生存期。<br>
+　　在前台生存期内，Activity 总是处于运行状态，此时的 Activity 是可以和用户进行交互的，我们平时看到和接触最多的就是这个状态下的 Activity。</p>
+</li>
+</ul>
+<h3 id="4-activity-生命周期示意图">4. Activity 生命周期示意图</h3>
+<figure data-type="image" tabindex="1"><img src="https://Petrichoroo.github.io/post-images/1659945664195.png" alt="" loading="lazy"></figure>
+<h3 id="5-activity-被回收了怎么办">5. Activity 被回收了怎么办</h3>
+<blockquote>
+<p>  当一个活动进入到了停止状态，是有可能被系统回收的。那么想象以下场景：应用中有一个活动 A，用户在活动 A 的基础上启动了活动 B，活动 A 就进入了停止状态，这个时候由于系统内存不足，将活动 A 回收掉了，然后用户按下 Back 键返回活动 A，会出现什么情况呢？<br>
+　　其实还是会正常显示活动 A 的，只不过这时并不会执行<code>onRestart()</code>方法，而是会执行活动 A 的<code>onCreate()</code>方法，因为活动 A 在这种情况下会被重新创建一次。但是活动 A 中是可能存在临时数据和状态的。这样就有可能导致数据的丢失。</p>
+</blockquote>
+<h4 id="onsaveinstancestate-回调方法">onSaveInstanceState() 回调方法</h4>
+<p>  Activity 中还提供了一个<code>onSaveInstanceState()</code>回调方法，这个方法可以保证在 Activity 被回收之前一定会被调用，因此我们可以通过这个方法来解决问题。<br>
+　　在 MainActivity 中添加如下代码就可以将临时数据进行保存：</p>
+<pre><code class="language-java">    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String tempData = &quot;Something you just typed&quot;;
+        outState.putString(&quot;dta_key&quot;, tempData);
+    }
+</code></pre>
+<p>  <code>onSaveInstanceState()</code>方法会携带一个<code>Bundle</code>类型的参数，<code>Bundle</code>提供了一系列的方法用于保存数据，比如使用<code>putString()</code>方法保存字符串，使用<code>putInt()</code>方法保存整型数据等，每个保存方法需要传入两个参数，第一个参数是键，用于后面从<code>Bundle</code>中取值，第二个参数是真正要保存的内容。</p>
+<p>  数据已经保存下来了，那么我们应该在哪里进行恢复呢？可以发现我们一直使用的<code>onCreate()</code>方法其实也有一个<code>Bundle</code>类型的参数。这个参数在一般情况下都是<code>null</code>，但是如果在Activity 被系统回收之前，你通过<code>onSaveInstanceState()</code>方法保存数据，这个参数就会带有之前保存的全部数据，我们只需要再通过相应的取值方法将数据取出即可。<br>
+　　修改 MainActivity 的<code>onCreate()</code>方法：</p>
+<pre><code class="language-java">    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            String tempData = savedInstanceState.getString(&quot;data_key&quot;);
+            Log.d(TAG,tempData);
+        }
+    }
+</code></pre>
+<p>  Intent 还可以结合 Bundle 一起用于传递数据。首先我们可以把需要传递的数据都保存在 Bundle 对象中，然后再将 Bundle 对象存放在 Intent 里。到了目标 Activity 之后，先从Intent 中取出 Bundle，再从 Bundle 中取出数据。</p>
+<h2 id="四-activity-的启动模式">四、Activity 的启动模式</h2>
+<blockquote>
+<p>  在实际项目中我们应该根据特定的需求为每个 Activity 指定恰当的启动模式。启动模式一共有 4 种，分别是 standard、singleTop、singleTask 和 singleInstance。<br>
+　　可以在<code>AndroidManifest.xml</code>中通过给<code>&lt;activity&gt;</code>标签指定<code>android:launchMode</code>属性来选择启动模式。</p>
+</blockquote>
+<h3 id="standard">standard</h3>
+<p>  <code>standard</code>是 Activity 默认的启动模式，在不进行显式指定的情况下，所有Activity 都会自动使用这种启动模式。在<code>standard</code>模式下，每当启动一个新的 Activity，它就会在返回栈中入栈，并处于栈顶的位置。对于使用<code>standard</code>模式的 Activity，系统不会在乎这个Activity 是否已经在返回栈中存在，每次启动都会创建一个该 Activity 的新实例。<br>
+　　<code>standard</code>模式的原理如图：<br>
+<img src="https://Petrichoroo.github.io/post-images/1659947471577.png" alt="" loading="lazy"></p>
+<h3 id="singletop">singleTop</h3>
+<p>  可能在有些情况下，我们会觉得 standard 模式不太合理。Activity 明明已经在栈顶了，为什么再次启动的时候还要创建一个新的 Activity 实例呢？但我们可以根据自己的需要进行修改，比如使用<code>singleTop</code>模式。当 Activity 的启动模式指定为<code>singleTop</code>时，在启动 Activity 时如果发现返回栈的栈顶已经是该 Activity ，则认为可以直接使用它，不会再创建新的Activity 实例。<br>
+　　<code>singleTop</code>模式的原理如图：<br>
+<img src="https://Petrichoroo.github.io/post-images/1659947947236.png" alt="" loading="lazy"></p>
+<p>  不过当 Activity 并未处于栈顶位置时，再启动 Activity 还是会创建新的实例的。</p>
+<h3 id="singletask">singleTask</h3>
+<p>  使用 singleTop 模式可以很好地解决重复创建栈顶 Activity 的问题，但是如果该Activity 并没有处于栈顶的位置，还是可能会创建多个 Activity 实例的。<br>
+　　如何实现某个 Activity 在整个应用程序的上下文中只存在一个实例？这就要借助<code>singleTask</code>模式。将 Activity 的启动模式指定为<code>singleTask</code>，每次启动该 Activity 时，系统首先会在返回栈中检查是否存在该 Activity 的实例，如果发现已经存在则直接使用该实例，并把在这个 Activity 之上的所有其他 Activity 统统出栈，如果没有发现就会创建一个新的 Activity 实例。<br>
+　　<code>singleTask</code>模式的原理如图：<br>
+<img src="https://Petrichoroo.github.io/post-images/1659948753660.png" alt="" loading="lazy"></p>
+<h3 id="singleinstance">singleInstance</h3>
+<blockquote>
+<p>  想象以下场景，假设我们的程序中有一个 Activity 是允许其他程序调用的，如果想实现其他程序和我们的程序可以共享这个 Activity 的实例，应该如何实现呢？使用前面 3 种启动模式肯定是做不到的，因为每个应用程序都会有自己的返回栈，同一个 Activity 在不同的返回栈中入栈时必然创建了新的实例。</p>
+</blockquote>
+<p>  <code>singleInstance</code>模式应该算是 4 种启动模式中最特殊也最复杂的一个了。不同于以上 3 种启动模式，指定为<code>singleInstance</code>模式的 Activity 会启用一个新的返回栈来管理这个  Activity（其实如果<code>singleTask</code>模式指定了不同的<code>taskAffinity</code>，也会启动一个新的返回栈），不管是哪个应用程序来访问这个 Activity，都共用同一个返回栈，也就解决了共享 Activity 实例的问题。<br>
+　　<code>singleInstance</code>模式的原理如图：<br>
+<img src="https://Petrichoroo.github.io/post-images/1659950041000.png" alt="" loading="lazy"></p>
+<h2 id="五-activity-的最佳实践">五、Activity 的最佳实践</h2>
+<h3 id="知晓当前是在哪一个活动">知晓当前是在哪一个活动</h3>
+<blockquote>
+<p>  如何根据程序当前的界面就能判断出这是哪一个 Activity？在你进入一家公司之后，更有可能的是接手一份别人写的代码。阅读别人的代码时有一个很头疼的问题，就是当你需要在某个界面上修改一些非常简单的东西时，却半天找不到这个界面对应的 Activity 是哪一个。</p>
+</blockquote>
+<p>  新建一个 BaseActivity 类，创建类型选择 Class，然后让其继承自 AppCompatActivity，并重写<code>onCreate()</code>方法：</p>
+<pre><code class="language-java">    public class BaseActivity extends AppCompatActivity {
+        @Override
+        protected void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            Log.d(&quot;BaseActivity&quot;, getClass().getSimpleName()); //获取当前实例的类名
+        }
+    }
+</code></pre>
+<p>  <code>getclass()</code>获取了当前实例的<code>Class</code>对象，然后再调用<code>getSimpleName()</code>获取当前实例的类名。<br>
+　　接下来我们需要让 BaseActivity 成为项目中所有 Activity 的父类，即修改每个 Activity 的继承结构。这样每当我们进入一个 Activity 的界面时，该 Activity 的类名就会被打印出来，这样我们就可以时刻知晓当前界面对应的是哪一个 Activity 了。</p>
+<h3 id="随时随地退出程序">随时随地退出程序</h3>
+<blockquote>
+<p>  如果目前你手机的界面还停留在某个 Activity，你会发现当前想退出程序是非常不方便的，可能需要连按多次 Back 键才行。而按 Home 键只是把程序挂起，并没有退出程序。如果我们的程序需要注销或者退出的功能该怎么办呢？</p>
+</blockquote>
+<p>  其实解决思路也很简单，只需要用一个专门的集合类对所有的活动进行管理就可以了。新建一个<code>ActivityCollector</code>类作为活动管理器，代码如下所示：</p>
+<pre><code class="language-java">    public class ActivityCollector {
+        public static List&lt;Activity&gt; activities = new ArrayList&lt;&gt;();
+        //加上static声明成为静态函数 可直接访问或者通过类名访问 否则需用对象的实例来调用
+        public static void addActivity(Activity activity) {    //添加活动
+            activities.add(activity);
+        }
+
+        public static void removeActivity(Activity activity) { //删除活动
+            activities.remove(activity);
+        }
+
+        public static void finishAll() {    //销毁活动
+            for (Activity activity : activities) {  
+                if (!activity.isFinishing()) {  //活动是否正在销毁中
+                    activity.finish();  //Activity.finish()方法调用Activity.onDestroy()
+                }
+            }
+        }
+    }
+</code></pre>
+<p>  在活动管理器中，我们通过一个 List 来暂存活动，然后提供了一个<code>addActivity()</code>方法用于向 List 中添加一个活动，提供了一个<code>removeActivity()</code>方法用于从List中移除活动，最后提供了一个<code>finishAll()</code>方法用于将 List 中存储的活动全部销毁掉。<br>
+　　接下来修改BaseActivity中的代码，如下所示：</p>
+<pre><code class="language-java">public class BaseActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(&quot;BaseActivity&quot;, getClass().getSimpleName()); //获取当前实例的类名
+        ActivityCollector.addActivity(this);    //将当前正在创建的活动添加到活动管理器内
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this); //将一个马上要销毁的活动从活动管理器里移除
+    }
+}
+</code></pre>
+<p>  从此以后，不管你想在什么地方退出程序，只需要调用<code>ActivityCollector.finishAll()</code>方法就可以了。<br>
+　　当然你还可以在销毁所有 Activity 的代码后面再加上杀掉当前进程的代码，以保证程序完全退<br>
+出，杀掉进程的代码如下所示：</p>
+<pre><code class="language-java">    android.os.Process.killProcess(android.os.Process.myPid());
+</code></pre>
+<p>  <code>killProcess()</code>方法用于杀掉一个进程，它接收一个进程 id 参数，我们可以通过<code>myPid()</code>方法来获得当前程序的进程 id。需要注意的是，<code>killProcess()</code>方法只能用于杀掉当前程序的进程，不能用于杀掉其他程序。</p>
+<h3 id="启动-activity-的最佳写法">启动 Activity 的最佳写法</h3>
+<blockquote>
+<p>  在真正的项目开发中经常会出现对接的问题。比如某个 Activity 并不是由你开发的，但现在你负责开发的部分需要启动这个 Activity，而你却不清楚启动这个 Activity 需要传递哪些数据。这时无非就有两个办法：一个是你自己去阅读这个 Activity 中的代码，另一个是询问负责编写此 Activity 的同事。</p>
+</blockquote>
+<p>  假设 SecondActivity 中需要用到两个非常重要的字符串参数，在启动 SecondActivity 的时候必须要传递过来，修改 SecondActivity 中的代码如下：</p>
+<pre><code class="language-java">    //所有SecondActivity中需要的数据都是通过actionStart()方法的参数传递过来的
+    public static void actionStart(Context context, String data1, String data2) {
+        Intent intent = new Intent(context, SecondActivity.class);
+        intent.putExtra(&quot;param1&quot;, data1);
+        intent.putExtra(&quot;param2&quot;, data2);
+        context.startActivity(intent);
+    }
+</code></pre>
+<p>  SecondActivity 所需要的数据在方法参数中全部体现出来了，这样即使不用阅读源代码，不去询问负责编写 SecondActivity 的同事，你也可以非常清晰地知道启动 SecondActivity 需要传递哪些数据。<br>
+　　另外，这样写还简化了启动活动的代码，现在只需要一行代码就可以启动 SecondActivity，如下所示：</p>
+<pre><code class="language-java">    SecondActivity.actionStart(FirstActivity.this, &quot;data1&quot;, &quot;data2&quot;);
+</code></pre>
+<p>  给我们编写的每个活动都添加类似的启动方法，不仅可以让启动活动变得非常简单，还可以节省别人来询问你的时间。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-liao-jie-android/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — 了解Android
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

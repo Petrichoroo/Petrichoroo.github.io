@@ -1,0 +1,1055 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — 持久化技术 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — 持久化技术
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-11 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%8A%80%E6%9C%AF">持久化技术</a>
+<ul>
+<li><a href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%8A%80%E6%9C%AF%E7%AE%80%E4%BB%8B">持久化技术简介</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8">文件存储</a>
+<ul>
+<li><a href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%B0%E6%96%87%E4%BB%B6%E4%B8%AD">将数据存储到文件中</a></li>
+<li><a href="#%E4%BB%8E%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE">从文件中读取数据</a></li>
+</ul>
+</li>
+<li><a href="#sharedpreferences-%E5%AD%98%E5%82%A8">SharedPreferences 存储</a>
+<ul>
+<li><a href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%88%B0-sharedpreferences-%E4%B8%AD">将数据存储到 SharedPreferences 中</a></li>
+<li><a href="#%E4%BB%8E-sharedpreferences-%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE">从 SharedPreferences 中读取数据</a></li>
+</ul>
+</li>
+<li><a href="#sqlite-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8">SQLite 数据库存储</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93">创建数据库</a></li>
+<li><a href="#%E5%8D%87%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%93">升级数据库</a>
+<ul>
+<li><a href="#%E6%99%AE%E9%80%9A%E5%86%99%E6%B3%95">普通写法</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E5%86%99%E6%B3%95">最佳写法</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE">添加数据</a></li>
+<li><a href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE">更新数据</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE">删除数据</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE">查询数据</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-sql-%E8%AF%AD%E5%8F%A5%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93">使用 SQL 语句操作数据库</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8-litepal-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93">使用 LitePal 操作数据库</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E5%8D%87%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%BA%93">创建和升级数据库</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE-2">添加数据</a></li>
+<li><a href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE-2">更新数据</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE-2">删除数据</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE-2">查询数据</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="持久化技术">持久化技术</h1>
+<hr>
+<h2 id="持久化技术简介">持久化技术简介</h2>
+<blockquote>
+<p>  数据持久化就是指将那些内存中的瞬时数据保存到存储设备中，保证即使在手机或电脑关机的情况下，这些数据仍然不会丢失。保存在内存中的数据是处于瞬时状态的，而保存在存储设备中的数据是处于持久状态的，持久化技术则提供了一种机制可以让数据在瞬时状态和持久状态之间进行转换。<br>
+　　Android 系统中主要提供了 3 种方式用于简单地实现数据持久化功能，即文件存储、SharedPreferences 存储以及数据库存储。</p>
+</blockquote>
+<h2 id="文件存储">文件存储</h2>
+<blockquote>
+<p>  文件存储是 Android 中最基本的一种数据存储方式，它不对存储的内容进行任何的格式化处理，所有数据都是原封不动地保存到文件当中的，因而它比较适合用于存储一些简单的文本数据或二进制数据。</p>
+</blockquote>
+<h3 id="将数据存储到文件中">将数据存储到文件中</h3>
+<p>   Context类中提供了一个<code>openFileOutput()</code>方法，可以用于将数据存储到指定的文件中。</p>
+<ul>
+<li>第一个参数是文件名，在文件创建的时候使用的就是这个名称，注意这里指定的文件名不可以包含路径。</li>
+<li>第二个参数是文件的操作模式，主要有两种模式可选，<code>MODE_PRIVATE</code>和<code>MODE_APPEND</code>。
+<ul>
+<li>MODE_PRIVATE 是默认的操作模式，表示当指定同样文件名的时候，所写入的内容将会覆盖原文件中的内容。</li>
+<li>MODE_APPEND 则表示如果该文件已存在，就往文件里面追加内容，不存在就创建新文件。</li>
+</ul>
+</li>
+</ul>
+<p>  <code>openFileOutput()</code>方法返回的是一个<code>FileOutputStream</code>对象，得到这个对象之后就可以使用 Java 流的方式将数据写入文件中了。<br>
+　　我们在 MainActivity 中编写一个<code>save()</code>方法，其作用是把输入的内容存储到文件中，文件命名为 data。然后重写了<code>onDestroy()</code>方法，这样就可以保证在活动销毁之前一定会调用这个方法。代码如下所示：</p>
+<pre><code class="language-java">    /**
+    将数据写到文件中（输出流）
+    openFileOutput() 返回 FileOutputStream 对象 借助其构建 OutputStreamWriter 对象
+    最后借助OutputStreamWriter构建出一个BufferedWriter对象 将文本写入字符输出流 输出到文件中
+    */
+    public void save(String inputText) {
+        //输入输出流声明在外面
+        FileOutputStream out = null;    //字节输出流
+        BufferedWriter writer = null;   //字符输出流
+        try {
+            out = openFileOutput(&quot;data&quot;, Context.MODE_PRIVATE);
+            //OutputStreamWriter 字节字符转换流
+            //把对象包装在对应的BufferedWriter中 获得最高效率 并且也避免了频繁的调用转换器
+            writer = new BufferedWriter(new OutputStreamWriter(out));
+            writer.write(inputText);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    //保证在活动销毁之前一定会调用这个方法
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        String inputText = edit.getText().toString();   //获取用户输入的文本信息
+        save(inputText);
+    }
+</code></pre>
+<p>  这样我们就把用户输入的内容保存到文件中了。可以借助 Device File Explorer 工具查看一下。这个工具一般在 Android Studio 的右侧边栏当中，在 /data/data/ 包名 /files/ 目录下可以看到已经生成了一个 data 文件。</p>
+<h3 id="从文件中读取数据">从文件中读取数据</h3>
+<p>  类似于将数据存储到文件中，Context 类中还提供了一个<code>openFileInput()</code>方法，用于从文件中读取数据。这个方法要比<code>openFileOutput()</code>简单一些，它只接收一个参数，即要读取的文件名。<br>
+　　同样地，我们在 MainActivity 中编写一个<code>load()</code>方法来读取文件中存储的文本内容。代码如下所示：</p>
+<pre><code class="language-java">    /**
+    从文件中读取数据（输入流）
+    openFileInput() 返回 FileInputStream 对象 借助其构建 InputStreamReader 对象
+    最后借助 InputStreamReader 构建出一个 BufferReader 对象 从字符输入流中读取文本
+    */
+    public String load() {
+        FileInputStream in = null;  //文件输入流 从文件系统的某个文件中获取输入字节
+        BufferedReader reader = null;   //字符缓冲流
+        StringBuilder content = new StringBuilder();
+        try {
+            in = openFileInput(&quot;data&quot;);
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = &quot;&quot;;
+            //读一行文字并返回该行字符 若读到文件末尾 则返回null
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return content.toString();
+        }
+    }
+</code></pre>
+<p>  若读取过程中没有产生异常，调用方就成功接收到了<code>load()</code>方法返回的字符串，即所读取文件中存储的文本内容。</p>
+<h2 id="sharedpreferences-存储">SharedPreferences 存储</h2>
+<blockquote>
+<p>  不同于文件的存储方式，<code>SharedPreferences</code>是使用键值对的方式来存储数据的。也就是说，当保存一条数据的时候，需要给这条数据提供一个对应的键，这样在读取数据的时候就可以通过这个键把相应的值取出来。<br>
+　　而且 SharedPreferences 还支持多种不同的数据类型存储。</p>
+</blockquote>
+<p>  Android 中主要提供了以下两种方法用于得到<code>SharedPreferences</code>对象。</p>
+<ul>
+<li>
+<p>Context 类中的<code>getSharedPreferences()</code>方法。<br>
+　　此方法接收两个参数：第一个参数用于指定<code>SharedPreferences</code>文件的名称，如果指定的文件不存在则会创建一个。第二个参数用于指定操作模式，目前只有默认的<code>MODE_PRIVATE</code>这一种模式可选，它和直接传入 0 的效果是相同的，表示只有当前的应用程序才可以对这个 SharedPreferences 文件进行读写。其他几种操作模式均已被废弃。</p>
+</li>
+<li>
+<p>Activity 类中的<code>getPreferences()</code>方法<br>
+　　这个方法和 Context 中的<code>getSharedPreferences()</code>方法很相似，不过它只接收一个操作模式参数，因为使用这个方法时会自动将当前 Activity 的类名作为 SharedPreferences 的文件名。</p>
+</li>
+</ul>
+<p>  原来还有一种方式：<code>PreferenceManager</code> 类中的<code>getDefaultSharedPreferences()</code>方法。它接收一个 Context 参数，并自动使用当前应用程序的包名作为前缀来命名 SharedPreferences 文件。只不过在在 API 29 中已经被弃用。</p>
+<h3 id="将数据存储到-sharedpreferences-中">将数据存储到 SharedPreferences 中</h3>
+<p>  得到了 SharedPreferences 对象之后，就可以开始向 SharedPreferences 文件中存储数据了，主要可以分为 3 步实现。</p>
+<ol>
+<li>调用 SharedPreferences 对象的<code>edit()</code>方法获取一个<code>SharedPreferences.Editor</code>对象。</li>
+<li>向 SharedPreferences.Editor 对象中添加数据，添加一个布尔型数据就使用<code>putBoolean()</code>方法，添加一个字符串则使用<code>putString()</code>方法，以此类推。</li>
+<li>调用<code>apply()</code>方法将添加的数据提交，从而完成数据存储操作。</li>
+</ol>
+<p>  接下来我们给按钮注册一个点击事件，用于将一些数据存储到 SharedPreferences 文件当中。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button saveData = findViewById(R.id.save_data);
+    saveData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SharedPreferences.Editor editor = getSharedPreferences(&quot;data&quot;,
+                        MODE_PRIVATE).edit();
+            editor.putString(&quot;name&quot;, &quot;Tom&quot;);
+            editor.putInt(&quot;age&quot;, 28);
+            editor.putBoolean(&quot;married&quot;, false);
+            editor.apply();
+        }
+    });
+</code></pre>
+<p>  这里我们向对象中添加了 3 条不同类型的数据，最后调用<code>apply()</code>方法进行提交，从而完成了数据存储的操作。<br>
+　　同样地，我们可以借助 Device File Explorer 来进行查看，进入到 /data/data/ 包名 /shared_prefs/目录下，可以看到生成了一个<code>data.xml</code>文件。</p>
+<h3 id="从-sharedpreferences-中读取数据">从 SharedPreferences 中读取数据</h3>
+<blockquote>
+<p>  SharedPreferences 对象中提供了一系列的 get 方法，用于读取存储的数据，每种 get 方法都对应了 SharedPreferences.Editor 中的一种 put 方法。<br>
+　　这些 get 方法都接收两个参数：第一个参数是键，传入存储数据时所使用的键就可以得到相应的值；第二个参数是默认值，表示当传入的键找不到对应的值时就会以默认值进行返回。</p>
+</blockquote>
+<p>  同样地，我们增加一个还原数据的按钮，为其注册一个点击事件，希望通过点击这个按钮来从 SharedPreferences 文件中读取数据。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button restoreData = findViewById(R.id.restore_data);
+    restoreData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SharedPreferences pref = getSharedPreferences(&quot;data&quot;, MODE_PRIVATE);
+            String name = pref.getString(&quot;name&quot;, &quot;&quot;);
+            int age = pref.getInt(&quot;age&quot;, 0);
+            boolean married = pref.getBoolean(&quot;married&quot;, false);
+            Log.d(&quot;MainActivity&quot;, &quot;name is &quot; + name);
+            Log.d(&quot;MainActivity&quot;, &quot;age is&quot; + age);
+            Log.d(&quot;MainActivity&quot;, &quot;married is&quot; + married);
+        }
+    });
+</code></pre>
+<p>  这里我们先得到了<code>SharedPreferences</code>对象，然后分别调用它的<code>getString()</code>、<code>getInt()</code>和<code>getBoolean()</code>方法，去获取前面所存储的姓名、年龄和是否已婚，最后通过 Log 打印出来。</p>
+<h2 id="sqlite-数据库存储">SQLite 数据库存储</h2>
+<blockquote>
+<p>  SQLite 是一款轻量级的关系型数据库，它的运算速度非常快，占用资源很少，因而特别适合在移动设备上使用。SQLite 不仅支持标准的 SQL 语法，还遵循了数据库的 ACID 事务。<br>
+　　前面我们所使用的文件存储和 SharedPreferences 存储毕竟只适用于保存一些简单的数据和键值对，当需要存储大量复杂的关系型数据的时候，就会发现以上两种存储方式很难应付得了。但是使用数据库就可以做得到。</p>
+</blockquote>
+<p>  Android 为了让我们能够更加方便地管理数据库，专门提供了一个<code>SQLiteOpenHelper</code>帮助类，借助这个类可以非常简单地对数据库进行创建和升级。<br>
+　　<code>SQLiteOpenHelper</code>是一个抽象类，这意味着如果我们想要使用它，就需要创建一个自己的帮助类去继承它。SQLiteOpenHelper 中有两个抽象方法：<code>onCreate()</code>和<code>onUpgrade()</code>。我们必须在自己的帮助类里重写这两个方法，然后分别在这两个方法中实现创建和升级数据库的逻辑。<br>
+　　<code>SQLiteOpenHelper</code>中还有两个非常重要的实例方法，它们都可以创建或打开一个现有的数据库（如果数据库已存在则直接打开，否则要创建一个新的数据库），并返回一个可对数据库进行读写操作的对象。这两个方法不同的是，当数据库不可写入的时候（如磁盘空间已满）：</p>
+<ul>
+<li>
+<p><code>getReadableDatabase()</code>：此方法返回的对象将以只读的方式打开数据库</p>
+</li>
+<li>
+<p><code>getWritableDatabase()</code>：将出现异常。</p>
+</li>
+</ul>
+<p>  <code>SQLiteOpenHelper</code>中有两个构造方法可供重写，一般使用参数少一点的那个构造方法即可。这个构造方法中接收 4 个参数：</p>
+<ul>
+<li>
+<p>第一个参数是<code>Context</code>，必须有它才能对数据库进行操作。</p>
+</li>
+<li>
+<p>第二个参数是数据库名，创建数据库时使用的就是这里指定的名称。</p>
+</li>
+<li>
+<p>第三个参数允许我们在查询数据的时候返回一个自定义的<code>Cursor</code>，一般传入 null 即可。</p>
+</li>
+<li>
+<p>第四个参数表示当前数据库的版本号，可用于对数据库进行升级操作。</p>
+</li>
+</ul>
+<p>  构建出<code>SQLiteOpenHelper</code>的实例之后，再调用上面的两个方法方法就能够创建数据库了，数据库文件会存放在<code>/data/data/包名/databases/</code>目录下。此时，重写的<code>onCreate()</code>方法也会得到执行，所以通常会在这里处理一些创建表的逻辑。</p>
+<h3 id="创建数据库">创建数据库</h3>
+<p>  这里我们希望创建一个名为 BookStore.db 的数据库，然后在这个数据库中新建一张 Book 表，表中有 id（主键）、作者、价格、页数和书名等列。<br>
+　　新建<code>MyDatabaseHelper</code>类继承自<code>SQLiteOpenHelper</code>，代码如下所示：</p>
+<pre><code class="language-java">    public class MyDatabaseHelper extends SQLiteOpenHelper {
+        public static final String CREATE_BOOK = &quot;create table Book (&quot;
+                + &quot;id integer primary key autoincrement, &quot;
+                + &quot;author text, &quot;
+                + &quot;price real, &quot;
+                + &quot;pages integer, &quot;
+                + &quot;name text)&quot;;
+        private Context mContext;
+        public MyDatabaseHelper(@Nullable Context context, @Nullable String name, 
+                    @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+            super(context, name, factory, version);
+            mContext = context;
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            sqLiteDatabase.execSQL(CREATE_BOOK);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        }
+    }
+</code></pre>
+<p>  这里把建表语句定义成了一个字符串变量，然后在<code>onCreate()</code>方法中又调用了 SQLiteDatabase 的<code>execSQL()</code>方法去执行这条建表语句，这样就可以保证在数据库创建完成的同时还能成功创建 Book 表。<br>
+　　SQLite 不像其他的数据库拥有众多繁杂的数据类型，它的数据类型很简单：integer 表示整型，real 表示浮点型，blob 表示二进制类型等。在上述建表语句中，我们还使用了<code>primary key</code>将 id 列设为主键，并用<code>autoincrement</code>关键字表示 id 列是自增长的。<br>
+　　然后我们在布局文件中加入一个按钮，为其注册点击事件，用于创建数据库。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MainActivity extends AppCompatActivity {
+        private MyDatabaseHelper dbHelper;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            dbHelper = new MyDatabaseHelper(this, &quot;BookStore.db&quot;, null, 1);
+            Button createDatabase = findViewById(R.id.create_database);
+            createDatabase.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dbHelper.getWritableDatabase();
+                }
+            });
+        }
+    }
+</code></pre>
+<p>  这里构建了一个<code>MyDatabaseHelper</code>对象，并通过构造函数的参数将数据库名指定为 BookStore.db，版本号指定为 1，然后在按钮的点击事件里里调用了<code>getWritableDatabase()</code>方法，由于当前程序中并没有 BookStore.db 这个数据库，于是会创建该数据库并调用 MyDatabaseHelper 中的<code>onCreate()</code>方法，这样 Book 表也就得到了创建。<br>
+　　如何才能看到我们所创建的数据库呢？这里我们仍然还是可以使用 Device File Explorer，但是这个工具最多只能看到 databases 目录下出现了一个 BookStore.db 文件，是无法查看 Book 表的。<br>
+　　此书第二版介绍的方法是通过使用 adb shell 来对数据库和表的创建情况进行检查，网上有很多相关教程。第三版介绍的方法是使用 Database Navigator 插件，可通过 File-&gt;Settings-&gt;Plugins 路径进入官方的插件市场进行下载，使用方法比较简单，网上也有很多教程。</p>
+<h3 id="升级数据库">升级数据库</h3>
+<h4 id="普通写法">普通写法</h4>
+<p>  目前项目中已经有一张 Book 表用于存放书的各种详细数据，下面我们想再添加一张<code>Category</code>表用于记录图书的分类。修改 MyDatabaseHelper 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MyDatabaseHelper extends SQLiteOpenHelper {
+        ...
+        public static final String CREATE_CATEGORY = &quot;create table Category(&quot;
+                + &quot;id integer primary key autoincrement,&quot;
+                + &quot;category_name text,&quot;
+                + &quot;category_code integer)&quot;;
+        private Context mContext;
+
+        public MyDatabaseHelper(@Nullable Context context, @Nullable String name,
+                    @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+            super(context, name, factory, version);
+            mContext = context;
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            ...
+            sqLiteDatabase.execSQL(CREATE_CATEGORY);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+            sqLiteDatabase.execSQL(&quot;drop table if exists Book &quot;);   //表存在则删除
+            sqLiteDatabase.execSQL(&quot;drop table if exists Category&quot;);
+            onCreate(sqLiteDatabase);
+        }
+    }
+</code></pre>
+<p>  首先我们添加了一条新的建表语句，并在 onCreate() 方法中执行，然后在<code>onUpgrade()</code>方法中执行了两条 DROP 语句，如果发现数据库中已经存在 Book 表或 Category 表，就将这两张表删除，然后调用 onCreate() 方法重新创建。</p>
+<blockquote>
+<p>  假若在这里我们不去使用 onUpgrade() 方法来更新数据库，而是仅在 onCreate() 方法中执行<code>sqLiteDatabase.execSQL(CREATE_CATEGORY)</code>，是无法成功创建 Category 表的。因为我们之前已经创建好了 BookStore.db 数据库，之后不管我们怎样点击创建按钮，<code>onCreate()</code>方法都不会再次执行，因此新添加的表也就无法得到创建了。除非你卸载程序。然后重新安装运行。</p>
+</blockquote>
+<p>  最后我们需要去修改 SQLiteOpenHelper 的构造方法里接收的第四个参数，它表示当前数据库的版本号，由于之前传入的是 1，这里传入一个比 1 大的数即可，然后<code>onUpgrade()</code>方法就可以得到执行了，如下所示：</p>
+<pre><code class="language-java">    dbHelper = new MyDatabaseHelper(this, &quot;BookStore.db&quot;, null, 2);
+</code></pre>
+<h4 id="最佳写法">最佳写法</h4>
+<blockquote>
+<p>  上面升级数据库的方式其实是非常粗暴的，为了保证数据库中的表是最新的，我们只是简单地在<code>onUpgrade()</code>方法中删除掉了当前所有的表，然后强制重新执行了一遍<code>onCreate()</code>方法。<br>
+　　想象以下场景，比如你编写的某个应用已经成功上线了，并且还拥有了不错的下载量。现在由于添加了新功能，数据库需要一起升级，结果用户更新了这个版本之后却发现以前程序中存储的本地数据全部丢失了，这是很糟糕的情况。<br>
+　　所以我们需要进行一些合理的控制来保证在升级数据库的时候，数据不会丢失。我们已经知道，每一个数据库版本都会对应一个版本号，当指定的数据库版本号大于当前数据库版本号的时候，就会进入<code>onUpgrade()</code>方法中执行更新操作。<br>
+　　这里需要为每一个版本号赋予其所对应的数据库变动，然后在 onUpgrade() 方法中对当前数据库的版本号进行判断，再执行相应的改变。</p>
+</blockquote>
+<p>  可以看到，<code>onUpgrade()</code>方法中，后面两个参数是我们之前没有用到的，它们分别代表着数据库的旧版本号以及新版本号。<br>
+　　下面我们来模拟一个数据库升级的案例，还是由 MyDatabaseHelper 类对数据库进行管理。第1版的程序要求非常简单，只需要创建一张Book表。代码如下所示：</p>
+<pre><code class="language-java">    public class MyDatabaseHelper extends SQLiteOpenHelper {
+        public static final String CREATE_BOOK = &quot;create table Book (&quot;
+                + &quot;id integer primary key autoincrement, &quot;
+                + &quot;author text, &quot;
+                + &quot;price real, &quot;
+                + &quot;pages integer, &quot;
+                + &quot;name text)&quot;;
+        private Context mContext;
+        public MyDatabaseHelper(@Nullable Context context, @Nullable String name, 
+                    @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+            super(context, name, factory, version);
+            mContext = context;
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            sqLiteDatabase.execSQL(CREATE_BOOK);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        }
+    }
+</code></pre>
+<p>  不过，几星期之后又有了新需求，这次需要向数据库中再添加一张<code>Category</code>表。于是，修改 MyDatabaseHelper 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MyDatabaseHelper extends SQLiteOpenHelper {
+        ...
+        public static final String CREATE_CATEGORY = &quot;create table Category(&quot;
+                + &quot;id integer primary key autoincrement,&quot;
+                + &quot;category_name text,&quot;
+                + &quot;category_code integer)&quot;;
+        private Context mContext;
+
+        public MyDatabaseHelper(@Nullable Context context, @Nullable String name, 
+                    @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+            super(context, name, factory, version);
+            mContext = context;
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            sqLiteDatabase.execSQL(CREATE_BOOK);
+            sqLiteDatabase.execSQL(CREATE_CATEGORY);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+            if(oldVersion &lt;= 1){
+                sqLiteDatabase.execSQL(CREATE_CATEGORY);
+            }
+        }
+    }
+</code></pre>
+<p>  可以看到，在<code>onCreate()</code>方法里我们新增了一条建表语句，然后又在<code>onUpgrade()</code>方法中添加了一个 if 判断，如果用户数据库的旧版本号小于等于 1，就只会创建一张 Category 表。<br>
+　　这样若用户直接安装第 2 版的程序，就会进入<code>onCreate()</code>方法，将两张表一起创建。而当用户使用第 2 版的程序覆盖安装第 1 版的程序时，就会进入升级数据库的操作中，此时由于 Book 表已经存在了，因此只需要创建一张 Category 表即可。<br>
+　　但是没过多久，新的需求又来了，这次要给 Book 表和 Category 表之间建立关联，需要在 Book 表中添加一个<code>category_id</code>字段。再次修改 MyDatabaseHelper 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MyDatabaseHelper extends SQLiteOpenHelper {
+        public static final String CREATE_BOOK = &quot;create table Book(&quot;
+                + &quot;id integer primary key autoincrement,&quot;
+                + &quot;author text,&quot;
+                + &quot;price real,&quot;
+                + &quot;pages integer,&quot;
+                + &quot;name text,&quot;
+                + &quot;category_id integer)&quot;;   //添加新字段
+        ...
+        private Context mContext;
+
+        public MyDatabaseHelper(@Nullable Context context, @Nullable String name,
+                    @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+            super(context, name, factory, version);
+            mContext = context;
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            sqLiteDatabase.execSQL(CREATE_BOOK);
+            sqLiteDatabase.execSQL(CREATE_CATEGORY);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+            if(oldVersion &lt;= 1){
+                sqLiteDatabase.execSQL(CREATE_CATEGORY);
+            }
+            if(oldVersion &lt;= 2){
+                sqLiteDatabase.execSQL(&quot;alter table Book add column category_id integer&quot;);
+            }
+        }
+    }
+</code></pre>
+<p>  首先我们在 Book 表的建表语句中添加了一个<code>category_id</code>列，这样当用户直接安装第 3 版的程序时（不会进入到 onUpdate() 方法中），这个新增的列就已经自动添加成功了。然而，如果用户之前已经安装了某一版本的程序，现在需要覆盖安装，就会进入升级数据库的操作中。在 onUpgrade() 方法里，我们添加了一个新的条件，若当前数据库的版本号是 2，就会执行<code>alter</code>命令，为 Book 表新增一个 category_id 列。</p>
+<blockquote>
+<p>  每当升级一个数据库版本的时候，<code>onUpgrade()</code>方法里都会写一个相应的 if 判断语句。这是为了保证 App 在跨版本升级的时候，每一次的数据库修改都能被全部执行。比如用户当前是从第 2 版升级到第 3 版，那么只有第二条判断语句会执行，而如果用户是直接从第 1 版升级到第 3 版，那么两条判断语句都会执行。使用这种方式来维护数据库的升级，不管版本怎样更新，都可以保证数据库的表结构是最新的，而且表中的数据完全不会丢失。</p>
+</blockquote>
+<h3 id="添加数据">添加数据</h3>
+<p>  <code>SQLiteDatabase</code>中提供了一个<code>insert()</code>方法，用于添加数据，它接收 3 个参数：</p>
+<ul>
+<li>
+<p>第一个参数是表名。</p>
+</li>
+<li>
+<p>第二个参数用于在未指定添加数据的情况下给某些可为空的列自动赋值 NULL ，一般我们用不到这个功能，直接传入 null 即可。</p>
+</li>
+<li>
+<p>第三个参数是一个<code>ContentValues</code>对象，它提供了一系列的<code>put()</code>方法重载，用于向 ContentValues 中添加数据，只需要将表中的每个列名以及相应的待添加数据传入即可。</p>
+</li>
+</ul>
+<p>  添加一个按钮，用于向数据库里添加数据，并为其注册点击事件，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button addData = findViewById(R.id.add_data);
+    addData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            //开始组装第一条数据
+            values.put(&quot;name&quot;, &quot;The Da Vinci Code&quot;);
+            values.put(&quot;author&quot;, &quot;Dan Brown&quot;);
+            values.put(&quot;pages&quot;, 454);
+            values.put(&quot;price&quot;, 16.96);
+            db.insert(&quot;Book&quot;, null, values);  //插入第一条数据
+            values.clear();
+            //开始组装第二条数据
+            values.put(&quot;name&quot;, &quot;The Lost Symbol&quot;);
+            values.put(&quot;author&quot;, &quot;Dan Brown&quot;);
+            values.put(&quot;pages&quot;, 510);
+            values.put(&quot;price&quot;, 19.95);
+            db.insert(&quot;Book&quot;, null, values);
+        }
+    });
+</code></pre>
+<p>  这里我们先获取了<code>SQLiteDatabase</code>对象，然后使用<code>ContentValues</code>对要添加的数据进行组装，最后使用<code>insert()</code>方法将数据添加到表当中。注意，在前面创建表的时候，我们将<code>id</code>列设置为自增长了，它的值会在入库的时候自动生成。</p>
+<h3 id="更新数据">更新数据</h3>
+<p>  <code>SQLiteDatabase</code>中提供了一个<code>update()</code>方法，用于对数据进行更新，这个方法接收 4 个参数：</p>
+<ul>
+<li>
+<p>第一个参数是表名。</p>
+</li>
+<li>
+<p>第二个参数是<code>ContentValues</code>对象，要把更新数据在这里组装进去。</p>
+</li>
+<li>
+<p>第三、第四个参数用于约束更新某一行或某几行中的数据，不指定的话默认会更新所有行。</p>
+</li>
+</ul>
+<p>  添加一个用于更新数据的按钮，并为其注册点击事件，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button updateData = findViewById(R.id.update_data);
+    updateData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(&quot;price&quot;, 10.99);
+            db.update(&quot;Book&quot;, values, &quot;name = ?&quot;, new String[]{&quot;The Da Vinci Code&quot;});
+        }
+    });
+</code></pre>
+<p>  这里使用了第三、第四个参数来指定具体更新哪几行。第三个参数对应的是 SQL 语句的<code>where</code>部分，表示更新所有<code>name</code>等于 ？的行，而 ？是一个占位符，可以通过第四个参数提供的一个字符串数组为第三个参数中的每个占位符指定相应的内容。</p>
+<h3 id="删除数据">删除数据</h3>
+<p>  <code>SQLiteDatabase</code>中提供了一个<code>delete()</code>方法，用于删除数据，这个方法接收 3 个参数：</p>
+<ul>
+<li>
+<p>第一个参数是表名。</p>
+</li>
+<li>
+<p>第二、第三个参数用于约束删除某一行或某几行的数据，不指定的话默认就是删除所有行。</p>
+</li>
+</ul>
+<p>  添加一个按钮，用于删除数据，并为其注册点击事件，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button deleteData = findViewById(R.id.delete_data);
+    deleteData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(&quot;Book&quot;, &quot;pages &gt; ?&quot;, new String[]{&quot;500&quot;});
+        }
+    });
+</code></pre>
+<p>  这里我们通过第二、第三个参数来指定仅删除那些页数超过 500 页的书。</p>
+<h3 id="查询数据">查询数据</h3>
+<p>  <code>SQLiteDatabase</code>中提供了一个<code>query()</code>方法用于对数据进行查询。这个方法的参数非常复杂，最短的一个方法重载也需要传入 7 个参数。</p>
+<ul>
+<li>
+<p>第一个参数是表名，表示我们希望从哪张表中查询数据。</p>
+</li>
+<li>
+<p>第二个参数用于指定去查询哪几列，如果不指定则默认查询所有列。</p>
+</li>
+<li>
+<p>第三、第四个参数用于约束查询某一行或某几行的数据，不指定则默认查询所有行的数据。</p>
+</li>
+<li>
+<p>第五个参数用于指定需要去<code>group by</code>的列，不指定则表示不对查询结果进行<code>group by</code>操作。</p>
+</li>
+<li>
+<p>第六个参数用于对<code>group by</code>之后的数据进行进一步的过滤，不指定则表示不进行过滤。</p>
+</li>
+<li>
+<p>第七个参数用于指定查询结果的排序方式，不指定则表示使用默认的排序方式。</p>
+</li>
+</ul>
+<p>  我们不必为每条查询语句都指定所有的参数，多数情况下只需要传入少数几个参数就可以完成查询操作了。调用<code>query()</code>方法后会返回一个<code>Cursor</code>对象，查询到的所有数据都将从这个对象中取出。<br>
+　　添加一个按钮用于查询数据，并为其注册点击事件，修改 MainActivity 中的代码，<br>
+如下所示：</p>
+<pre><code class="language-java">    Button queryData = findViewById(R.id.query_data);
+    queryData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            Cursor cursor = db.query(&quot;Book&quot;, null, null, null,
+                        null, null, null);
+            if (cursor.moveToFirst()) { //将数据的指针移动到第一行的位置
+                //遍历 Cursor 对象
+                do {
+                    @SuppressLint(&quot;Range&quot;) String name = cursor.getString(cursor.getColumnIndex(&quot;name&quot;));
+                    @SuppressLint(&quot;Range&quot;) String author = cursor.getString(cursor.getColumnIndex(&quot;author&quot;));
+                    @SuppressLint(&quot;Range&quot;) int pages = cursor.getInt(cursor.getColumnIndex(&quot;pages&quot;));
+                    @SuppressLint(&quot;Range&quot;) double price = cursor.getDouble(cursor.getColumnIndex(&quot;price&quot;));
+                    Log.d(&quot;MainActivity&quot;, &quot;Book's name is &quot; + name);
+                    Log.d(&quot;MainActivity&quot;, &quot;Book's author is &quot; + author);
+                    Log.d(&quot;MainActivity&quot;, &quot;Book's pages is &quot; + pages);
+                    Log.d(&quot;MainActivity&quot;, &quot;Book's price is &quot; + price);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+    });
+</code></pre>
+<p>  这里的<code>query()</code>方法只使用了第一个参数指明查询 Book 表，后面的参数全部为 null，这就表示希望查询这张表中的所有数据。查询完成后会得到一个<code>Cursor</code>对象，接着我们调用它的<code>moveToFirst()</code>方法，将数据的指针移动到第一行的位置。接着便是如何读取数据，<code>getColumnIndex()</code>方法可以获取到某一列在表中对应的位置索引，然后将这个索引传入相应的取值方法中，就可以得到从数据库中读取到的数据了。最后别忘了调用<code>close()</code>方法来关闭 Cursor。</p>
+<h3 id="使用-sql-语句操作数据库">使用 SQL 语句操作数据库</h3>
+<blockquote>
+<p>  Android 不仅提供了很多方便的 API 用于操作数据库，还同样提供了一系列的方法，使得可以直接通过 SQL 语句来操作数据库。</p>
+</blockquote>
+<ul>
+<li>添加数据：</li>
+</ul>
+<pre><code class="language-java">    db.execSQL(&quot;insert into Book (name,author,pages,price) values(?,?,?,?)&quot;,
+        new String[] {&quot;The Da Vinci Code&quot;,&quot;Dan Brown&quot;,&quot;454&quot;,&quot;16.96&quot;});
+    db.execSQL(&quot;insert ioto Book (name,author,pages,price) values(?,?,?,?)&quot;,
+        new String[] {&quot;The Lost Symbol&quot;,&quot;Dan Brown&quot;,&quot;510&quot;,&quot;19.95&quot;});
+</code></pre>
+<ul>
+<li>更新数据：</li>
+</ul>
+<pre><code class="language-java">    db.execSQL(&quot;update Book set price = ? where name = ? &quot;,
+        new String[]{&quot;10.99&quot;,&quot;The Da Vinci Code&quot; });
+</code></pre>
+<ul>
+<li>删除数据：</li>
+</ul>
+<pre><code class="language-java">    db.execSQL(&quot;delete from Book where pages &gt; ? &quot;,new String[] { &quot;500&quot; });
+</code></pre>
+<ul>
+<li>查询数据：</li>
+</ul>
+<pre><code class="language-java">    db.rawQuery(&quot;select * from Book&quot;,null);
+</code></pre>
+<p>  除了查询数据调用的是<code>SQLiteDatabase</code>的<code>rawQuery()</code>方法，其他的操作都是调用的<code>execSQL()</code>方法。</p>
+<h2 id="使用-litepal-操作数据库">使用 LitePal 操作数据库</h2>
+<blockquote>
+<p>  LitePal 是一款开源的 Android 数据库框架，它采用了对象关系映射（ORM）的模式，并将我们平时开发最常用到的一些数据库功能进行了封装。使得不用编写 SQL 语句就可以完成各种建表和増删改查的操作。(这个开源库是此书作者开发维护的)</p>
+</blockquote>
+<p>  使用 LitePal 的第一步，就是编辑 app/build.gradle 文件，在 dependencies 闭包中添加如下内容：</p>
+<pre><code class="language-java">    dependencies {
+        implementation 'org.litepal.guolindev:core:3.2.3'
+    }
+</code></pre>
+<p>  记得<code>sync</code>，接下来需要配置<code>litepal.xml</code>文件。右击 app/src/main 目录→New→Directory，创建一个<code>assets</code>目录，然后在 assets 目录右击 →New→File 再新建一个 litepal.xml 文件（.xml后缀要保留），接着编辑 litepal.xml 文件中的内容，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+    &lt;litepal&gt;
+        &lt;dbname value=&quot;BookStore&quot;&gt;&lt;/dbname&gt;
+        &lt;version value=&quot;1&quot;&gt;&lt;/version&gt;
+        &lt;list&gt;
+        &lt;/list&gt;
+    &lt;/litepal&gt;
+</code></pre>
+<p>  其中，<code>&lt;dbname&gt;</code>标签用于指定数据库名，<code>&lt;version&gt;</code>标签用于指定数据库版本号，<code>&lt;list&gt;</code>标签用于指定所有的映射模型。<br>
+　　最后，还需要再配置一下<code>LitePalApplication</code>，修改 AndroidManifest.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;application
+        android:name=&quot;org.litepal.LitePalApplication&quot;
+        ...
+    &lt;/application&gt;
+</code></pre>
+<p>  将项目的 application 配置为<code>org.litepal.LitePalApplication</code>，这样才能让 LitePal 的所有功能都可以正常工作。</p>
+<h3 id="创建和升级数据库">创建和升级数据库</h3>
+<p>  之前创建数据库是通过自定义一个类继承自<code>SQLiteOpenHelper</code>，然后在<code>onCreate()</code>方法中编写建表语句来实现的，而使用 LitePal 就不用再这么麻烦了。<br>
+　　LitePal 采取的是对象关系映射（ORM）的模式，对象关系映射，简单点说，我们使用的编程语言是面向对象语言，而使用的数据库则是关系型数据库，那么将面向对象的语言和面向关系的数据库之间建立一种映射关系，这就是对象关系映射了。<br>
+　　对象关系映射模式，它赋予了我们一个强大的功能，就是可以用面向对象的思维来操作数据库，而不用再和 SQL 语句打交道了。<br>
+　　定义一个 Book 类，代码如下所示：</p>
+<pre><code class="language-java">    public class Book extends {
+        private int id;
+        private String author;  //作者
+        private double price;   //价格
+        private int pages;  //书页
+        private String name;    //书名
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public int getPages() {
+            return pages;
+        }
+
+        public void setPages(int pages) {
+            this.pages = pages;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+</code></pre>
+<p>  这是一个典型的 Java bean，在 Book 类中定义了id、author、price、pages、name这几个字段，并生成了相应的<code>getter</code>和<code>setter</code>方法。Book 类就会对应数据库中的 Book 表，而类中的每一个字段分别对应了表中的每一个列，这就是对象关系映射最直观的体验。<br>
+　　接下来我们还需要将 Book 类添加到映射模型列表当中，修改<code>litepal.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+    &lt;litepal&gt;
+        &lt;dbname value=&quot;BookStore&quot;&gt;&lt;/dbname&gt;
+        &lt;version value=&quot;1&quot;&gt;&lt;/version&gt;
+        &lt;list&gt;
+            &lt;mapping class=&quot;com.example.litepaltest.Book&quot;&gt;&lt;/mapping&gt;
+        &lt;/list&gt;
+    &lt;/litepal&gt;
+</code></pre>
+<p>  这里使用<code>&lt;mapping&gt;</code>标签来声明要配置的映射模型类，注意一定要使用完整的类名。不管有多少模型类需要映射，都使用同样的方式配置在<code>&lt;list&gt;</code>标签下即可。<br>
+　　现在只要进行任意一次数据库的操作，BookStore.db 数据库应该就会自动创建出来。那么我们修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button createDatabase = findViewById(R.id.create_database);
+    createDatabase.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Connector.getDatabase();
+        }
+    });
+</code></pre>
+<p>  调用<code>Connector.getDatabase()</code>方法就是一次最简单的数据库操作，只要点击一下按钮，数据库就会自动创建完成了。<br>
+　　使用 LitePal 来升级数据库也很简单，不用思考任何的复杂逻辑，只需要改你想改的任何内容，然后将版本号加 1 就行了。比如我们想要向 Book 表中添加一个 press（出版社）列，直接修改 Book 类中的代码，添加一个 press 字段即可，如下所示：</p>
+<pre><code class="language-java">    public class Book {
+        ...
+        private String press;
+        public String getPress() {
+            return press;
+        }
+
+        public void setPress(String press) {
+            this.press = press;
+        }
+</code></pre>
+<p>  与此同时，我们还想再添加一张 Category 表，那么只需要新建一个 Category 类就可以了，代码如下所示：</p>
+<pre><code class="language-java">    public class Category {
+        private int id;
+        private String categoryName;
+        private String categoryCode;
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public void setCategoryName(String categoryName) {
+            this.categoryName = categoryName;
+        }
+
+        public void setCategoryCode(String categoryCode) {
+            this.categoryCode = categoryCode;
+        }
+    }
+</code></pre>
+<p>  修改完成后只需要记得将版本号加 1 就行了。当然由于这里还添加了一个新的模型类，因此也需要将它添加到映射模型列表中。修改 litepal.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+    &lt;litepal&gt;
+        &lt;dbname value=&quot;BookStore&quot;&gt;&lt;/dbname&gt;
+        &lt;version value=&quot;2&quot;&gt;&lt;/version&gt;
+        &lt;list&gt;
+            &lt;mapping class=&quot;com.example.litepaltest.Book&quot;&gt;&lt;/mapping&gt;
+            &lt;mapping class=&quot;com.example.litepaltest.Category&quot;&gt;&lt;/mapping&gt;
+        &lt;/list&gt;
+    &lt;/litepal&gt;
+</code></pre>
+<p>  然后重新运行一下程序，点击 Create database 按钮，你会发现 book 表中新增了一个 press 列，category 表也创建成功了，当然 LitePal 还自动帮我们做了一项非常重要的工作，就是保留之前表中的所有数据，这样就不用担心数据丢失的问题了。</p>
+<h3 id="添加数据-2">添加数据</h3>
+<p>  使用 LitePal 添加数据，只需要创建出模型类的实例，再将所有要存储的数据设置好，最后调用一下<code>save()</code>方法即可。<br>
+　　观察现有的模型类，你会发现它们都是没有继承结构的。因为 LitePal 进行表管理操作时不需要模型类有任何的继承结构，但是进行 CRUD 操作时就不行了，必须要继承自 LitePalSupport 类，因此这里我们需要先把继承结构加上。修改Book类中的代码，如下所示：</p>
+<pre><code class="language-java">    public class Book extends LitePalSupport {
+        ...
+    }
+</code></pre>
+<p>  然后向 Book 表中添加数据，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button addData = findViewById(R.id.add_data);
+    addData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Book book = new Book();
+            book.setName(&quot;The Da Vinci Code&quot;);
+            book.setAuthor(&quot;Dan Brown&quot;);
+            book.setPages(454);
+            book.setPrice(16.86);
+            book.setPress(&quot;Unknow&quot;);
+            book.save();
+        }
+    });
+</code></pre>
+<p>  调用 Book 类中的各种<code>set</code>方法对数据进行设置，最后再调用<code>book.save()</code>方法就能完成数据添加操作，这个<code>save()</code>方法是从<code>LitePalSupport</code>类中继承而来的。</p>
+<h3 id="更新数据-2">更新数据</h3>
+<p>  最简单的一种更新方式就是对已存储的对象重新设值，然后重新调用<code>save()</code>方法即可。对于 LitePal 来说，对象是否已存储就是根据调用<code>.isSaved()</code>方法的结果来判断的，返回<code>true</code>就表示已存储，返回<code>false</code>就表示未存储。<br>
+　　只有在两种情况下<code>model.isSaved()</code>方法才会返回 true。</p>
+<ul>
+<li>
+<p>已经调用过<code>model.save()</code>方法去添加数据了，此时 model 会被认为是已存储的对象。</p>
+</li>
+<li>
+<p>model 对象是通过 LitePal 提供的查询 API 查出来的，由于是从数据库中查到的对象，因此也会被认为是已存储的对象。</p>
+</li>
+</ul>
+<p>  添加一个按钮，用于更新数据，并为其注册点击事件，代码如下所示：</p>
+<pre><code class="language-java">    Button updateData = findViewById(R.id.update_data);
+    updateData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Book book = new Book();
+            book.setName(&quot;The Lost Symbol&quot;);
+            book.setAuthor(&quot;Dan Brown&quot;);
+            book.setPages(510);
+            book.setPrice(19.95);
+            book.setPress(&quot;UnKnow&quot;);
+            book.save();
+            book.setPrice(24.2);    //修改价格
+            book.save();
+        }
+    });
+</code></pre>
+<p>  这里调用<code>setPrice()</code>方法修改了这本书的价格，之后再次调用了<code>save()</code>方法。此时 LitePal 会发现当前的 Book 对象是已存储的，因此不会再向数据库中去添加一条新数据，而是会直接更新当前的数据。<br>
+　　但是这种更新方式只能对已存储的对象进行操作，限制性比较大，下面我们使用另外一种更加灵巧的更新方式。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button updateData = findViewById(R.id.update_data);
+    updateData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Book book = new Book();
+            book.setPrice(14.95);
+            book.setPress(&quot;Anchor&quot;);
+            book.updateAll(&quot;name = ? and author = ?&quot;, &quot;The Lost Symbol&quot;, &quot;Dan Brown&quot;);
+        }
+    });
+</code></pre>
+<p>  这里调用<code>setPrice()</code>和<code>setPress()</code>方法来设置要更新的数据，最后再调用<code>updateAll()</code>方法去执行更新操作。注意 updateAll() 方法中可以指定一个条件约束，如果不指定条件语句的话，就表示更新所有数据。<br>
+　　需要注意的是，对于所有想要把数据更新成默认值的操作，LitePal 统一提供了一个<code>setToDefault()</code>方法，然后传入相应的列名就可以实现了，如下所示：</p>
+<pre><code class="language-java">    Book book = new Book();
+    book.setToDefault(&quot;pages&quot;);
+    book.updateAll();
+</code></pre>
+<p>  这里将所有书的页数都更新为 0，因为<code>updateAll()</code>方法中没有指定约束条件，因此更新操作对所有数据都生效了。</p>
+<h3 id="删除数据-2">删除数据</h3>
+<p>  添加一个按钮，用于删除数据，并为其注册点击事件，代码如下所示：</p>
+<pre><code class="language-java">    Button deleteData = findViewById(R.id.delete_data);
+    deleteData.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            LitePal.deleteAll(Book.class, &quot;price &lt; ?&quot;, &quot;15&quot;);
+        }
+    });
+</code></pre>
+<p>  这里调用了<code>LitePal.deleteAll()</code>方法来删除数据，其中 deleteAll() 方法的第一个参数用于指定删除哪张表中的数据，后面的参数用于指定约束条件。</p>
+<h3 id="查询数据-2">查询数据</h3>
+<p>  LitePal 在查询 API 方面做了非常多的优化，基本上可以满足绝大多数场景的查询需求，并且代码十分整洁。比如我要去查询 Book 表中的数据，代码如下所示：</p>
+<pre><code class="language-java">    List&lt;Book&gt; books = LitePal.findAll(Book.class);
+</code></pre>
+<p>  <code>findAll()</code>方法的返回值是一个 Book 类型的<code>List</code>集合，也就是说，我们不用像之前那样再通过 Cursor 对象一行行去取值了，LitePal 已经自动帮我们完成了赋值操作。然后我们就可以通过调用 Book 类中的一系列 getter 方法来得到相关数据。</p>
+<p>  除了 findAll() 方法之外，LitePal 还提供了很多其他非常有用的查询 API，如：</p>
+<ul>
+<li>查询 Book 表中的第一条数据：</li>
+</ul>
+<pre><code class="language-java">    Book firstBook = LitePal.findFirst(Book.class);
+</code></pre>
+<ul>
+<li>查询 Book 表中的最后一条数据：</li>
+</ul>
+<pre><code class="language-java">    Book lastBook = LitePal.findLast(Book.class);
+</code></pre>
+<p>  还可以通过连缀查询来定制更多的查询功能，如</p>
+<ul>
+<li><code>select()</code>方法用于指定查询哪几列的数据，比如只查 name 和 author这两列的数据：</li>
+</ul>
+<pre><code class="language-java">    List&lt;Book&gt; books = LitePal.select(&quot;name&quot;,&quot;author&quot;).find(Book.class);
+</code></pre>
+<ul>
+<li><code>where()</code>方法用于指定查询的约束条件，比如只查页数大于 400 的数据：</li>
+</ul>
+<pre><code class="language-java">    List&lt;Book&gt; books = LitePal.where(&quot;pages &gt; ?&quot;,&quot;400&quot;).find(Book.class);
+</code></pre>
+<ul>
+<li><code>order()</code>方法用于指定结果的排序方式，比如将查询结果按照书价从高到低排序：</li>
+</ul>
+<pre><code class="language-java">    List&lt;Book&gt; books = LitePal.order(&quot;price desc&quot;).find(Book.class);
+</code></pre>
+<blockquote>
+<p>  其中<code>desc</code>表示降序排列，<code>asc</code>或者不写表示升序排列。</p>
+</blockquote>
+<ul>
+<li><code>limit()</code>方法用于指定查询结果的数量，比如只查表中的前 3 条数据：</li>
+</ul>
+<pre><code class="language-java">    List&lt;Book&gt; books = LitePal.limit(3).find(Book.class);
+</code></pre>
+<ul>
+<li><code>offset()</code>方法用于指定查询结果的偏移量，比如查询表中的第 2 条、第 3 条、第 4 条数据：</li>
+</ul>
+<pre><code class="language-java">    List&lt;Book&gt; books = LitePal.limit(3).offset(1).find(Book.class);
+</code></pre>
+<p> &amp;msp;当然，你还可以对这 5 个方法进行任意的连缀组合，来完成一个比较复杂的查询操作，比如：</p>
+<pre><code class="language-java">    List&lt;Book&gt; books = LitePal.select(&quot;name&quot;,&quot;author&quot;,&quot;pages&quot;)
+        .where(&quot;pages &gt; ?&quot;.&quot;400&quot;)
+        .order(&quot;pages&quot;)
+        .limit(10)
+        .offset(10)
+        .find(Book.class);
+</code></pre>
+<p>  这段代码就表示，查询 Book 表中第 11～20 条满足页数大于 400 这个条件的 name、author 和 pages 这 3 列数据，并将查询结果按照页数升序排列。<br>
+　　LitePal 仍然支持使用原生的 SQL 来进行查询，比如：</p>
+<pre><code class="language-java">    Cursor c = LitePal.findBySQL(&quot;select * from Book where pages &gt; ? and price &lt; ? &quot;,&quot;400&quot;,&quot;20&quot;);
+</code></pre>
+<p>  调用<code>LitePal.findBySQL()</code>方法来进行原生查询，其中第一个参数用于指定 SQL 语句，后面的参数用于指定占位符的值。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-broadcast/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — Broadcast
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

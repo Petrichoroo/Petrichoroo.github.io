@@ -1,0 +1,310 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Kotlin：泛型和委托 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Kotlin：泛型和委托
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-21 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/f0WJ2wxNg/" class="post-tags">
+                            # Kotlin
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">泛型的基本用法</a></li>
+<li><a href="#%E7%B1%BB%E5%A7%94%E6%89%98">类委托</a></li>
+<li><a href="#%E5%A7%94%E6%89%98%E5%B1%9E%E6%80%A7">委托属性</a></li>
+<li><a href="#%E6%87%92%E5%8A%A0%E8%BD%BD%E6%8A%80%E6%9C%AFby-lazy">懒加载技术（by lazy）</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="泛型的基本用法">泛型的基本用法</h2>
+<p>  在一般的编程模式下，我们需要给任何一个变量指定一个具体的类型，而泛型允许我们在不指定具体类型的情况下进行编程，这样编写出来的代码将会拥有更好的扩展性。<br>
+　　泛型主要有两种定义方式：一种是定义泛型类，另一种是定义泛型方法，通常使用的语法结构是<code>&lt;T&gt;</code>。<br>
+　　定义一个泛型类，就可以这么写：</p>
+<pre><code class="language-java">    class MyClass&lt;T&gt; {
+        fun method(param: T): T {
+            return param
+        }
+    }
+</code></pre>
+<p>  此时的<code>MyClass</code>就是一个泛型类，MyClass 中的方法允许使用<code>T</code>类型的参数和返回值。我们在调用 MyClass 类和<code>method()</code>方法的时候，就可以将泛型指定成具体的类型，如下所示：</p>
+<pre><code class="language-java">    val myClass = MyClass&lt;Int&gt;()
+    val result = myClass.method(123)
+</code></pre>
+<p>  而如果我们不想定义一个泛型类，只是想定义一个泛型方法，只需要将定义泛型的语法结构写在方法上面即可，如下所示：</p>
+<pre><code class="language-java">    class MyClass {
+        fun &lt;T&gt; method(param: T): T {
+            return param
+        }
+    }
+</code></pre>
+<p>  此时的调用方式也需要进行相应的调整：</p>
+<pre><code class="language-java">    val myClass = MyClass()
+    val result = myClass.method&lt;Int&gt;(123)
+</code></pre>
+<p>  由于 Kotlin 出色的类型推导机制，这里可以直接省略泛型的指定：</p>
+<pre><code class="language-java">    val myClass = MyClass()
+    val result = myClass.method(123)
+</code></pre>
+<p>  Kotlin 允许我们对泛型的类型进行限制，可以通过指定上界的方式来对泛型的类型进行约束，比如这里将<code>method()</code>方法的泛型上界设置为<code>Number</code>类型，如下所示：</p>
+<pre><code class="language-java">    class MyClass {
+        fun &lt;T : Number&gt; method(param: T): T {
+            return param
+        }
+    }
+</code></pre>
+<p>  现在只能将<code>method()</code>方法的泛型指定成数字类型，比如<code>Int</code>、<code>Float</code>、<code>Double</code>等。但是如果指定成字符串类型，就肯定会报错。</p>
+<p>  另外，在默认情况下，所有的泛型都是可以指定成可空类型的，这是因为在不手动指定上界的时候，泛型的上界默认是<code>Any?</code>。而如果想要让泛型的类型不可为空，只需要将泛型的上界手动指定成<code>Any</code>即可。</p>
+<h2 id="类委托">类委托</h2>
+<blockquote>
+<p>  委托是一种设计模式，它的基本理念是：操作对象自己不会去处理某段逻辑，而是会把工作委托给另外一个辅助对象去处理。<br>
+　　Kotlin 中将委托功能分为了两种：类委托和委托属性。</p>
+</blockquote>
+<p>  类委托的核心思想在于将一个类的具体实现委托给另一个类去完成。借助于委托模式，我们可以轻松实现一个自己的实现类。比如这里定义一个<code>MySet</code>，并让它实现<code>Set</code>接口，代码如下所示：</p>
+<pre><code class="language-java">    class MySet&lt;T&gt;(val helperSet: HashSet&lt;T&gt;) : Set&lt;T&gt; {
+        override val size: Int
+            get() = helperSet.size
+
+        override fun contains(element: T) = helperSet.contains(element)
+        override fun containsAll(elements: Collection&lt;T&gt;) = helperSet.containsAll(elements)
+        override fun isEmpty() = helperSet.isEmpty()
+        override fun iterator() = helperSet.iterator()
+}
+</code></pre>
+<p>  可以看到，<code>MySet</code>的构造函数中接收了一个<code>HashSet</code>参数，这就相当于一个辅助对象。然后在<code>Set</code>接口所有的方法实现中，我们都没有进行自己的实现，而是调用了辅助对象中相应的方法实现，这其实就是一种委托模式。</p>
+<blockquote>
+<p>  这种写法的好处是什么呢？既然都是调用辅助对象的方法实现，那还不如直接使用辅助对象。</p>
+</blockquote>
+<p>  如果我们只是让大部分的方法实现调用辅助对象中的方法，少部分的方法实现由自己来重写，甚至加入一些自己独有的方法，那么<code>MySet</code>就会成为一个全新的数据结构类，这就是委托模式的意义所在。</p>
+<p>  但是这种写法也有一定的弊端，如果接口中的待实现方法比较少还好，要是有几十甚至上百个方法的话，每个都去这样调用辅助对象中的相应方法实现是很复杂的，不过在 Kotlin 中可以通过类委托的功能来解决这个问题。<br>
+　　Kotlin 中委托使用的关键字是<code>by</code>，我们只需要在接口声明的后面使用 by 关键字，再接上受委托的辅助对象，就可以免去之前所写的一大堆模板式的代码了，如下所示：</p>
+<pre><code class="language-java">    class MySet&lt;T&gt;(val helperSet: HashSet&lt;T&gt;) : Set&lt;T&gt; by helperSet {
+    }
+</code></pre>
+<p>  另外，如果我们要对某个方法进行重新实现，只需要单独重写那一个方法即可，其他的方法仍然可以享受类委托所带来的便利，如下所示：</p>
+<pre><code class="language-java">    class MySet&lt;T&gt;(val helperSet: HashSet&lt;T&gt;) : Set&lt;T&gt; by helperSet {
+        fun helloWorld() = println(&quot;Hello World&quot;)
+        override fun isEmpty() = false
+    }
+</code></pre>
+<p>  这里新增了一个<code>helloWorld()</code>方法，并且重写了<code>isEmpty()</code>方法，让它永远返回<code>false</code>。这当然是一种错误的做法，这里仅仅是为了演示一下而已。<br>
+　　现在<code>MySet</code>就成为了一个全新的数据结构类，它不仅永远不会为空，而且还能打印 &quot;Hello World&quot;，至于其他<code>Set</code>接口中的功能，则和<code>HashSet</code>保持一致。这就是 Kotlin 的类委托所能实现的功能。</p>
+<h2 id="委托属性">委托属性</h2>
+<p>  类委托的核心思想是将一个类的具体实现委托给另一个类去完成，而委托属性的核心思想是将一个属性（字段）的具体实现委托给另一个类去完成。<br>
+　　委托属性的语法结构，如下所示：</p>
+<pre><code class="language-java">    class MyClass {
+        var p by Delegate()
+    }
+</code></pre>
+<p>  这里使用<code>by</code>关键字连接了左边的<code>p</code>属性和右边的<code>Delegate</code>实例。<br>
+　　这种写法就代表着将<code>p</code>属性的具体实现委托给了<code>Delegate</code>类去完成。当调用 p 属性的时候会自动调用 Delegate 类的<code>getValue()</code>方法，当给 p 属性赋值的时候会自动调用 Delegate 类的<code>setValue()</code>方法。<br>
+　　因此，我们还得对<code>Delegate</code>类进行具体的实现才行，代码如下所示：</p>
+<pre><code class="language-java">    class Delegate {
+        var propValue: Any? = null
+        operator fun getValue(myClass: MyClass, prop: KProperty&lt;*&gt;): Any? {
+            return propValue
+        }
+
+        operator fun setValue(myClass: MyClass, prop: KProperty&lt;*&gt;, value: Any?) {
+            propValue = value
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  这是一种标准的代码实现模板，在<code>Delegate</code> 类中我们必须实现<code>getValue()</code>和<code>setValue()</code>这两个方法，并且都要使用<code>operator</code>关键字进行声明。</p>
+</blockquote>
+<p>  <code>getValue()</code>方法要接收两个参数：</p>
+<ul>
+<li>
+<p>第一个参数用于声明该<code>Delegate</code>类的委托功能可以在什么类中使用，这里写成<code>MyClass</code>表示仅可在 MyClass 类中使用。</p>
+</li>
+<li>
+<p>第二个参数<code>KProperty&lt;*&gt;</code>是Kotlin中的一个属性操作类，可用于获取各种属性相关的值，在当前场景下用不着，但是必须在方法参数上进行声明。另外，<code>&lt;*&gt;</code>这种泛型的写法表示你不知道或者不关心泛型的具体类型，只是为了通过语法编译而已。至于返回值可以声明成任何类型，根据具体的实现逻辑即可。</p>
+</li>
+</ul>
+<p>  <code>setValue()</code>方法也是相似的，只不过它要接收 3 个参数。前两个参数和<code>getValue()</code>方法是相同的，最后一个参数表示具体要赋值给委托属性的值，这个参数的类型必须和 getValue() 方法返回值的类型保持一致。</p>
+<p>  整个委托属性的工作流程：当给<code>MyClass</code>的<code>p</code>属性赋值时，就会调用<code>Delegate</code>类的<code>setValue()</code>方法，当获取 MyClass 中 p 属性的值时，就会调用 Delegate 类的<code>getValue()</code>方法。</p>
+<p>  不过，其实还存在一种情况可以不用在<code>Delegate</code>类中实现<code>setValue()</code>方法，那就是<code>MyClass</code>中的<code>p</code>属性是使用<code>val</code>关键字声明的。因为如果 p 属性是使用 val 关键字声明的，那么就意味着 p 属性是无法在初始化之后被重新赋值的，因此也就没有必要实现 setValue() 方法。</p>
+<h2 id="懒加载技术by-lazy">懒加载技术（by lazy）</h2>
+<blockquote>
+<p>  把想要延迟执行的代码放到<code>by lazy</code>代码块中，这样代码块中的代码在一开始的时候就不会执行，只有当相关变量首次被调用的时候，代码块中的代码才会执行。</p>
+</blockquote>
+<p>  实际上，<code>by lazy</code>并不是连在一起的关键字，只有<code>by</code>才是 Kotlin 中的关键字，<code>lazy</code>在这里只是一个高阶函数而已。<br>
+　　在<code>lazy</code>函数中会创建并返回一个<code>Delegate</code>对象，当调用<code>p</code>属性时，其实调用的是 Delegate 对象的<code>getValue()</code>方法，然后 getValue() 方法中又会调用 lazy 函数传入的<code>Lambda</code>表达式，这样表达式中的代码就可以得到执行了，并且调用 p 属性后得到的值就是 Lambda 表达式中最后一行代码的返回值。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlingao-jie-han-shu-xiang-jie/" class="post-title gt-a-link">
+                    Kotlin：高阶函数详解
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>实现强制下线功能（Kotlin) | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    实现强制下线功能（Kotlin)
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-20 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#%E5%BC%BA%E5%88%B6%E4%B8%8B%E7%BA%BF">强制下线</a>
+<ul>
+<li><a href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0">具体实现</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="强制下线">强制下线</h1>
+<hr>
+<h2 id="具体实现">具体实现</h2>
+<blockquote>
+<p>  实现强制下线功能的思路比较简单，只需要在界面上弹出一个对话框，让用户无法进行任何其他操作，必须点击对话框中的“确定”按钮，然后回到登录界面即可。</p>
+</blockquote>
+<p>  新建一个<code>BroadcastBestPractice</code>项目，由于强制下线功能需要先关闭所有的<code>Activity</code>，然后回到登录界面，因此先创建一个<code>ActivityCollector</code>类用于管理所有的Activity，代码如下所示：</p>
+<pre><code class="language-java">    object ActivityCollector {  //单例类 全局最多只能拥有一个实例
+        private val activities = ArrayList&lt;Activity&gt;()
+
+        fun addActivity(activity: Activity) {
+            activities.add(activity)
+        }
+
+        fun removeActivity(activity: Activity) {
+            activities.remove(activity)
+        }
+
+        fun finishAll() {
+            for (activity in activities) {
+                if (!activity.isFinishing) {
+                    activity.finish()
+                }
+            }
+            activities.clear()
+        }
+    }
+</code></pre>
+<p>  然后创建<code>BaseActivity</code>类作为所有 Activity 的父类，代码如下所示：</p>
+<pre><code class="language-java">    open class BaseActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            ActivityCollector.addActivity(this)
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            ActivityCollector.removeActivity(this)
+        }
+    }
+</code></pre>
+<p>  然后创建一个<code>LoginActivity</code>来作为登录界面，然后编辑布局文件<code>activity_login.xml</code>，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;60dp&quot;
+            android:layout_marginTop=&quot;180dp&quot;&gt;
+
+            &lt;TextView
+                android:layout_width=&quot;90dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:text=&quot;Account:&quot;
+                android:textSize=&quot;18sp&quot; /&gt;
+
+            &lt;EditText
+                android:id=&quot;@+id/accountEdit&quot;
+                android:layout_width=&quot;0dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:layout_weight=&quot;1&quot; /&gt;
+        &lt;/LinearLayout&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;60dp&quot;&gt;
+
+            &lt;TextView
+                android:layout_width=&quot;90dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:text=&quot;Account:&quot;
+                android:textSize=&quot;18sp&quot; /&gt;
+
+            &lt;EditText
+                android:id=&quot;@+id/passwordEdit&quot;
+                android:layout_width=&quot;0dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:layout_weight=&quot;1&quot;
+                android:inputType=&quot;textPassword&quot; /&gt;
+        &lt;/LinearLayout&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/login&quot;
+            android:layout_width=&quot;200dp&quot;
+            android:layout_height=&quot;60dp&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;
+            android:text=&quot;Login&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  布局最外层是一个纵向的<code>LinearLayout</code>，里面包含了 3 行直接子元素。<br>
+　　第一行是一个横向的 LinearLayout，用于输入账号信息；第二行也是一个横向的 LinearLayout，用于输入密码信息；第三行是一个登录按钮。<br>
+　　接下来修改<code>LoginActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class LoginActivity : BaseActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_login)
+            val button: Button = findViewById(R.id.login)
+            val accountEdit: EditText = findViewById(R.id.accountEdit)
+            val passwordEdit: EditText = findViewById(R.id.passwordEdit)
+            button.setOnClickListener {
+                val account = accountEdit.text.toString()
+                val password = passwordEdit.text.toString()
+                if (account == &quot;admin&quot; &amp;&amp; password == &quot;123456&quot;) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, &quot;account or password is invalid&quot;, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+</code></pre>
+<p>  这里模拟了一个简单的登录功能。首先将<code>LoginActivity</code>的继承结构改成继承自<code>BaseActivity</code>，然后在登录按钮的点击事件里对输入的账号和密码进行判断。<br>
+　　因此，可以将<code>MainActivity</code>理解成是登录成功后进入的程序主界面，这里我们并不需要在主界面提供什么花哨的功能，只需要加入强制下线功能就可以了。修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:orientation=&quot;vertical&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot; &gt;
+        &lt;Button
+            android:id=&quot;@+id/forceOffline&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;Send force offline broadcast&quot; 
+            android:textAllCaps=&quot;false&quot;/&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  这里只有一个按钮用于触发强制下线功能。然后修改<code>MainActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : BaseActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            val forceOffline: Button = findViewById(R.id.forceOffline)
+            forceOffline.setOnClickListener {
+                val intent = Intent(&quot;com.example.broadcastbestpractice.FORCE_OFFLINE&quot;)
+                sendBroadcast(intent)
+            }
+        }
+    }
+</code></pre>
+<p>  这里在按钮的点击事件里发送了一条通知程序强制用户下线的广播，也就是说，强制用户下线的逻辑并不是写在<code>MainActivity</code>里的，而是应该写在接收这条广播的<code>BroadcastReceiver</code>里。<br>
+　　这样强制下线的功能就不会依附于任何界面了，不管是在程序的任何地方，只要发出这样一条广播，就可以完成强制下线的操作。<br>
+　　由于<code>BroadcastReceiver</code>中需要弹出一个对话框来阻塞用户的正常操作，但如果创建的是一个静态注册的 BroadcastReceiver，是没有办法在<code>onReceive()</code>方法里弹出对话框这样的 UI 控件的，而我们显然也不可能在每个 Activity 中都注册一个动态的 BroadcastReceiver。<br>
+　　好的解决办法是在<code>BaseActivity</code>中动态注册一个 BroadcastReceiver 就可以了，因为所有的 Activity 都继承自 BaseActivity。<br>
+　　修改<code>BaseActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    open class BaseActivity : AppCompatActivity() {
+        lateinit var receiver: ForceOfflineReceiver
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            ActivityCollector.addActivity(this)
+        }
+
+        /**
+        * 始终需要保证只有处于栈顶的Activity才能接收到这条强制下线广播
+        * 非栈顶的Activity不应该也没必要接收这条广播
+        * 所以写在onResume()和onPause()方法里就可以很好地解决这个问题
+        * 当一个Activity失去栈顶位置时就会自动取消BroadcastReceiver的注册。*/
+        override fun onResume() {
+            super.onResume()
+            val intentFilter = IntentFilter()
+            intentFilter.addAction(&quot;com.example.broadcastbestpractice.FORCE_OFFLINE&quot;)
+            receiver = ForceOfflineReceiver()
+            registerReceiver(receiver, intentFilter)
+        }
+
+        override fun onPause() {
+            super.onPause()
+            unregisterReceiver(receiver)
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            ActivityCollector.removeActivity(this)
+        }
+
+        inner class ForceOfflineReceiver : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                AlertDialog.Builder(context).apply {
+                    setTitle(&quot;Warning&quot;)
+                    setMessage(&quot;You are forced to be offline. Please try to login again.&quot;)
+                    setCancelable(false)    //将对话框设为不可取消
+                    setPositiveButton(&quot;OK&quot;) { _, _ -&gt;
+                        ActivityCollector.finishAll()   //销毁所有Activity
+                        val intent = Intent(context, LoginActivity::class.java)
+                        context.startActivity(intent)   //重新启动LoginActivity
+                    }
+                    show()
+                }
+            }
+        }
+    }
+</code></pre>
+<p>  这样的话，所有强制下线的逻辑就已经完成了，接下来我们还需要对<code>AndroidManifest.xml</code>文<br>
+件进行修改，代码如下所示：</p>
+<pre><code class="language-java">    &lt;application
+        ...
+        &lt;activity android:name=&quot;.LoginActivity&quot;&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name=&quot;android.intent.action.MAIN&quot;/&gt;
+                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot;/&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+        
+        &lt;activity android:name=&quot;.MainActivity&quot;&gt;
+        &lt;/activity&gt;
+    &lt;/application&gt;
+</code></pre>
+<p>  就是将主 Activity 设置为<code>LoginActivity</code>，而不再是<code>MainActivity</code>，因为我们肯定不希望用户在没登录的情况下就能直接进入程序主界面。</p>
+<p>  现在来尝试运行一下程序。首先会进入登录界面，并可以在这里输入账号和密码，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984254228.png" alt="" loading="lazy"><br>
+  如果输入的账号密码正确，点击登录按钮就会进入程序的主界面，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984324934.png" alt="" loading="lazy"><br>
+  这时点击一下发送广播的按钮，就会发出一条强制下线的广播，<code>ForceOfflineReceiver</code>收到这条广播后会弹出一个对话框，提示用户已被强制下线，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984387773.png" alt="" loading="lazy"><br>
+  这时用户将无法再对界面的任何元素进行操作，只能点击“OK”按钮，然后重新回到登录界面，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984424487.png" alt="" loading="lazy"></p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlinkuo-zhan-han-shu-he-yun-suan-fu-chong-zai/" class="post-title gt-a-link">
+                    Kotlin：扩展函数和运算符重载
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

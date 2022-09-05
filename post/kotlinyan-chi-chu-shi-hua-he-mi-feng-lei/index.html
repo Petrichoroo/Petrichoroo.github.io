@@ -1,0 +1,339 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Kotlin：延迟初始化和密封类 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Kotlin：延迟初始化和密封类
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-17 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/f0WJ2wxNg/" class="post-tags">
+                            # Kotlin
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E5%AF%B9%E5%8F%98%E9%87%8F%E5%BB%B6%E8%BF%9F%E5%88%9D%E5%A7%8B%E5%8C%96">对变量延迟初始化</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E5%AF%86%E5%B0%81%E7%B1%BB%E4%BC%98%E5%8C%96%E4%BB%A3%E7%A0%81">使用密封类优化代码</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="对变量延迟初始化">对变量延迟初始化</h2>
+<blockquote>
+<p>  如果你的类中存在很多全局变量实例，为了保证它们能够满足 Kotlin 的空指针检查语法标准，你不得不做许多的非空判断保护才行，即使你非常确定它们不会为空。</p>
+</blockquote>
+<p>  观察如下代码，会发现这里适配器的写法略微有点特殊：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity(), View.OnClickListener {
+        private var adapter: MsgAdapter? = null
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            ...
+            adapter = MsgAdapter(msgList)
+            ...
+        }
+        override fun onClick(v: View?) {
+            ...
+            adapter?.notifyItemInserted(msgList.size - 1)
+            ...
+        }
+    }
+</code></pre>
+<p>  这里将<code>adapter</code>设置为了全局变量，但是它的初始化工作是在<code>onCreate()</code>方法中进行的，因此不得不先将 adapter 赋值为<code>null</code>，同时把它的类型声明成<code>MsgAdapter?</code>。<br>
+　　虽然我们会在 onCreate() 方法中对 adapter 进行初始化，同时确保<code>onClick()</code>必然在 onCreate() 方法之后才会调用，但是我们在 onClick() 方法中调用 adapter 的任何方法时仍然要进行判空处理才行，否则编译肯定无法通过。<br>
+　　而当你的代码中有了越来越多的全局变量实例时，这个问题就会变得越来越明显，到时候你可能必须编写大量额外的判空处理代码，只是为了满足 Kotlin 编译器的要求。</p>
+<p>  因此，我们可以考虑对全局变量进行延迟初始化。<br>
+　　延迟初始化使用的是<code>lateinit</code>关键字，它可以告诉 Kotlin 编译器，我会在晚些时候对这个变量进行初始化，这样就不用在一开始的时候将它赋值为 null 了。<br>
+　　使用延迟初始化的方式对上述代码进行优化，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity(), View.OnClickListener {
+        private lateinit var adapter: MsgAdapter
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            ...
+            adapter = MsgAdapter(msgList)
+            ...
+        }
+        override fun onClick(v: View?) {
+            ...
+            adapter.notifyItemInserted(msgList.size - 1)
+            ...
+        }
+    }
+</code></pre>
+<p>  当然，使用<code>lateinit</code>关键字也不是没有任何风险，如果我们在 adapter 变量还没有初始化的情况下就直接使用它，那么程序就一定会崩溃。<br>
+　　所以，当我们对一个全局变量使用了<code>lateinit</code>关键字时，请一定要确保它在被任何地方调用之前已经完成了初始化工作，否则 Kotlin 将无法保证程序的安全性。<br>
+　　我们可以通过代码来判断一个全局变量是否已经完成了初始化，这样在某些时候能够有效地避免重复对某一个变量进行初始化操作，示例代码如下：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity(), View.OnClickListener {
+        private lateinit var adapter: MsgAdapter
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        if (!::adapter.isInitialized) { //若已初始化 取反后为false
+            adapter = MsgAdapter(msgList) 
+        }
+        ...
+        }
+    }
+</code></pre>
+<h2 id="使用密封类优化代码">使用密封类优化代码</h2>
+<p>  新建一个 Kotlin 文件，文件名就叫<code>Result.kt</code>，然后在这个文件中编写如下代码：</p>
+<pre><code class="language-java">    interface Result
+    class Success(val msg: String) : Result
+    class Failure(val error: Exception) : Result
+</code></pre>
+<p>  这里定义了一个<code>Result</code>接口，用于表示某个操作的执行结果，接口中不用编写任何内容。然后定义了两个类去实现 Result 接口。<br>
+　　接下来再定义一个<code>getResultMsg()</code>方法，用于获取最终执行结果的信息，代码如下所示：</p>
+<pre><code class="language-java">    fun getResultMsg(result: Result) = when (result) {
+        is Success -&gt; result.msg
+        is Failure -&gt; result.error.message
+        else -&gt; throw IllegalArgumentException()
+    }
+</code></pre>
+<p>  getResultMsg() 方法中接收一个<code>Result</code>参数。我们通过<code>when</code>语句来判断 result 是属于<code>Success</code>还是<code>Failure</code>，再分别返回对应的消息。<br>
+　　但比较让人讨厌的是，接下来我们不得不再编写一个<code>else</code>条件，否则 Kotlin 编译器会认为这里缺少条件分支，代码将无法编译通过。但实际上 Result 的执行结果只可能是 Success 或者 Failure，所以在这里直接抛出了一个异常，只是为了满足 Kotlin 编译器的语法检查而已。<br>
+　　另外，编写 else 条件还有一个潜在的风险。若现在新增了一个<code>Unknown</code>类并实现 Result 接口，用于表示未知的执行结果，但是忘记在 getResultMsg() 方法中添加相应的条件分支，编译器在这种情况下是不会提醒我们的，而是会在运行的时候进入 else 条件里面，从而抛出异常并导致程序崩溃。</p>
+<p>  不过，Kotlin 的密封类可以很好地解决这个问题。<br>
+　　密封类的关键字是<code>sealed class</code>，下面将 Result 接口改造成密封类的写法：</p>
+<pre><code class="language-java">    sealed class Result
+    class Success(val msg: String) : Result()
+    class Failure(val error: Exception) : Result()
+</code></pre>
+<blockquote>
+<p>  由于密封类是一个可继承的类，因此在继承它的时候需要在后面加上一对括号。</p>
+</blockquote>
+<p>  现在 getResultMsg() 方法中的 else 条件已经不再需要了。<br>
+　　因为当在 when 语句中传入一个密封类变量作为条件时，Kotlin 编译器会自动检查该密封类有哪些子类，并强制要求你将每一个子类所对应的条件全部处理。这样就可以保证，即使没有编写 else 条件，也不可能会出现漏写条件分支的情况。<br>
+　　而如果我们现在新增一个 Unknown 类，并也让它继承自 Result，此时 getResultMsg() 方法就一定会报错，必须增加一个 Unknown 的条件分支才能让代码编译通过。</p>
+<blockquote>
+<p>  密封类及其所有子类只能定义在同一个文件的顶层位置，不能嵌套在其他类中，这是被密封类底层的实现机制所限制的。</p>
+</blockquote>
+<p>  下面使用密封类结合<code>MsgAdapter</code>中的<code>ViewHolder</code>一起使用，并顺便优化一下 MsgAdapter 中的代码。</p>
+<pre><code class="language-java">    class MsgAdapter(val msgList: List&lt;Msg&gt;) : RecyclerView.Adapter&lt;RecyclerView.ViewHolder&gt;() {
+        inner class LeftViewHolder(view: View) : RecyclerView.ViewHolder(view) {      
+            ...
+        }
+        inner class RightViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            ...
+        }
+        override fun getItemViewType(position: Int): Int {
+            ...
+        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) {
+            ...
+        }
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val msg = msgList[position]
+            when (holder) {
+                is LeftViewHolder -&gt; holder.leftMsg.text = msg.content
+                is RightViewHolder -&gt; holder.rightMsg.text = msg.content
+            else -&gt; throw IllegalArgumentException()
+            }
+        }
+        override fun getItemCount() = msgList.size
+    }
+</code></pre>
+<p>  <code>onBindViewHolder()</code>方法中就存在一个没有实际作用的 else 条件，只是抛出了一个异常而已。对于这部分代码，我们就可以借助密封类的特性来进行优化。<br>
+　　删除<code>LeftViewHolder</code>和<code>RightViewHolder</code>类，新建一个<code>MsgViewHolder.kt</code>文件，在其中加入如下代码：</p>
+<pre><code class="language-java">    sealed class MsgViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    class LeftViewHolder(view: View) : MsgViewHolder(view) {
+        val leftMsg: TextView = view.findViewById(R.id.leftMsg)
+    }
+    class RightViewHolder(view: View) : MsgViewHolder(view) {
+        val rightMsg: TextView = view.findViewById(R.id.rightMsg)
+    }
+</code></pre>
+<p>  这里定义了一个密封类<code>MsgViewHolder</code>，并让它继承自<code>RecyclerView.ViewHolder</code>，然后让 LeftViewHolder 和 RightViewHolder 继承自 MsgViewHolder。<br>
+　　这样就相当于密封类 MsgViewHolder 只有两个已知子类，因此在 when 语句中只要处理这两种情况的条件分支即可。<br>
+　　现在修改 MsgAdapter 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MsgAdapter(val msgList: List&lt;Msg&gt;) : RecyclerView.Adapter&lt;MsgViewHolder&gt;() {
+        ...
+        override fun onBindViewHolder(holder: MsgViewHolder, position: Int) {
+            val msg = msgList[position]
+            when (holder) {
+                is LeftViewHolder -&gt; holder.leftMsg.text = msg.content
+                is RightViewHolder -&gt; holder.rightMsg.text = msg.content
+            }
+        }
+        ...
+    }
+</code></pre>
+<p>  这里我们将<code>RecyclerView.Adapter</code>的泛型指定成刚刚定义的密封类<code>MsgViewHolder</code>。<br>
+　　这样<code>onBindViewHolder()</code>方法传入的参数就变成了 MsgViewHolder。然后只要在 when 语<br>
+句当中处理两种情况即可。</p>
+<blockquote>
+<p>  这种 RecyclerView 适配器的写法更加规范也更加推荐。</p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlinbiao-zhun-han-shu-he-jing-tai-fang-fa/" class="post-title gt-a-link">
+                    Kotlin：标准函数和静态方法
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

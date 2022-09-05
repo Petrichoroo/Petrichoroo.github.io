@@ -1,0 +1,430 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — Broadcast | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — Broadcast
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-11 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#broadcast">Broadcast</a>
+<ul>
+<li><a href="#%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E7%AE%80%E4%BB%8B">广播机制简介</a></li>
+<li><a href="#%E6%8E%A5%E6%94%B6%E7%B3%BB%E7%BB%9F%E5%B9%BF%E6%92%AD">接收系统广播</a>
+<ul>
+<li><a href="#%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C%E7%9B%91%E5%90%AC%E7%BD%91%E7%BB%9C%E5%8F%98%E5%8C%96">动态注册监听网络变化</a></li>
+<li><a href="#%E9%9D%99%E6%80%81%E6%B3%A8%E5%86%8C%E5%AE%9E%E7%8E%B0%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8">静态注册实现开机启动</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%91%E9%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B9%BF%E6%92%AD">发送自定义广播</a>
+<ul>
+<li><a href="#%E5%8F%91%E9%80%81%E6%A0%87%E5%87%86%E5%B9%BF%E6%92%AD">发送标准广播</a></li>
+<li><a href="#%E5%8F%91%E9%80%81%E6%9C%89%E5%BA%8F%E5%B9%BF%E6%92%AD">发送有序广播</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0%E5%B9%BF%E6%92%AD">使用本地广播</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="broadcast">Broadcast</h1>
+<hr>
+<h2 id="广播机制简介">广播机制简介</h2>
+<blockquote>
+<p>  Android 中的每个应用程序都可以对自己感兴趣的广播进行注册，这样该程序就只会收到自己所关心的广播内容，这些广播可能是来自于系统的，也可能是来自于其他应用程序的。Android 提供了一套完整的 API，允许应用程序自由地发送和接收广播。</p>
+</blockquote>
+<p>  Android中 的广播主要可以分为两种类型：标准广播和有序广播。</p>
+<ul>
+<li>
+<p>标准广播是一种完全异步执行的广播，在广播发出之后，所有的 BroadcastReceiver 几乎会在同一时刻收到这条广播消息，因此它们之间没有任何先后顺序可言。这种广播的效率会比较高，但同时也意味着它是无法被截断的。</p>
+</li>
+<li>
+<p>有序广播则是一种同步执行的广播，在广播发出之后，同一时刻只会有一个 BroadcastReceiver 能够收到这条广播消息，当这个BroadcastReceiver中的逻辑执行完毕后，广播才会继续传递。所以此时的 BroadcastReceiver 是有先后顺序的，优先级高的 BroadcastReceiver 就可以先收到广播消息，并且前面的 BroadcastReceiver 还可以截断正在传递的广播，这样后面的 BroadcastReceiver 就无法收到广播消息了。</p>
+</li>
+</ul>
+<h2 id="接收系统广播">接收系统广播</h2>
+<blockquote>
+<p>  Android 内置了很多系统级别的广播，我们可以在应用程序中通过监听这些广播来得到系统的状态信息。广播接收器可以自由地对自己感兴趣的广播进行注册，这样当有相应的广播发出时，广播接收器就能够收到该广播，并在内部处理相应的逻辑。<br>
+　　注册广播的方式一般有两种，在代码中注册和在 AndroidManifest.xml 中注册，其中前者也被称为动态注册，后者也被称为静态注册。</p>
+</blockquote>
+<h3 id="动态注册监听网络变化">动态注册监听网络变化</h3>
+<p>  新建一个类，让它继承自<code>BroadcastReceiver</code>，并重写父类的<code>onReceive()</code>方法。这样当有广播到来时，onReceive() 方法就会得到执行，具体的逻辑就可以在这个方法中处理。代码如下：</p>
+<pre><code class="language-java">    public class MainActivity extends AppCompatActivity {
+        private IntentFilter intentFilter;
+        private NetWorkChangeReceiver netWorkChangeReceiver;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            intentFilter = new IntentFilter();
+            intentFilter.addAction(&quot;android.net.conn.CONNECTIVITY_CHANGE&quot;);
+            netWorkChangeReceiver = new NetWorkChangeReceiver();
+            registerReceiver(netWorkChangeReceiver,intentFilter);
+        }
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+            unregisterReceiver(netWorkChangeReceiver);
+        }
+
+        class NetWorkChangeReceiver extends BroadcastReceiver {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Toast.makeText(context,&quot;network changes&quot;,Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+</code></pre>
+<p>  这里定义了一个内部类<code>NetworkChangeReceiver</code>，继承自<code>BroadcastReceiver</code>，并重写了父类的<code>onReceive()</code>方法。这样每当网络状态发生变化时，onReceive() 方法就会得到执行，这里只是简单地使用 Toast 提示了一段文本信息。<br>
+　　这里先创建了一个<code>IntentFilter</code>的实例，添加了值为<code>android.net.conn.CONNECTIVITY_CHANGE</code>的 action。当网络状态发生变化时，系统发出的正是这条广播，也就是说我们的广播接收器想要监听什么广播，就在这里添加相应的 action。<br>
+　　然后创建了<code>NetworkChangeReceiver</code>的实例，再调用<code>registerReceiver()</code>方法进行注册。<br>
+  这样 NetworkChangeReceiver 就会收到所有值为<code>android.net.conn.CONNECTIVITY_CHANGE</code>的广播，也就实现了监听网络变化的功能。<br>
+　　最后需要注意的是，动态注册的广播接收器一定都要取消注册才行。这里我们是在<code>onDestroy()</code>方法中通过调用<code>unregisterReceiver()</code>方法来实现的。<br>
+　　不过，只是提醒网络发生了变化还不够人性化，最好是能准确地告诉用户当前是有网络还是没有网络，因此我们还需要对上面的代码进行进一步的优化。修改 NetWorkChangeReceiver 中的代码，如下所示：</p>
+<pre><code class="language-java">    @Override
+    public void onReceive(Context context, Intent intent) {
+        //得到系统服务类的实例 专门用于管理网络连接
+        ConnectivityManager connectionManager = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+        //判断当前是否有网络
+        if (networkInfo != null &amp;&amp; networkInfo.isAvailable()) {
+            Toast.makeText(context, &quot;network is available&quot;, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, &quot;network is unavailable&quot;, Toast.LENGTH_SHORT).show();
+        }
+    }
+</code></pre>
+<p>  这里通过<code>getSystemService()</code>方法得到<code>ConnectivityManager</code>的实例，这是一个系统服务类，专门用于管理网络连接的。然后调用它的<code>getActiveNetworkInfo()</code>方法可以得到<code>NetworkInfo</code>的实例，最后通过判断出当前是否有网络来对用户进行提示。<br>
+　　最后需要注意的是，访问系统的网络状态就是需要声明权限的。修改<code>AndroidManifest.xml</code>，如下所示：</p>
+<pre><code class="language-java">    &lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;
+</code></pre>
+<h3 id="静态注册实现开机启动">静态注册实现开机启动</h3>
+<blockquote>
+<p>  在Android 8.0系统之后，所有隐式广播都不允许使用静态注册的方式来接收了。隐式广播指的是那些没有具体指定发送给哪个应用程序的广播，大多数系统广播属于隐式广播，但是少数特殊的系统广播目前仍然允许使用静态注册的方式来接收。</p>
+</blockquote>
+<p>  这里我们准备让程序接收一条开机广播，在开机的时候，我们的应用程序肯定是没有启动的，因此这个功能不能使用动态注册的方式来实现，而应该使用静态注册的方式来接收开机广播，然后在<code>onReceive()</code>方法里执行相应的逻辑。<br>
+　　首先在我们的<code>com.example.broadcasttest</code>包下右击新建一个BroadcastReceiver，将其命名为<code>BootCompleteReceiver</code>，并勾选下面的两个属性，<code>Exported</code>表示是否允许这个BroadcastReceiver 接收本程序以外的广播，<code>Enabled</code>表示是否启用这个BroadcastReceiver。<br>
+　　然后修改 BootCompleteReceiver 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class BootCompleteReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context,&quot;Boot Complete&quot;,Toast.LENGTH_SHORT).show();
+        }
+    }
+</code></pre>
+<p>  这里我们只是在<code>onReceive()</code>方法中使用 Toast 弹出一段提示信息。<br>
+　　另外，静态的 BroadcastReceiver 一定要在<code>AndroidManifest.xml</code>文件中注册才可以使用。不过目前的<code>BootCompleteReceiver</code>是无法收到开机广播的，我们还需要对 AndroidManifest.xml 文件进行修改，如下所示：</p>
+<pre><code class="language-java">    &lt;receiver
+        android:name=&quot;.BootCompleteReceiver&quot;
+        android:enabled=&quot;true&quot;
+        android:exported=&quot;true&quot;&gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;android.intent.action.BOOT_COMPLETED&quot; /&gt;
+        &lt;/intent-filter&gt;
+    &lt;/receiver&gt;
+</code></pre>
+<p>  由于 Android 系统启动完成后会发出一条值为<code>android.intent.action.BOOT_COMPLETED</code>的广播，因此我们在<code>&lt;receiver&gt;</code>标签中又添加了一个<code>&lt;intent-filter&gt;</code>标签，并在里面声明了相应的 action。<br>
+　　另外接收系统的开机广播就是需要进行权限声明的，所以修改<code>AndroidManifest.xml</code>文件，如下所示：</p>
+<pre><code class="language-java">    &lt;uses-permission android:name=&quot;android.permission.RECEIVE_BOOT_COMPLETED&quot; /&gt;
+</code></pre>
+<p>  注意不要在<code>onReceive()</code>方法中添加过多的逻辑或者进行任何的耗时操作，因为 BroadcastReceiver 中是不允许开启线程的，当 onReceive() 方法运行了较长时间而没有结束时，程序就会出现错误。<br>
+　　因此广播接收器更多的是扮演一种打开程序其他组件的角色，比如创建一条状态栏通知，或者启动一个服务等。</p>
+<h2 id="发送自定义广播">发送自定义广播</h2>
+<h3 id="发送标准广播">发送标准广播</h3>
+<p>  新建一个<code>MyBroadcastReceiver</code>，代码如下所示：</p>
+<pre><code class="language-java">    public class MyBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context,&quot;received in MyBroadcastReceiver&quot;,Toast.LENGTH_SHORT).show();
+        }
+    }
+</code></pre>
+<p>  然后在<code>AndroidManifest.xml</code>中对这个广播接收器进行修改：</p>
+<pre><code class="language-java">    &lt;receiver
+        android:name=&quot;.MyBroadcastReceiver&quot;
+        android:enabled=&quot;true&quot;
+        android:exported=&quot;true&quot;&gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;com.example.broadcasttest.MY_BROADCAST&quot;/&gt;
+        &lt;/intent-filter&gt;
+    &lt;/receiver&gt;
+</code></pre>
+<p>  这里让 MyBroadcastReceiver 接收一条值为<code>com.example.broadcasttest. MY_BROADCAST</code>的广播，因此待会儿在发送广播的时候，我们就需要发出这样的一条广播。<br>
+　　我们在布局文件中定义了一个 Button，用于作为发送广播的触发点。并为其设置点击事件，如下所示：</p>
+<pre><code class="language-java">    Button myButton = findViewById(R.id.my_button);
+    myButton.setOnClickListener(new View.OnClickListener() {
+        //所有监听Intent中这条广播的广播接收器就会收到消息
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(&quot;com.example.broadcasttest.MY_BROADCAST&quot;);
+            //属性分别是广播接收器的包名和对应的 Receiver 的路径
+            intent.setComponent(new ComponentName(&quot;com.example.broadcasttest&quot;,
+                        &quot;com.example.broadcasttest.MY_BROADCAST&quot;));
+            sendBroadcast(intent,);
+        }
+    });
+</code></pre>
+<p>  首先构建出了一个 Intent 对象，并把要发送的广播的值传入，注意在 Android8.0 系统之后，静态注册的 BroadcastReceiver 是无法接收隐式广播的，而默认情况下我们发出的自定义广播恰恰都是隐式广播。因此这里调用<code>setComponent()</code>方法指定广播是发送给哪个应用程序的，从而让它变成一条显式广播。再调用<code>sendBroadcast()</code>方法发送广播，这样所有监听<code>com.example.broadcasttest.MY_BROADCAST</code>这条广播的广播接收器就会收到消息。</p>
+<h3 id="发送有序广播">发送有序广播</h3>
+<blockquote>
+<p>  和标准广播不同，有序广播是一种同步执行的广播，并且是可以被截断的</p>
+</blockquote>
+<p>  修改 Button 的点击事件，如下所示：</p>
+<pre><code class="language-java">    ...
+    sendOrderedBroadcast(intent, null);  //发送有序广播
+</code></pre>
+<p>  <code>sendOrderedBroadcast()</code>方法接收两个参数，第一个参数仍然是 Intent，第二个参数是一个与权限相关的字符串，这里传入 null 就行了。<br>
+　　然后需要去设定广播接收器的先后顺序，修改<code>AndroidManifest.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;receiver
+        android:name=&quot;.MyBroadcastReceiver&quot;
+        android:enabled=&quot;true&quot;
+        android:exported=&quot;true&quot;&gt;
+        &lt;intent-filter android:priority=&quot;100&quot;&gt;
+            &lt;action android:name=&quot;com.example.broadcasttest.MY_BROADCAST&quot;/&gt;
+        &lt;/intent-filter&gt;
+    &lt;/receiver&gt;
+</code></pre>
+<p>  这里通过<code>android:priority</code>属性给 BroadcastReceiver 设置了优先级，优先级<br>
+比较高的 BroadcastReceiver 就可以先收到广播。<br>
+　　既然已经获得了接收广播的优先权，那么<code>MyBroadcastReceiver</code>就可以选择是否允许广播继续<br>
+传递了。修改 MyBroadcastReceiver 中的代码，如下所示：</p>
+<pre><code class="language-java">    @Override
+    public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context,&quot;received in MyBroadcastReceiver&quot;,Toast.LENGTH_SHORT).show();
+        abortBroadcast();   //将这条广播截断 后面的广播接收器将无法再接收到这条广播
+    }
+</code></pre>
+<h2 id="使用本地广播">使用本地广播</h2>
+<blockquote>
+<p>  前面我们发送和接收的广播全部属于系统全局广播，即发出的广播可以被其他任何应用程序接收到，并且我们也可以接收来自于其他任何应用程序的广播。这样就很容易引起安全性的问题，比如说我们发送的一些携带关键性数据的广播有可能被其他的应用程序截获，或者其他的程序不停地向我们的广播接收器里发送各种垃圾广播。</p>
+</blockquote>
+<p>  为了解决广播的安全性问题，Android 引入了本地广播机制，使用该机制发出的广播只能在应用程序的内部进行传递，并且广播接收器也只能接收来自本应用程序发出的广播。<br>
+　　需要知道的是，本地广播是无法通过静态注册的方式来接收的。我们知道静态注册主要是为了在程序未启动的情况下能接收广播，而当我们发送本地广播的时候，程序肯定是已经启动的了，所以我们需要动态注册方式创建接收器。<br>
+　　这里我们创建一个继承于<code>BroadcastReceiver</code>的<code>LocalReceiver</code>类，代码如下：</p>
+<pre><code class="language-java">    public class LocalReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context,&quot;Received in LocalReceiver&quot;,Toast.LENGTH_SHORT).show();
+        }
+    }
+</code></pre>
+<p>  接着修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MainActivity extends AppCompatActivity {
+        private IntentFilter intentFilter;
+        private LocalReceiver localReceiver;
+        private LocalBroadcastManager localBroadcastManager;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            //获取实例
+            Button button = findViewById(R.id.send_button);
+            localBroadcastManager = LocalBroadcastManager.getInstance(this);
+            intentFilter = new IntentFilter();
+            intentFilter.addAction(&quot;com.example.broadcasttest.LOCAL_BROADCAST&quot;);
+            localReceiver = new LocalReceiver();
+            //注册本地广播接收器
+            localBroadcastManager.registerReceiver(localReceiver,intentFilter);
+            //发送广播的点击事件
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(&quot;com.example.broadcasttest.LOCAL_BROADCAST&quot;);
+                    localBroadcastManager.sendBroadcast(intent);    //发送本地广播
+                }
+            });
+        }
+
+        @Override
+        protected void onDestroy(){
+            super.onDestroy();
+            unregisterReceiver(localReceiver);
+        }
+    }
+</code></pre>
+<p>  首先通过<code>LocalBroadcastManager</code>的<code>getInstance()</code>方法得到了它的一个实例，然后在注册广播接收器的时候调用的是 LocalBroadcastManager 的<code>registerReceiver()</code>方法，在发送广播的时候调用的是 LocalBroadcastManager 的<code>sendBroadcast()</code>方法，仅此而已。<br>
+　　使用本地广播的几点优势：</p>
+<ul>
+<li>可以明确地知道正在发送的广播不会离开我们的程序，因此不必担心机密数据泄漏。</li>
+<li>其他的程序无法将广播发送到我们程序的内部，因此不需要担心会有安全漏洞的隐患。</li>
+<li>发送本地广播比发送系统全局广播将会更加高效。</li>
+</ul>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-fragment/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — Fragment
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

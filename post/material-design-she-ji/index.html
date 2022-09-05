@@ -1,0 +1,1292 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Material Design 设计 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Material Design 设计
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-23 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#material-design">Material Design</a>
+<ul>
+<li><a href="#toolbar">Toolbar</a></li>
+<li><a href="#%E6%BB%91%E5%8A%A8%E8%8F%9C%E5%8D%95">滑动菜单</a>
+<ul>
+<li><a href="#drawerlayout">DrawerLayout</a></li>
+<li><a href="#navigationview">NavigationView</a></li>
+</ul>
+</li>
+<li><a href="#%E6%82%AC%E6%B5%AE%E6%8C%89%E9%92%AE%E5%92%8C%E5%8F%AF%E4%BA%A4%E4%BA%92%E6%8F%90%E7%A4%BA">悬浮按钮和可交互提示</a>
+<ul>
+<li><a href="#floatingactionbutton">FloatingActionButton</a></li>
+<li><a href="#snackbar">Snackbar</a></li>
+<li><a href="#coordinatorlayout">CoordinatorLayout</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%A1%E7%89%87%E5%BC%8F%E5%B8%83%E5%B1%80">卡片式布局</a>
+<ul>
+<li><a href="#materialcardview">MaterialCardView</a></li>
+<li><a href="#appbarlayout">AppBarLayout</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%8B%E6%8B%89%E5%88%B7%E6%96%B0">下拉刷新</a></li>
+<li><a href="#%E5%8F%AF%E6%8A%98%E5%8F%A0%E5%BC%8F%E6%A0%87%E9%A2%98%E6%A0%8F">可折叠式标题栏</a>
+<ul>
+<li><a href="#collapsingtoolbarlayout">CollapsingToolbarLayout</a></li>
+<li><a href="#%E5%85%85%E5%88%86%E5%88%A9%E7%94%A8%E7%B3%BB%E7%BB%9F%E7%8A%B6%E6%80%81%E6%A0%8F%E7%A9%BA%E9%97%B4">充分利用系统状态栏空间</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="material-design">Material Design</h1>
+<blockquote>
+<p>  Material Design 是由 Google 的设计工程师们基于传统优秀的设计原则，结合丰富的创意和科学技术所开发的一套全新的界面设计语言，包含了视觉、运动、互动效果等特性。</p>
+</blockquote>
+<hr>
+<h2 id="toolbar">Toolbar</h2>
+<p>  每个 Activity 最顶部的那个标题栏是<code>ActionBar</code>，而<code>Toolbar</code>的强大之处在于，它不仅继承了 ActionBar 的所有功能，而且灵活性很高，可以配合其它控件完成一些 Material Design 的效果。<br>
+　　任何一个新建的项目，默认都是会显示<code>ActionBar</code>的，这个 ActionBar 其实这是根据项目中指定的主题来显示的。<br>
+　　在<code>AndroidManifest.xml</code>文件中，可以通过<code>android:theme</code>属性指定一个主题，打开<code>res/values/styles.xml</code>文件，可以看到这个主题，如下所示：</p>
+<pre><code class="language-java">    &lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;&gt;
+        &lt;style name=&quot;Theme.MaterialTest&quot; parent=&quot;Theme.MaterialComponents.DayNight.DarkActionBar&quot;&gt;
+            ...
+        &lt;/style&gt;
+    &lt;/resources&gt;
+</code></pre>
+<p>  可以看到，这里的<code>DarkActionBar</code>是一个深色的<code>ActionBar</code>主题，现在需要使用<code>Toolbar</code>来替代 ActionBar，因此需要指定一个不带 ActionBar 的主题。<br>
+　　这里使用<code>Theme.MaterialComponents.Light.NoActionBar</code>，其表示浅色主题，它会将界面的主体颜色设成浅色，陪衬颜色设成深色。<br>
+　　然后修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;androidx.appcompat.widget.Toolbar
+            android:id=&quot;@+id/toolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;?attr/actionBarSize&quot;
+            android:background=&quot;@color/design_default_color_primary&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:popupTheme=&quot;@style/ThemeOverlay.AppCompat.Light&quot; /&gt;
+    &lt;/FrameLayout&gt;
+</code></pre>
+<p>  由于许多 Material 属性是在新系统中新增的，为了能够兼容旧系统，这里使用<code>xmlns:app</code>指定了一个新的命名空间，因此可以使用<code>app:attribute</code>这样的写法。<br>
+　　由于在<code>styles.xml</code>中将程序的主题指定成了浅色主题，因此<code>Toolbar</code>现在也是浅色主题，那么 Toolbar 上面的各种元素就会自动使用深色系，从而和主体颜色区别开。<br>
+　　但为了与主体的浅色区别开，<code>Toolbar</code>中的文字变成黑色会很难看。那么为了能让<code>Toolbar</code>单独使用深色主题，这里使用<code>android:theme</code>将主题指定成<code>ThemeOverlay.AppCompat.Dark.ActionBar</code>。<br>
+　　但是这样指定之后又会出现新的问题，若<code>Toolbar</code>中有菜单按钮，那么弹出的菜单项也会变成深色主题，这样就再次变得十分难看，于是这里又使用了<code>app:popupTheme</code>属性，单独将弹出的菜单项指定成浅色主题。<br>
+　　接下来修改 MainActivity，代码如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            setSupportActionBar(toolbar)
+        }
+    }
+</code></pre>
+<p>  这里调用<code>setSupportActionBar()</code>方法并将<code>Toolbar</code>的实例传入即可。</p>
+<p>  下面在<code>AndroidManifest.xml</code>中修改标题栏上显示的文字内容，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    package=&quot;com.example.materialtest&quot;&gt;
+
+    &lt;application
+        ...
+        &lt;activity
+            android:name=&quot;.MainActivity&quot;
+            android:label=&quot;Fruits&quot;&gt;
+            ...
+    &lt;/application&gt;
+
+&lt;/manifest&gt;
+</code></pre>
+<p>  这里给 activity 增加了一个<code>android:label</code>属性，用于指定在<code>Toolbar</code>中显示的文字内容，如果没有指定的话，会默认使用 application 中指定的<code>label</code>内容，即应用名称。</p>
+<p>  下面在<code>Toolbar</code>上添加一些 action 按钮，将图片资源放在<code>drawable-xxhdpi</code>中，然后在<code>res</code>目录下创建一个<code>menu</code>文件夹，接着在 menu 下创建一个<code>toolbar.xml</code>文件，并编写如下代码：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
+        &lt;item
+            android:id=&quot;@+id/backup&quot;
+            android:icon=&quot;@drawable/ic_backup&quot;
+            android:title=&quot;Backup&quot;
+            app:showAsAction=&quot;always&quot; /&gt;
+        &lt;item
+            android:id=&quot;@+id/delete&quot;
+            android:icon=&quot;@drawable/ic_delete&quot;
+            android:title=&quot;Delete&quot;
+            app:showAsAction=&quot;ifRoom&quot; /&gt;
+        &lt;item
+            android:id=&quot;@+id/settings&quot;
+            android:icon=&quot;@drawable/ic_settings&quot;
+            android:title=&quot;Settings&quot;
+            app:showAsAction=&quot;never&quot; /&gt;
+    &lt;/menu&gt;
+</code></pre>
+<p>  通过<code>&lt;item&gt;</code>标签来定义<code>action</code>按钮，<code>android:id</code>用于指定按钮的 id，<code>android:icon</code>用于指定按钮的图标，<code>android:title</code>用于指定按钮的文字。<br>
+　　接着使用<code>app:showAsAction</code>来指定按钮的显示位置：</p>
+<ul>
+<li>
+<p><code>always</code>：表示永远显示在<code>Toolbar</code>中，如果屏幕空间不够则不显示。</p>
+</li>
+<li>
+<p><code>ifRoom</code>：表示屏幕空间足够的情况下显示在<code>Toolbar</code>中，不够的话就显示在菜单当中。</p>
+</li>
+<li>
+<p><code>never</code>：表示永远显示在菜单当中。</p>
+</li>
+</ul>
+<blockquote>
+<p>  注意，<code>Toolbar</code>中的 action 按钮只会显示图标，菜单中的 action 按钮只会显示文字。</p>
+</blockquote>
+<p>  下面修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            setSupportActionBar(toolbar)
+        }
+
+        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+            menuInflater.inflate(R.menu.toolbar, menu)
+            return true
+        }
+
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.backup -&gt; Toast.makeText(
+                    this, &quot;You clicked Backup&quot;,
+                    Toast.LENGTH_SHORT
+                ).show()
+                R.id.delete -&gt; Toast.makeText(
+                    this, &quot;You clicked Delete&quot;,
+                    Toast.LENGTH_SHORT
+                ).show()
+                R.id.settings -&gt; Toast.makeText(
+                    this, &quot;You clicked Settings&quot;,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            return true
+        }
+    }
+</code></pre>
+<p>  在<code>onCreateOptionsMenu()</code>中加载<code>toolbar.xml</code>菜单文件，然后在<code>onOptionsItemSelected()</code>方法中处理各个按钮的点击事件。<br>
+　　运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661339081892.png" alt="" loading="lazy"></p>
+<p>  可以看到，<code>Toolbar</code>上显示了两个 action 按钮，这是因为<code>Backup</code>按钮指定的显示位置是<code>always</code>，<code>Delete</code>按钮指定的显示位置是<code>ifRoom</code>，而现在屏幕空间很充足，因此两个按钮都会显示在 Toolbar 中。另外一个<code>Settings</code>按钮由于指定的显示位置是<code>never</code>，所以不会显示在 Toolbar 中，另外，这些 action 按钮都是可以响应点击事件的。</p>
+<h2 id="滑动菜单">滑动菜单</h2>
+<h3 id="drawerlayout">DrawerLayout</h3>
+<blockquote>
+<p>  滑动菜单，就是将一些菜单选项隐藏起来，而不是放置在主屏幕上，然后可以通过滑动的方式将菜单显示出来。</p>
+</blockquote>
+<p>  <code>DrawerLayout</code>是一个布局，在其中允许放入两个直接子控件：第一个子控件是主屏幕中显示的内容，第二个子控件是滑动菜单中显示的内容。<br>
+　　修改 activity_main.xml 中的代码，如下：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:id=&quot;@+id/drawerLayout&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;FrameLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                android:id=&quot;@+id/toolbar&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;?attr/actionBarSize&quot;
+                android:background=&quot;@color/design_default_color_primary&quot;
+                android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+                app:popupTheme=&quot;@style/ThemeOverlay.AppCompat.Light&quot; /&gt;
+        &lt;/FrameLayout&gt;
+
+        &lt;TextView
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_gravity=&quot;start&quot;
+            android:background=&quot;#FFF&quot;
+            android:text=&quot;This is menu&quot;
+            android:textSize=&quot;30sp&quot; /&gt;
+    &lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  最外层的控件使用了<code>DrawerLayout</code>。其中放置了两个直接子控件：第一个子控件是<code>FrameLayout</code>，用于作为主屏幕中显示的内容，里面是之前定义的<code>Toolbar</code>；第二个子控件是一个<code>TextView</code>，用于作为滑动菜单中显示的内容，其实使用什么都可以，DrawerLayout 并没有限制只能使用固定的控件。<br>
+　　第二个子控件的<code>layout_gravity</code>这个属性是必须指定的，因为需要告诉滑动菜单是在屏幕的左边还是右边，这里指定的<code>start</code>表示会根据系统语言进行判断，如果系统语言是从左往右的，比如英语、汉语，滑动菜单就在左边，如果系统语言是从右往左的，比如阿拉伯语，滑动菜单就在右边。<br>
+　　运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661339908001.png" alt="" loading="lazy"><br>
+  在屏幕的左侧边缘向右拖动，就可以让滑动菜单显示出来了。</p>
+<blockquote>
+<p>  不过有个问题，因为只有在屏幕的左侧边缘进行拖动时才能将菜单拖出来，而很多用户可能根本就不知道有这个功能，那么该怎么提示他们呢？</p>
+</blockquote>
+<p>  Material Design 建议的做法是在<code>Toolbar</code>的最左边加入一个导航按钮，点击按钮也会将滑动菜单的内容展示出来。<br>
+　　修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            ...
+            supportActionBar?.let {
+                it.setDisplayHomeAsUpEnabled(true)  //让导航按钮显示出来
+                it.setHomeAsUpIndicator(R.drawable.ic_menu) //设置导航按钮图标
+            }
+        }
+        ...
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                ...
+                android.R.id.home -&gt; drawerLayout.openDrawer(GravityCompat.START)
+            }
+            return true
+        }
+    }
+</code></pre>
+<p>  调用<code>getSupportActionBar()</code>方法得到了<code>ActionBar</code>的实例，虽然这个 ActionBar 的具体实现是由<code>Toolbar</code>来完成的。<br>
+　　实际上，<code>Toolbar</code>最左侧的这个按钮就叫作<code>Home</code>按钮，它默认的图标是一个返回的箭头，含义是返回上一个 Activity。很明显，这里将它默认的样式和作用都进行了修改。<br>
+　　对<code>Home</code>按钮的点击事件进行处理，其 id 永远都是<code>android.R.id.home</code>。然后调用<code>DrawerLayout</code>的<code>openDrawer()</code>方法将滑动菜单展示出来。</p>
+<blockquote>
+<p>  注意，<code>openDrawer()</code>方法要求传入一个<code>Gravity</code>参数，为了保证这里的行为和 XML 中定义的一致，传入了<code>GravityCompat.START</code>。</p>
+</blockquote>
+<p>  运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661340658124.png" alt="" loading="lazy"><br>
+  可以看到，在 Toolbar 的最左边出现了一个导航按钮。</p>
+<h3 id="navigationview">NavigationView</h3>
+<p>  上面菜单页面仅仅使用了一个<code>TextView</code>，非常单调并且比较难看。可以使用<code>NavigationView</code>来对页面进行优化。<br>
+　　<code>NavigationView</code>是 Material 库中提供的一个控件，它不仅是严格按照 Material Design 的要求来设计的，而且可以将滑动菜单页面的实现变得非常简单。<br>
+　　在<code>app/build.gradle</code>文件的 dependencies 闭包中添加如下内容：</p>
+<pre><code class="language-java">dependencies {
+    implementation 'de.hdodenhof:circleimageview:3.0.1' //实现图片圆形化
+    ...
+}
+</code></pre>
+<p>  在开始使用<code>NavigationView</code>之前，需要准备好两个东西：<code>menu</code>和<code>headerLayout</code>。<br>
+　　<code>menu</code>用来在 NavigationView 中显示具体的菜单项，<code>headerLayout</code>则用来在 NavigationView 中显示头部布局。<br>
+　　在<code>menu</code>文件夹下创建一个<code>nav_menu.xml</code>文件，并编写如下代码：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+        &lt;group android:checkableBehavior=&quot;single&quot;&gt;
+            &lt;item
+                android:id=&quot;@+id/navCall&quot;
+                android:icon=&quot;@drawable/nav_call&quot;
+                android:title=&quot;Call&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navFriends&quot;
+                android:icon=&quot;@drawable/nav_friends&quot;
+                android:title=&quot;Friends&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navLocation&quot;
+                android:icon=&quot;@drawable/nav_location&quot;
+                android:title=&quot;Location&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navMail&quot;
+                android:icon=&quot;@drawable/nav_mail&quot;
+                android:title=&quot;Mail&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navTask&quot;
+                android:icon=&quot;@drawable/nav_task&quot;
+                android:title=&quot;Tasks&quot; /&gt;
+        &lt;/group&gt;
+    &lt;/menu&gt;
+</code></pre>
+<p>  首先在<code>&lt;menu&gt;</code>中嵌套了一个<code>&lt;group&gt;</code>标签，然后将 group 的<code>checkableBehavior</code>属性指定为<code>single</code>。group 表示一个组，checkableBehavior 指定为<code>single</code>表示组中的所有菜单项只能单选。<br>
+　　接下来应该准备<code>headerLayout</code>了，这是一个可以随意定制的布局。简单起见，只在其中放置头像、用户名、邮箱地址这 3 项内容。<br>
+　　在<code>layout</code>文件夹下创建一个<code>nav_header.xml</code>文件。修改其中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;180dp&quot;
+        android:background=&quot;@color/design_default_color_primary&quot;
+        android:padding=&quot;10dp&quot;&gt;
+
+        &lt;de.hdodenhof.circleimageview.CircleImageView
+            android:id=&quot;@+id/iconImage&quot;
+            android:layout_width=&quot;70dp&quot;
+            android:layout_height=&quot;70dp&quot;
+            android:layout_centerInParent=&quot;true&quot;
+            android:src=&quot;@drawable/nav_icon&quot; /&gt;
+
+        &lt;TextView
+            android:id=&quot;@+id/mailText&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_alignParentBottom=&quot;true&quot;
+            android:text=&quot;tony@gmail.com&quot;
+            android:textColor=&quot;#FFF&quot;
+            android:textSize=&quot;14sp&quot; /&gt;
+
+        &lt;TextView
+            android:id=&quot;@+id/userText&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_above=&quot;@+id/mailText&quot;
+            android:text=&quot;Tony Purple&quot;
+            android:textColor=&quot;#FFF&quot;
+            android:textSize=&quot;14sp&quot; /&gt;
+
+    &lt;/RelativeLayout&gt;
+</code></pre>
+<p>  在<code>RelativeLayout</code>中我们放置了 3 个控件，<code>CircleImageView</code>是一个用于将图片圆形化的控件，这里给它指定了一张图片作为头像，然后设置为居中显示。另外两个<code>TextView</code>分别用于显示用户名和邮箱地址。<br>
+　　现在<code>menu</code>和<code>headerLayout</code>都准备好了，可以使用<code>NavigationView</code>了。修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:id=&quot;@+id/drawerLayout&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+        ...
+        &lt;com.google.android.material.navigation.NavigationView
+            android:id=&quot;@+id/navView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_gravity=&quot;start&quot;
+            app:headerLayout=&quot;@layout/nav_header&quot;
+            app:menu=&quot;@menu/nav_menu&quot; /&gt;
+    &lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里将之前的 TextView 换成<code>NavigationView</code>，又通过<code>app:menu</code>和<code>app:headerLayout</code>属性将刚才准备好的<code>menu</code>和<code>headerLayout</code>设置进去，这样就完成 NavigationView 的定义。<br>
+　　然后处理<code>NavigationView</code>中菜单项的点击事件。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
+        ...
+        navView.setCheckedItem(R.id.navCall)    //将Call菜单项设置为默认选中
+        navView.setNavigationItemSelectedListener {
+            //当用户点击了任意菜单项时 就会回调到Lambda表达式当中 可以在这里写相应的逻辑处理
+            /*when(it.itemId){
+                R.id.navCall -&gt; ...
+                R.id.navFriends -&gt; ...
+            }*/
+            drawerLayout.closeDrawers() //这里简单起见 无论点击那个按钮 都将滑动菜单关闭
+            true    //表示此事件已被处理
+        }
+        ...
+    }
+}
+</code></pre>
+<p>  运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661344614072.png" alt="" loading="lazy"></p>
+<h2 id="悬浮按钮和可交互提示">悬浮按钮和可交互提示</h2>
+<blockquote>
+<p>  立面设计是 Material Design 中一条非常重要的设计思想，也就是说，按照 Material Design 的理念，应用程序的界面不仅仅是一个平面，而应该是有立体效果的。</p>
+</blockquote>
+<h3 id="floatingactionbutton">FloatingActionButton</h3>
+<p>  <code>FloatingActionButton</code>是 Material 库中提供的一个控件，这个控件可以比较轻松地实现悬浮按钮的效果。<br>
+　　修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;FrameLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+        ...
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id=&quot;@+id/fab&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;bottom|right&quot;
+            android:layout_margin=&quot;16dp&quot;
+            android:src=&quot;@drawable/ic_done&quot; /&gt;
+    &lt;/FrameLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661345203439.png" alt="" loading="lazy"></p>
+<p>  修改 MainActivity 中的代码，处理<code>FloatingActionButton</code>的点击事件，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        fab.setOnClickListener {
+            Toast.makeText(this, &quot;FAB clicked&quot;, Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+</code></pre>
+<p>  <code>FloatingActionButton</code>也是调用<code>setOnClickListener()</code>方法来设置按钮的点击事件，这里简单地弹出了一个<code>Toast</code>。</p>
+<h3 id="snackbar">Snackbar</h3>
+<p>  <code>Snackbar</code>并不是<code>Toast</code>的替代品，它们有着不同的应用场景。Toast 的作用是告诉用户现在发生了什么事情，但用户只能被动接收这个事情。而<code>Snackba</code>r则在这方面进行了扩展，它允许在提示中加入一个可交互按钮，当用户点击按钮的时候，可以执行一些额外的逻辑操作。<br>
+　　修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        fab.setOnClickListener { view -&gt;
+            Snackbar.make(view, &quot;Data deleted&quot;, Snackbar.LENGTH_SHORT)
+                .setAction(&quot;Undo&quot;) {
+                    Toast.makeText(this, &quot;Data resorted&quot;, Toast.LENGTH_SHORT).show()
+                }
+                .show()
+        }
+    }
+}
+</code></pre>
+<p>  这里调用了<code>Snackbar</code>的<code>make()</code>方法来创建一个 Snackba r对象。make() 方法的第一个参数需要传入一个<code>View</code>，只要是当前界面布局的任意一个 View 即可，Snackbar 会使用这个 View 自动查找最外层的布局，用于展示提示信息；第二个参数就是 Snackbar 中显示的内容；第三个参数是 Snackbar 显示的时长。<br>
+　　接着又调用了一个<code>setAction()</code>方法来设置一个动作，从而让 Snackbar 不仅仅是一个提示，而是可以和用户进行交互的。。<br>
+　　运行程序，并点击悬浮按钮，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661346030690.png" alt="" loading="lazy"></p>
+<p>  可以看到，<code>Snackbar</code>从屏幕底部出现了，上面有设置的提示文字，还有一个“Undo”按钮，并且可以点击。<br>
+　　不过问题是这个<code>Snackbar</code>将悬浮按钮给遮挡住了。虽说 Snackbar 过一会儿就会自动消失，但这种用户体验总归是不友好的。可以借助<code>CoordinatorLayout</code>来解决这个问题。</p>
+<h3 id="coordinatorlayout">CoordinatorLayout</h3>
+<p>  <code>CoordinatorLayout</code>可以说是一个加强版的<code>FrameLayout</code>它在普通情况下的作用和 FrameLayout 基本一致，但是它拥有一些额外的 Material 能力。<br>
+　　<code>CoordinatorLayout</code>可以监听其所有子控件的各种事件，并自动帮助我们做出最为合理的响应。比如刚才弹出的<code>Snackbar</code>提示将悬浮按钮遮挡住了，而如果能让 CoordinatorLayout 监听到 Snackbar 的弹出事件，那么它会自动将内部的<code>FloatingActionButton</code>向上偏移，从而确保不会被 Snackbar 遮挡。<br>
+　　至于<code>CoordinatorLayout</code>的使用也非常简单，只需要将原来的<code>FrameLayout</code>替换即可。修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;androidx.appcompat.widget.Toolbar
+            .../&gt;
+
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            ... /&gt;
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  由于<code>CoordinatorLayout</code>本身就是一个加强版的<code>FrameLayout</code>，因此这种替换不会有任何的副作用。重新运行程序，并点击悬浮按钮，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661346587267.png" alt="" loading="lazy"><br>
+  可以看到，悬浮按钮自动向上偏移了<code>Snackbar</code>的同等高度，从而确保不会被遮挡。当<code>Snackbar</code>消失的时候，悬浮按钮会自动向下偏移回到原来的位置。</p>
+<blockquote>
+<p>  在<code>Snackbar</code>的<code>make()</code>方法中传入的第一个参数用来指定 Snackbar 是基于哪个<code>View</code>触发的，刚才传入的是<code>FloatingActionButton</code>本身，而 FloatingActionButton 是<code>CoordinatorLayout</code>中的子控件，因此 Snackbar 这个事件就理所应当能被监听到。<br>
+　　若给<code>Snackbar</code>的<code>make()</code>方法传入一个<code>DrawerLayout</code>，那么 Snackbar 就会再次遮挡悬浮按钮，因为 DrawerLayout 不是<code>CoordinatorLayout</code>的子控件。</p>
+</blockquote>
+<h2 id="卡片式布局">卡片式布局</h2>
+<h3 id="materialcardview">MaterialCardView</h3>
+<p>  <code>MaterialCardView</code>是用于实现卡片式布局效果的重要控件，由 Material 库提供。实际上，它也是一个<code>FrameLayout</code>，只是额外提供了圆角和阴影等效果，看上去会有立体的感觉。<br>
+　　MaterialCardView 用法非常简单，如下所示：</p>
+<pre><code class="language-java">    &lt;com.google.android.material.card.MaterialCardView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        app:cardCornerRadius=&quot;4dp&quot;
+        app:elevation=&quot;5dp&quot;&gt;
+        &lt;TextView
+            android:id=&quot;@+id/infoText&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;/&gt;
+    &lt;/com.google.android.material.card.MaterialCardView&gt;
+</code></pre>
+<p>  这里定义了一个<code>MaterialCardView</code>布局，我们可以通过<code>app:cardCornerRadius</code>属性指定卡片圆角的弧度，数值越大，圆角的弧度也越大。<br>
+　　另外，还可以通过<code>app:elevation</code>属性指定卡片的高度：高度值越大，投影范围也越大，但是投影效果越淡；高度值越小，投影范围也越小，但是投影效果越浓。这一点和<code>FloatingActionButton</code>是一致的。<br>
+　　然后，我们在<code>MaterialCardView</code>布局中放置了一个<code>TextView</code>，那么这个 TextView 就会显示在一张卡片当中。<br>
+　　但是显然不可能在如此宽阔的一块空白区域内只放置一张卡片。为了能够充分利用屏幕的空间，这里使用<code>RecyclerView</code>填充主界面部分。<br>
+　　首先添加一个 Glide 库的依赖，在<code>app/build.gradle</code>文件中声明如下：</p>
+<pre><code class="language-java">dependencies {
+    implementation 'com.github.bumptech.glide:glide:4.9.0'  //实现复杂的图片加载功能
+    ...
+}
+</code></pre>
+<p>  Glide 是一个超级强大的开源图片加载库，它不仅可以用于加载本地图片，还可以加载网络图片、GIF 图片甚至是本地视频。最重要的是，Glide 的用法非常简单，只需几行代码就能轻松实现复杂的图片加载功能，因此这里使用它来加载水果图片。<br>
+　　接下来开始具体的代码实现，修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;androidx.appcompat.widget.Toolbar
+            .../&gt;
+
+        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id=&quot;@+id/recyclerView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot; /&gt;
+
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            ... /&gt;
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里在<code>CoordinatorLayout</code>中添加了一个<code>RecyclerView</code>，并使其占满整个布局的空间。<br>
+　　接着定义一个实体类<code>Fruit</code>，代码如下所示：</p>
+<pre><code class="language-java">    class Fruit(val name: String, val imageId: Int)
+</code></pre>
+<p>  <code>Fruit</code>类中只有两个字段：<code>name</code>表示水果的名字，<code>imageId</code>表示水果对应图片的资源id。<br>
+　　然后为<code>RecyclerView</code>的子项指定一个自定义的布局，在<code>layout</code>目录下新建<code>fruit_item.xml</code>，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;com.google.android.material.card.MaterialCardView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_margin=&quot;5dp&quot;
+        app:cardCornerRadius=&quot;4dp&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:orientation=&quot;vertical&quot;&gt;
+
+            &lt;ImageView
+                android:id=&quot;@+id/fruitImage&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;100dp&quot;
+                android:scaleType=&quot;centerCrop&quot; /&gt;
+
+            &lt;TextView
+                android:id=&quot;@+id/fruitName&quot;
+                android:layout_width=&quot;wrap_content&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_horizontal&quot;
+                android:layout_margin=&quot;5dp&quot;
+                android:textSize=&quot;16sp&quot; /&gt;
+        &lt;/LinearLayout&gt;
+    &lt;/com.google.android.material.card.MaterialCardView&gt;
+</code></pre>
+<p>  这里使用了<code>MaterialCardView</code>来作为子项的最外层布局，从而使得<code>RecyclerView</code>中的每个元素都是在卡片当中的。<br>
+　　注意，在<code>ImageView</code>中使用了一个<code>scaleType</code>属性，这个属性可以指定图片的缩放模式。由于各张水果图片的长宽比例可能会不一致，为了让所有的图片都能填充满整个 ImageView，这里使用<code>centerCrop</code>模式，它可以让图片保持原有比例填充满 ImageView，并将超出屏幕的部分裁剪掉。<br>
+　　接下来需要为<code>RecyclerView</code>准备一个适配器，新建<code>FruitAdapter</code>类，代码如下所示：</p>
+<pre><code class="language-java">    class FruitAdapter(val context: Context, val fruitList: List&lt;Fruit&gt;) :
+        RecyclerView.Adapter&lt;FruitAdapter.ViewHolder&gt;() {
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val fruitImage: ImageView = itemView.findViewById(R.id.fruitImage)
+            val fruitName: TextView = itemView.findViewById(R.id.fruitName)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.fruit_item, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val fruit = fruitList[position]
+            holder.fruitName.text = fruit.name
+            Glide.with(context).load(fruit.imageId).into(holder.fruitImage)
+        }
+
+        override fun getItemCount(): Int {
+            return fruitList.size
+        }
+    }
+</code></pre>
+<p>  需要注意的是，在<code>onBindViewHolder()</code>方法中使用了<code>Glide</code>来加载水果图片。<br>
+　　首先调用<code>Glide.with()</code>并传入一个<code>Context</code>、<code>Activity</code>或<code>Fragment</code>参数，然后调用<code>load()</code>方法加载图片，可以是一个 URL 地址，也可以是一个本地路径，或者是一个资源<code>id</code>，最后调用<code>into()</code>方法将图片设置到具体某一个<code>ImageView</code>中即可。</p>
+<blockquote>
+<p>  为什么要使用<code>Glide</code>而不是传统的设置图片方式呢？因为如果所使用的水果图片像素非常高的话，不进行压缩就直接展示，很容易引起内存溢出。<br>
+　　而<code>Glide</code>在内部做了许多非常复杂的逻辑操作，其中就包括了图片压缩，我们只需要安心按照 Glide的标准用法去加载图片即可。</p>
+</blockquote>
+<p>  这样就将<code>RecyclerView</code>的适配器准备好了，最后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    private val fruits = mutableListOf(
+        Fruit(&quot;Apple&quot;, R.drawable.apple), Fruit(
+            &quot;Banana&quot;,
+            R.drawable.banana
+        ), Fruit(&quot;Orange&quot;, R.drawable.orange), Fruit(
+            &quot;Watermelon&quot;,
+            R.drawable.watermelon
+        ), Fruit(&quot;Pear&quot;, R.drawable.pear), Fruit(
+            &quot;Grape&quot;,
+            R.drawable.grape
+        ), Fruit(&quot;Pineapple&quot;, R.drawable.pineapple), Fruit(
+            &quot;Strawberry&quot;,
+            R.drawable.strawberry
+        ), Fruit(&quot;Cherry&quot;, R.drawable.cherry), Fruit(
+            &quot;Mango&quot;,
+            R.drawable.mango
+        )
+    )
+    private val fruitList = ArrayList&lt;Fruit&gt;()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        initFruits()
+        val layoutManager = GridLayoutManager(this, 2)
+        recyclerView.layoutManager = layoutManager
+        val adapter = FruitAdapter(this, fruitList)
+        recyclerView.adapter = adapter
+    }
+
+    private fun initFruits() {
+        fruitList.clear()
+        repeat(50) {
+            val index = (0 until fruits.size).random()
+            fruitList.add(fruits[index])
+        }
+    }
+}
+</code></pre>
+<p>  首先定义了一个水果集合，集合里面存放了多个<code>Fruit</code>的实例，每个实例都代表一种水果。然后在<code>initFruits()</code>方法中，从刚才定义的<code>Fruit</code>数组中随机挑选一个水果放入<code>fruitList</code>当中，这样每次打开程序看到的水果数据都会是不同的。<br>
+　　这里使用到了<code>GridLayoutManager</code>布局方式，它的构造函数接收两个参数：第一个是<code>Context</code>，第二个是列数。这里每一行中会有两列数据。<br>
+　　现在重新运行一下程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661350933876.png" alt="" loading="lazy"><br>
+  可以看到，每个水果都是在一张单独的卡片当中的，并且还拥有圆角和投影。</p>
+<blockquote>
+<p>  不过又出现了一个问题，<code>Toolbar</code>被<code>RecyclerView</code>给挡住了，这就需要借助另外一个工具<code>AppBarLayout</code>来解决了。</p>
+</blockquote>
+<h3 id="appbarlayout">AppBarLayout</h3>
+<p>  由于<code>RecyclerView</code>和<code>Toolbar</code>都是放置在<code>CoordinatorLayout</code>中的，而CoordinatorLayout 就是一个加强版的<code>FrameLayout</code>，那么 FrameLayout 中的所有控件在不进行明确定位的情况下，默认都会摆放在布局的左上角，从而产生了遮挡的现象。<br>
+　　在传统情况下，使用偏移是唯一的解决办法，即让<code>RecyclerView</code>向下偏移一个<code>Toolbar</code>的高度，从而保证不会遮挡到 Toolbar。<br>
+　　不过这里准备使用 Material 库中提供的另外一个工具——<code>AppBarLayout</code>。AppBarLayout 实际<br>
+上是一个垂直方向的<code>LinearLayout</code>，它在内部做了很多滚动事件的封装。<br>
+　　使用<code>AppBarLayout</code>解决前面的遮挡问题只需要两步即可，第一步将<code>Toolbar</code>嵌套到 AppBarLayout 中，第二步给<code>RecyclerView</code>指定一个布局行为。<br>
+　　修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;com.google.android.material.appbar.AppBarLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                .../&gt;
+        &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+
+        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id=&quot;@+id/recyclerView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot; /&gt;
+
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            ... /&gt;
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里首先定义了一个<code>AppBarLayout</code>，并将<code>Toolbar</code>放置在其中，然后在<code>RecyclerView</code>中使用<code>app:layout_behavior</code>属性指定了一个布局行为。其中<code>appbar_scrolling_view_behavior</code>这个字符串也是由Material库提供的。<br>
+　　重新运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661351735102.png" alt="" loading="lazy"></p>
+<p>  当<code>AppBarLayout</code>接收到滚动事件的时候，它内部的子控件其实是可以指定如何去响应这些事件的，通过<code>app:layout_scrollFlags</code>属性就能实现。修改 activity_main.xml中 的代码，如下：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;com.google.android.material.appbar.AppBarLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                ...
+                app:layout_scrollFlags=&quot;scroll|enterAlways|snap&quot; /&gt;
+        &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+
+        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id=&quot;@+id/recyclerView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot; /&gt;
+        ...
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里在<code>Toolbar</code>中添加了一个<code>app:layout_scrollFlags</code>属性，并将这个属性的值指定成了<code>scroll|enterAlways|snap</code>。</p>
+<ul>
+<li>
+<p><code>scroll</code>：表示当 RecyclerView 向上滚动的时候，Toolbar 会跟着一起向上滚动并实现隐藏。</p>
+</li>
+<li>
+<p><code>enterAlways</code>：表示当 RecyclerView 向下滚动的时候，Toolbar 会跟着一起向下滚动并重新显示。</p>
+</li>
+<li>
+<p><code>snap</code>：表示当 Toolbar 还没有完全隐藏或显示的时候，会根据当前滚动的距离，自动选择是隐藏还是显示。</p>
+</li>
+</ul>
+<p>  现在重新运行程序，并向上滚动<code>RecyclerView</code>，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661352211620.png" alt="" loading="lazy"></p>
+<p>  可以看到，随着我们向上滚动<code>RecyclerView</code>，<code>Toolbar</code>自动消失了！而向下滚动 RecyclerView时，Toolbar 又会重新出现。</p>
+<h2 id="下拉刷新">下拉刷新</h2>
+<p>  <code>SwipeRefreshLayout</code>是用于实现下拉刷新功能的核心类，把想要实现下拉刷新功能的控件放置其中，就可以迅速让这个控件支持下拉刷新。那么在此项目中，支持下拉刷新功能的控件自然是<code>RecyclerView</code>。<br>
+　　使用<code>SwipeRefreshLayout</code>之前首先需要在<code>app/build.gradle</code>文件中添加如下依赖：</p>
+<pre><code class="language-java">dependencies {
+    implementation &quot;androidx.swiperefreshlayout:swiperefreshlayout:1.0.0&quot; //下拉刷新
+    ...
+}
+</code></pre>
+<p>  然后修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+        ...
+        &lt;androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id=&quot;@+id/swipeRefresh&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;&gt;
+
+            &lt;androidx.recyclerview.widget.RecyclerView
+                android:id=&quot;@+id/recyclerView&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;match_parent&quot; /&gt;
+        &lt;/androidx.swiperefreshlayout.widget.SwipeRefreshLayout&gt;
+        ...
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  可以看到，这里在<code>RecyclerView</code>的外面又嵌套了一层<code>SwipeRefreshLayout</code>，这样 RecyclerView 就自动拥有下拉刷新功能了。</p>
+<blockquote>
+<p>  注意，由于<code>RecyclerView</code>现在变成了<code>SwipeRefreshLayout</code>的子控件，因此之前使用<code>app:layout_behavior</code>声明的布局行为现在也要移到 SwipeRefreshLayout 中才行。</p>
+</blockquote>
+<p>  然后在代码中处理具体的刷新逻辑。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    ...
+    @SuppressLint(&quot;ResourceAsColor&quot;)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        swipeRefresh.setColorSchemeColors(R.color.design_default_color_primary)
+        swipeRefresh.setOnRefreshListener {
+            refreshFruits(adapter)
+        }
+    }
+
+    private fun refreshFruits(adapter: FruitAdapter) {
+        thread {
+            Thread.sleep(2000)
+            runOnUiThread { //切回主线程
+                initFruits()    //重新生成水果数据
+                adapter.notifyDataSetChanged()  //通知数据发生变化
+                swipeRefresh.isRefreshing = false   //刷新事件结束，并隐藏刷新进度条
+            }
+        }
+    }
+    ...
+}
+</code></pre>
+<p>  当当用户进行了下拉刷新操作时，就会回调到<code>Lambda</code>表达式当中，然后在这里去处理具体的刷新逻辑就即可。<br>
+　　通常情况下，当触发了下拉刷新事件，应该是去网络上请求最新的数据，然后再将这些数据展示出来。这里简单起见，没有和网络进行交互，而是调用一个<code>refreshFruits()</code>方法进行本地刷新操作<br>
+　　<code>refreshFruits()</code>方法中先是开启了一个线程，然后将线程沉睡两秒钟。之所以这么做，是因为本地刷新操作速度非常快，如果不将线程沉睡的话，刷新立刻就结束了，从而看不到刷新的过程。<br>
+　　重新运行程序，在屏幕的主界面向下拖动，会有一个下拉刷新的进度条出现，松手后就会自动进行刷新了，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661353512940.png" alt="" loading="lazy"></p>
+<p>  下拉刷新的进度条只会停留两秒钟，之后就会自动消失，界面上的水果数据也会随之更新。</p>
+<h2 id="可折叠式标题栏">可折叠式标题栏</h2>
+<h3 id="collapsingtoolbarlayout">CollapsingToolbarLayout</h3>
+<p>  <code>CollapsingToolbarLayout</code>是一个作用于<code>Toolbar</code>基础之上的布局，可以让 Toolbar 的效果变得更加丰富，但它是不能独立存在的，它在设计的时候就被限定只能作为<code>AppBarLayout</code>的直接子布局来使用。而 AppBarLayout 又必须是<code>CoordinatorLayout</code>的子布局。<br>
+　　首先需要一个额外的 Activity 作为水果的详情展示界面，创建一个<code>FruitActivity</code>，并将布局名指定成<code>activity_fruit.xml</code>，然后开始编写水果详情展示界面的布局。<br>
+　　由于整个布局文件比较复杂，这里采用分段编写的方式。<code>activity_fruit.xml</code>中的内容主要分为两部分，一个是水果标题栏，一个是水果内容详情，我们来一步步实现。<br>
+　　首先实现标题栏部分，这里使用<code>CoordinatorLayout</code>作为最外层布局，并在其中嵌套一个<code>AppBarLayout</code>，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot; /&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  接下来在<code>AppBarLayout</code>中再嵌套一个<code>CollapsingToolbarLayout</code>，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;&gt;
+
+        &lt;com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id=&quot;@+id/collapsingToolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:contentScrim=&quot;@color/design_default_color_primary&quot;
+            app:layout_scrollFlags=&quot;scroll|exitUntilCollapsed&quot; /&gt;
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  为了实现更加高级的<code>Toolbar</code>效果，这里通过<code>android:theme</code>属性将<code>activity_main.xml</code>中给 Toolbar 设置的主题提到上一层来。<br>
+　　<code>app:contentScrim</code>属性用于指定<code>CollapsingToolbarLayout</code>在趋于折叠状态以及折叠之后的背景色。<br>
+　　<code>app:layout_scrollFlags</code>属性所设置的值中，<code>scroll</code>表示<code>CollapsingToolbarLayout</code>会随着水果内容详情的滚动一起滚动，<code>exitUntilCollapsed</code>表示当 CollapsingToolbarLayout 随着滚动完成折叠之后就保留在界面上，不再移出屏幕。<br>
+　　接下来，在<code>CollapsingToolbarLayout</code>中定义标题栏的具体内容，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;&gt;
+
+        &lt;com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id=&quot;@+id/collapsingToolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:contentScrim=&quot;@color/design_default_color_primary&quot;
+            app:layout_scrollFlags=&quot;scroll|exitUntilCollapsed&quot;&gt;
+
+            &lt;ImageView
+                android:id=&quot;@+id/fruitImage&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;match_parent&quot;
+                android:scaleType=&quot;centerCrop&quot;
+                app:layout_collapseMode=&quot;parallax&quot; /&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                android:id=&quot;@+id/toolbar&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;?attr/actionBarSize&quot;
+                app:layout_collapseMode=&quot;pin&quot; /&gt;
+        &lt;/com.google.android.material.appbar.CollapsingToolbarLayout&gt;
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  在<code>CollapsingToolbarLayout</code>中定义了一个<code>ImageView</code>和一个<code>Toolbar</code>，也就意味着，这个高级版的标题栏将是由普通的标题栏加上图片组合而成的。<br>
+　　<code>app:layout_collapseMode</code>用于指定当前控件在<code>CollapsingToolbarLayout</code>折叠过程中的折叠模式。</p>
+<ul>
+<li>
+<p><code>Toolbar</code>指定成<code>pin</code>：表示在折叠的过程中位置始终保持不变。</p>
+</li>
+<li>
+<p><code>ImageView</code>指定成<code>parallax</code>：表示会在折叠的过程中产生一定的错位偏移，这种模式的视觉效果会非常好。</p>
+</li>
+</ul>
+<p>  这样就将水果标题栏的界面编写完成了，然后编写水果内容详情部分。继续修改 activity_fruit.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;&gt;
+        ...
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+
+    &lt;androidx.core.widget.NestedScrollView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot; /&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  水果内容详情的最外层布局使用了一个<code>NestedScrollView</code>，注意它和<code>AppBarLayout</code>是平级的。<br>
+　　<code>ScrollView</code>允许使用滚动的方式来查看屏幕以外的数据，而<code>NestedScrollView</code>在此基础之上还增加了嵌套响应滚动事件的功能。由于<code>CoordinatorLayout</code>本身已经可以响应滚动事件了，因此在它的内部就需要使用 NestedScrollView 或 RecyclerView 这样的布局。<br>
+　　另外，这里还通过<code>app:layout_behavior</code>属性指定了一个布局行为，这和之前在<code>RecyclerView</code>中的用法是一模一样的。<br>
+　　不管是<code>ScrollView</code>还是<code>NestedScrollView</code>，它们的内部都只允许存在一个直接子布局。因此，如果想要在里面放入很多东西的话，通常会先嵌套一个<code>LinearLayout</code>，然后再在 LinearLayout 中放入具体的内容即可，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+    ...
+    &lt;androidx.core.widget.NestedScrollView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:orientation=&quot;vertical&quot;&gt;
+
+            &lt;com.google.android.material.card.MaterialCardView
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_marginLeft=&quot;15dp&quot;
+                android:layout_marginTop=&quot;35dp&quot;
+                android:layout_marginRight=&quot;15dp&quot;
+                android:layout_marginBottom=&quot;15dp&quot;
+                app:cardCornerRadius=&quot;4dp&quot;&gt;
+
+                &lt;TextView
+                    android:id=&quot;@+id/fruitContentText&quot;
+                    android:layout_width=&quot;wrap_content&quot;
+                    android:layout_height=&quot;wrap_content&quot;
+                    android:layout_margin=&quot;10dp&quot; /&gt;
+            &lt;/com.google.android.material.card.MaterialCardView&gt;
+        &lt;/LinearLayout&gt;
+    &lt;/androidx.core.widget.NestedScrollView&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  为了让界面更加美观，这里在<code>MaterialCardView</code>和<code>TextView</code>上都加了一些边距。</p>
+<p>  这样就把水果标题栏和水果内容详情的界面都编写完了，不过还可以在界面上再添加一个悬浮按钮。这个悬浮按钮并不是必需的，根据具体的需求添加即可，若加入的话，将获得一些额外的动画效果。<br>
+　　这是一个水果详情展示界面，那么可以加入一个表示评论作用的悬浮按钮。修改<code>activity_fruit.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+    ...
+    &lt;androidx.core.widget.NestedScrollView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:orientation=&quot;vertical&quot;&gt;
+            ...
+    &lt;/androidx.core.widget.NestedScrollView&gt;
+
+    &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_margin=&quot;16dp&quot;
+        android:src=&quot;@drawable/ic_comment&quot;
+        app:layout_anchor=&quot;@id/appBar&quot;
+        app:layout_anchorGravity=&quot;bottom|end&quot; /&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  这里加入了一个<code>FloatingActionButton</code>，它和<code>AppBarLayout</code>以及<code>NestedScrollView</code>是平级的。<br>
+　　<code>app:layout_anchor</code>属性指定了一个锚点，我们将锚点设置为<code>AppBarLayout</code>，这样悬浮按钮就会出现在水果标题栏的区域内，接着又使用<code>app:layout_anchorGravity</code>属性将悬浮按钮定位在标题栏区域的右下角。<br>
+　　完成界面设计后，接下来开始编写功能逻辑，修改<code>FruitActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">class FruitActivity : AppCompatActivity() {
+    companion object {
+        const val FRUIT_NAME = &quot;fruit_name&quot;
+        const val FRUIT_IMAGE_ID = &quot;fruit_image_id&quot;
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_fruit)
+        val fruitName = intent.getStringExtra(FRUIT_NAME) ?: &quot;&quot;
+        val fruitImageId = intent.getIntExtra(FRUIT_IMAGE_ID, 0)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        collapsingToolbar.title = fruitName
+        Glide.with(this).load(fruitImageId).into(fruitImageView)
+        fruitContentText.text = generateFruitContent(fruitName)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -&gt; {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun generateFruitContent(fruitName: String) = fruitName.repeat(500)
+}
+</code></pre>
+<p>  这里通过<code>Intent</code>获取了传入的水果名和水果图片的资源<code>id</code>。接着使用了<code>Toolbar</code>的标准用法，将它作为<code>ActionBar</code>显示，并启用<code>Home</code>按钮。由于 Home 按钮的默认图标就是一个返回箭头，因此就不用额外设置别的图标。<br>
+　　接下来开始填充界面上的内容，调用<code>CollapsingToolbarLayout</code>的<code>setTitle()</code>方法，将水果名设置成当前界面的标题，然后使用<code>Glide</code>加载传入的水果图片，并设置到标题栏的<code>ImageView</code>上面。接着需要填充水果的内容详情，这里只是将水果名循环拼接 500 次，从而生成了一个比较长的字符串，将它设置到了<code>TextView</code>上面。</p>
+<p>  最后需要处理<code>RecyclerView</code>的点击事件，不然的话，根本就无法打开<code>FruitActivity</code>。修改<code>FruitAdapter</code>中的代码，如下所示：</p>
+<pre><code class="language-java">class FruitAdapter(val context: Context, val fruitList: List&lt;Fruit&gt;) :
+    RecyclerView.Adapter&lt;FruitAdapter.ViewHolder&gt;() {
+    ...
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.fruit_item, parent, false)
+        val holder = ViewHolder(view)
+        holder.itemView.setOnClickListener {
+            val position = holder.adapterPosition
+            val fruit = fruitList[position]
+            val intent = Intent(context, FruitActivity::class.java).apply {
+                putExtra(FruitActivity.FRUIT_NAME, fruit.name)
+                putExtra(FruitActivity.FRUIT_IMAGE_ID, fruit.imageId)
+            }
+            context.startActivity(intent)
+        }
+        return holder
+    }
+}
+</code></pre>
+<p>  这里给<code>fruit_item.xml</code>的最外层布局注册了一个点击事件监听器，然后在点击事件中获取当前点击项的水果名和水果图片资源<code>id</code>，把它们传入<code>Intent</code>中，然后启动<code>FruitActivity</code>。<br>
+　　重新运行程序，并点击界面上的任意一个水果，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661363703391.png" alt="" loading="lazy"></p>
+<p>  这个界面上的内容分为 3 部分：水果标题栏、水果内容详情和悬浮按钮。<code>Toolbar</code>和水果背景图完美地融合到了一起，既保证了图片的展示空间，又不影响 Toolbar 的任何功能，那个向左的箭头就是用来返回上一个 Activity 的。<br>
+　　尝试向上拖动水果内容详情，我们会发现水果背景图上的标题会慢慢缩小，并且背景图会产生一些错位偏移的效果，如图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661363838064.png" alt="" loading="lazy"><br>
+  这是由于用户想要查看水果的内容详情，此时界面的重点在具体的内容上面，因此标题栏就会自动进行折叠，从而节省屏幕空间。<br>
+　　继续向上拖动，直到标题栏变成完全折叠状态，效果如图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661363890156.png" alt="" loading="lazy"><br>
+  可以看到，标题栏的背景图片不见了，悬浮按钮也自动消失了，现在水果标题栏变成了一个最普通的<code>Toolbar</code>。这是由于用户正在阅读具体的内容，需要给他们提供最充分的阅读空间。<br>
+　　而如果这个时候向下拖动水果内容详情，就会执行一个完全相反的动画过程，最终恢复成开始的界面效果。</p>
+<h3 id="充分利用系统状态栏空间">充分利用系统状态栏空间</h3>
+<p>  虽然现在水果详情展示界面的效果已经非常华丽了，但我们会发现水果的背景图片和系统的状态栏总有一些不搭的感觉，若能将背景图和状态栏融合到一起，那视觉体验绝对能提升几个档次。<br>
+　　想要让背景图能够和系统状态栏融合，需要借助<code>android:fitsSystemWindows</code>这个属性来实现。在<code>CoordinatorLayout</code>、<code>AppBarLayout</code>、<code>CollapsingToolbarLayout</code>这种嵌套结构的布局中，将控件的 android:fitsSystemWindows 属性指定成<code>true</code>，就表示该控件会出现在系统状态栏里。<br>
+　　对应到我们的程序，那就是水果标题栏中的<code>ImageView</code>应该设置这个属性了。不过只给 ImageView 设置这个属性是没有用的，必须将 ImageView 布局结构中的所有父布局都设置上这个属性才可以，修改<code>activity_fruit.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:fitsSystemWindows=&quot;true&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;
+        android:fitsSystemWindows=&quot;true&quot;&gt;
+
+        &lt;com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id=&quot;@+id/collapsingToolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:fitsSystemWindows=&quot;true&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:contentScrim=&quot;@color/design_default_color_primary&quot;
+            app:layout_scrollFlags=&quot;scroll|exitUntilCollapsed&quot;&gt;
+
+            &lt;ImageView
+                android:id=&quot;@+id/fruitImageView&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;match_parent&quot;
+                android:fitsSystemWindows=&quot;true&quot;
+                android:scaleType=&quot;centerCrop&quot;
+                app:layout_collapseMode=&quot;parallax&quot; /&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                android:id=&quot;@+id/toolbar&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;?attr/actionBarSize&quot;
+                app:layout_collapseMode=&quot;pin&quot; /&gt;
+        &lt;/com.google.android.material.appbar.CollapsingToolbarLayout&gt;
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+    ...
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  然后需要在程序的主题中将状态栏颜色指定成透明色。指定成透明色的方法很简单，在主题中将<code>android:statusBarColor</code>属性的值指定成<code>@android:color/transparent</code>即可。<br>
+　　打开<code>res/values/themes.xml</code>文件，对主题的内容进行修改，如下所示：</p>
+<pre><code class="language-java">&lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;&gt;
+    &lt;style name=&quot;Theme.MaterialTest&quot; parent=&quot;Theme.MaterialComponents.Light.NoActionBar&quot;&gt;
+    ...
+    &lt;/style&gt;
+    &lt;style name=&quot;FruitActivityTheme&quot; parent=&quot;Theme.MaterialTest&quot;&gt;
+        &lt;item name=&quot;android:statusBarColor&quot;&gt;@android:color/transparent&lt;/item&gt;
+    &lt;/style&gt;
+&lt;/resources&gt;
+</code></pre>
+<p>  这里定义了一个<code>FruitActivityTheme</code>主题，并将其中状态栏的颜色指定成透明色，它是专门给<code>FruitActivity</code>使用的。<br>
+　　最后，修改 AndroidManifest.xml 中的代码，让<code>FruitActivity</code>使用这个主题，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    package=&quot;com.example.materialtest&quot;&gt;
+    &lt;application
+        ...
+        &lt;activity
+            android:name=&quot;.FruitActivity&quot;
+            android:theme=&quot;@style/FruitActivityTheme&quot;&gt;&lt;/activity&gt;
+        ...
+    &lt;/application&gt;
+&lt;/manifest&gt;
+</code></pre>
+<p>  这里使用<code>android:theme</code>属性单独给 FruitActivity 指定了<code>FruitActivityTheme</code>这个主题。<br>
+　　重新运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661365806860.png" alt="" loading="lazy"><br>
+  可以发现，系统状态栏和背景图融合到一起了。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlinshi-yong-xie-cheng-bian-xie-gao-xiao-de-bing-fa-cheng-xu/" class="post-title gt-a-link">
+                    Kotlin：使用协程编写高效的并发程序
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

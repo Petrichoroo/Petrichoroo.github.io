@@ -1,0 +1,872 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — 内容提供器 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — 内容提供器
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-13 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#content-provider">Content Provider</a>
+<ul>
+<li><a href="#%E5%86%85%E5%AE%B9%E6%8F%90%E4%BE%9B%E5%99%A8%E7%AE%80%E4%BB%8B">内容提供器简介</a></li>
+<li><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%9D%83%E9%99%90">运行时权限</a>
+<ul>
+<li><a href="#android-%E6%9D%83%E9%99%90%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3">Android 权限机制详解</a></li>
+<li><a href="#%E5%9C%A8%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E7%94%B3%E8%AF%B7%E6%9D%83%E9%99%90">在程序运行时申请权限</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AE%BF%E9%97%AE%E5%85%B6%E4%BB%96%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE">访问其他程序中的数据</a>
+<ul>
+<li><a href="#contentresolver-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">ContentResolver 的基本用法</a></li>
+<li><a href="#%E8%AF%BB%E5%8F%96%E7%B3%BB%E7%BB%9F%E8%81%94%E7%B3%BB%E4%BA%BA">读取系统联系人</a></li>
+</ul>
+</li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84-content-provider">创建自己的 Content Provider</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA-contentprovider-%E7%9A%84%E6%AD%A5%E9%AA%A4">创建 ContentProvider 的步骤</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E8%B7%A8%E7%A8%8B%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%85%B1%E4%BA%AB">实现跨程序数据共享</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="content-provider">Content Provider</h1>
+<hr>
+<h2 id="内容提供器简介">内容提供器简介</h2>
+<blockquote>
+<p>  <code>ContentProvider</code>主要用于在不同的应用程序之间实现数据共享的功能，它提供了一套完整的机制，允许一个程序访问另一个程序中的数据，同时还能保证被访问数据的安全性。<br>
+　　目前，使用ContentProvider 是 Android 实现跨程序共享数据的标准方式。</p>
+</blockquote>
+<p>  不同于文件存储和 SharedPreferences 存储中的两种全局可读写操作模式（Android 4.2版本中都已被废弃），ContentProvider 可以选择只对哪一部分数据进行共享，从而保证我们程序中的隐私数据不会有泄漏的风险。</p>
+<h2 id="运行时权限">运行时权限</h2>
+<h3 id="android-权限机制详解">Android 权限机制详解</h3>
+<p>  Android 6.0 系统中加入了运行时权限功能。也就是说，用户不需要在安装软件的时候一次性授权所有申请的权限，而是可以在软件的用过程中再对某一项权限申请进行授权。<br>
+　　当然，并不是所有权限都需要在运行时申请，Android 现在将常用的权限大致归成了两类，一类是普通权限，一类是危险权限。准确地讲，其实还有一些特殊权限，不过这些权限使用得相对较少。<br>
+　　普通权限指的是那些不会直接威胁到用户的安全和隐私的权限，对于这部分权限申请，系统会自动帮我们进行授权，不需要用户手动操作。<br>
+　　危险权限则表示那些可能会触及用户隐私或者对设备安全性造成影响的权限，如获取设备联系人信息、定位设备的地理位置等，对于这部分权限申请，必须由用户手动授权才可以，否则程序就无法使用相应的功能。<br>
+　　至 Android 10 系统为止，所有的危险权限，一共是 11 组 30 个权限。每个危险权限都属于一个权限组，我们在进行运行时权限处理时使用的是权限名。原则上，用户一旦同意了某个权限申请之后，同组的其他权限也会被系统自动授权。但是请谨记，不要基于此规则来实现任何功能逻辑，因为 Android 系统随时有可能调整权限的分组。</p>
+<h3 id="在程序运行时申请权限">在程序运行时申请权限</h3>
+<p>  <code>CALL_PHONE</code>这个权限是编写拨打电话功能的时候需要声明的，因为拨打电话会涉及用户手机的资费问题，因而被列为了危险权限。<br>
+　　在 Android 6.0 系统及以上实现拨打电话功能需要进行运行时权限处理，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    Button makeCall = findViewById(R.id.make_call);
+    //在程序运行过程中由用户授权我们去执行某些危险操作
+    makeCall.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //先判断用户是不是已经给过我们授权
+            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                //没有授权 调用相关方法来向用户申请授权
+                ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.CALL_PHONE}, 1);
+            } else {
+                //已经授权 直接执行拨打电话的逻辑操作
+                call();
+            }
+        }
+    });
+</code></pre>
+<p>  首先判断用户是不是已经给过我们授权了，借助的是<code>checkSelfPermission()</code>方法，其接收两个参数：第一个参数是 Context，第二个参数是具体的权限名。<br>
+　　然后我们使用方法的返回值和<code>PackageManager.PERMISSION_GRANTED</code>做比较，相等就说明用户已经授权，不等就表示用户没有授权。<br>
+　　如果没有授权的话，则需要调用<code>ActivityCompat.requestPermissions()</code>方法向用户申请授权。其接收 3 个参数：第一个参数要求是 Activity 的实例；第二个参数是一个 String 数组，我们把要申请的权限名放在数组中即可；第三个参数是请求码，只要是唯一值即可。<br>
+　　调用完<code>requestPermissions()</code>方法之后，系统会弹出一个权限申请的对话框，用户可以选择同意或拒绝我们的权限申请。不论是哪种结果，最终都会回调到<code>onRequestPermissionsResult()</code>方法中，而授权的结果则会封装在<code>grantResults</code>参数当中。这里我们只需要判断一下最后的授权结果：如果用户同意的话，就调用<code>call()</code>方法拨打电话；如果用户拒绝的话，我们只能放弃操作，并且弹出一条失败提示。代码如下所示：</p>
+<pre><code class="language-java">    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                //判断一下最后的授权结果
+                if (grantResults.length &gt; 0 &amp;&amp; grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    call();
+                } else {
+                    Toast.makeText(this, &quot;You denied the permission&quot;,
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
+    }
+
+    private void call() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse(&quot;tel:10086&quot;));
+            startActivity(intent);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+</code></pre>
+<p>  最后需要注意的是，无论是普通权限、还是运行时权限，都需要在 AndroidManifest 中进行声明。比如拨打电话需要加入以下权限：</p>
+<pre><code class="language-java">    &lt;uses-permission android:name=&quot;android.permission.CALL_PHONE&quot;/&gt;
+</code></pre>
+<h2 id="访问其他程序中的数据">访问其他程序中的数据</h2>
+<blockquote>
+<p>  <code>ContentProvider</code>的用法一般有两种：一种是使用现有的 ContentProvider 读取和操作相应程序中的数据。另一种是创建自己的 ContentProvider，给程序的数据提供外部访问接口。</p>
+</blockquote>
+<h3 id="contentresolver-的基本用法">ContentResolver 的基本用法</h3>
+<p>  对于每一个应用程序来说，如果想要访问 ContentProvider 中共享的数据，就一定要借助<code>ContentResolver</code>类，可以通过 Context 中的<code>getContentResolver()</code>方法获取该类实例。<br>
+　　ContentResolver 中提供了一系列的方法用于对数据进行增删改查操作，其中<code>insert()</code>方法用于添加数据，<code>update()</code>方法用于更新数据，<code>delete()</code>方法用于删除数据，<code>query()</code>方法用于查询数据，不过这些方法都是不接收表名参数的，而是使用一个<code>Uri</code>参数代替，这个参数被称为内容 URI。<br>
+　　内容 URI 给 ContentProvider 中的数据建立了唯一标识符，它主要由两部分组成：</p>
+<ul>
+<li>
+<p><code>authority</code>：用于对不同的应用程序做区分，一般为了避免冲突，会采用应用包名的方式来进行命名。比如某个应用的包名是 com.example.app，那么该应用对应的 authority 就是com.example.app.provider。</p>
+</li>
+<li>
+<p><code>path</code>：用于对同一应用程序中不同的表做区分的，通常会添加到<code>authority</code>的后面。</p>
+</li>
+</ul>
+<p>  还需要在字符串的头部加上协议声明，因此内容 URI 最标准的格式如下：</p>
+<ul>
+<li><font color='red'> content:// </font>com.example.app.provider/table1</li>
+<li><font color='red'> content:// </font>com.example.app.provider/table2</li>
+</ul>
+<blockquote>
+<p>  内容 URI 可以非常清楚地表达我们想要访问哪个程序中哪张表里的数据。</p>
+</blockquote>
+<p>  在得到了内容 URI 字符串之后，我们还需要将它解析成 Uri 对象才可以作为参数传入。代码如下所示：</p>
+<pre><code class="language-java">    Uri uri = Uri.parse(&quot;content://com.example.app.provider/table1&quot;)
+</code></pre>
+<p>  使用这个 Uri 对象来查询 table1 表中的数据了，代码如下所示：</p>
+<pre><code class="language-java">    Cursor cursor = getContentResolver().query(
+            uri,
+            projection,
+            selection,
+            selectionArgs,
+            sortOrder);
+</code></pre>
+<p>  参数说明如下所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660377293293.png" alt="" loading="lazy"><br>
+  通过移动游标的位置遍历 Cursor 的所有行，然后取出每一行中相应列的数据，代码如下所示：</p>
+<pre><code class="language-java">    if (cursor != null) {
+        while (cursor.moveToNext()) {
+            String column1 = cursor.getString(cursor.getColumnIndex(&quot;column1&quot;));
+            int column2 = cursor.getInt(cursor.getColumnIndex(&quot;column2&quot;));
+        }
+        cursor.close();
+    }
+</code></pre>
+<p>  向 table1 表中添加一条数据，代码如下所示：</p>
+<pre><code class="language-java">    ContentValues values = new ContentValues();
+    values.put(&quot;column1&quot;,&quot;text&quot;);
+    values.put(&quot;column2&quot;,1);
+    getContentResolver().insert(uri,values);
+</code></pre>
+<p>  更新这条新添加的数据，把 column1 的值清空，可以借助 ContentResolver 的<code>update()</code>方法实现，代码如下所示：</p>
+<pre><code class="language-java">    ContentValues values = new ContentValues();
+    values.put(&quot;column1&quot;,&quot;&quot;);
+    getContentResolver().update(uri,values,&quot;column1 = ? and column2 = ? &quot;,new String[] {&quot;text&quot;,&quot;1&quot;});
+</code></pre>
+<p>  这里使用了<code>selection</code>和<code>selectionArgs</code>参数来对想要更新的数据进行约束，以防止所有的行都会受影响。最后，可以调用 ContentResolver 的<code>delete()</code>方法将这条数据删除掉，代码如下所示：</p>
+<pre><code class="language-java">    getContentResolver().delete(uri,&quot;column2 = ? &quot;,new String[] {&quot;1&quot;});
+</code></pre>
+<h3 id="读取系统联系人">读取系统联系人</h3>
+<p>  模拟器电话簿里是没有任何联系人的，需要自己手动添加几个，以便稍后进行读取。<br>
+　　首先在 AndroidManifest 中添加权限，如下所示：</p>
+<pre><code class="language-java">    &lt;uses-permission android:name=&quot;android.permission.READ_CONTACTS&quot;/&gt;
+</code></pre>
+<p>  这是一个危险权限，需要程序运行时申请。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MainActivity extends AppCompatActivity {
+        ArrayAdapter&lt;String&gt; adapter;
+        List&lt;String&gt; contactsList = new ArrayList&lt;&gt;();
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            ListView contactsView = findViewById(R.id.contacts_view);
+            adapter = new ArrayAdapter&lt;String&gt;(this,
+                    android.R.layout.simple_list_item_1, contactsList);
+            contactsView.setAdapter(adapter);
+            //READ_CONTACTS权限属于危险权限
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CONTACTS}, 1);
+            } else {
+                readContacts();
+            }
+        }
+
+        private void readContacts() {
+            Cursor cursor = null;
+            try {
+                //查询联系人数据
+                cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null, null, null, null);
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        //获取联系人姓名
+                        @SuppressLint(&quot;Range&quot;) String displayName = cursor.getString(cursor.getColumnIndex
+                                (ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        //获取联系人手机号
+                        @SuppressLint(&quot;Range&quot;) String number = cursor.getString(cursor.getColumnIndex
+                                (ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        //将数据添加到 ListView 的数据源里
+                        contactsList.add(displayName + &quot;\n&quot; + number);
+                    }
+                    adapter.notifyDataSetChanged(); //通知刷新ListView
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+
+        @Override
+        public void onRequestPermissionsResult(...) {
+            ... //与之前所写差别不大
+        }
+    }
+</code></pre>
+<p>  这里使用了 ListView 来展示读取出来的联系人信息，<code>READ_CONTACTS</code>权限属于危险权限，需要程序运行时申请，其步骤和之前所写差不多。在用户授权之后，调用<code>readContacts()</code>方法读取系统联系人信息。<br>
+　　<code>ContactsContract.CommonDataKinds.Phone</code>类已经帮我们做好了封装，不需要我们自己去解析一个内容 URI 字符串，它提供了一个<code>CONTENT_URI</code>常量，而这个常量就是使用<code>Uri.parse()</code>方法解析出来的结果。<br>
+　　同样地，在<code>getColumnIndex()</code>方法中，传入的联系人姓名和联系人手机号所对应的常量也是封装好了的，将两个数据取出后进行拼接，然后将数据添加到 ListView 的数据源里，并通知刷新一下 ListView，最后记得将 Cursor 对象关闭。</p>
+<h2 id="创建自己的-content-provider">创建自己的 Content Provider</h2>
+<blockquote>
+<p>  上面我们是在自己的程序中访问其他应用程序的数据，那么那些提供外部访问接口的应用程序都是如何实现这种功能的呢？它们又是怎样保证数据的安全性，使得隐私数据不会泄漏出去？</p>
+</blockquote>
+<h3 id="创建-contentprovider-的步骤">创建 ContentProvider 的步骤</h3>
+<p>  通过新建一个类去继承<code>ContentProvider</code>的方式来创建一个自己的内容提供器。ContentProvider类中有 6 个抽象方法，我们在使用子类继承它的时候，需要将其全部重写，如下所示：</p>
+<pre><code class="language-java">    public class MyProvider extends ContentProvider {
+        @Override
+        public boolean onCreate() {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public Cursor query(@NonNull Uri uri, @Nullable String[] strings, 
+                @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public String getType(@NonNull Uri uri) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+            return null;
+        }
+
+        @Override
+        public int delete(@NonNull Uri uri, @Nullable String s, 
+                @Nullable String[] strings) {
+            return 0;
+        }
+
+        @Override
+        public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, 
+                @Nullable String s, @Nullable String[] strings) {
+            return 0;
+        }
+    }
+</code></pre>
+<ul>
+<li>
+<p><code>onCreate()</code>：初始化内容提供器的时候调用。通常会在这里完成对数据库的创建和升级等操作。</p>
+</li>
+<li>
+<p><code>query()</code>：从内容提供器中查询数据。使用 uri 参数来确定查询哪张表，查询的结果存放在 Cursor 对象中返回。</p>
+</li>
+<li>
+<p><code>insert()</code>：向内容提供器中添加一条数据。使用 uri 参数来确定要添加到的表，待添加的数据保存在 values 参数中。添加完成后，返回一个用于表示这条新记录的 URI。</p>
+</li>
+<li>
+<p><code>update()</code>：更新内容提供器中已有的数据。使用 uri 参数来确定更新哪一张表中的数据，受影响的行数将作为返回值返回。</p>
+</li>
+<li>
+<p><code>delete()</code>：从内容提供器中删除数据。使用 uri 参数来确定删除哪一张表中的数据，被删除的行数将作为返回值返回。</p>
+</li>
+<li>
+<p><code>getType()</code>：根据传入的内容 URI 来返回相应的<code>MIME</code>类型。</p>
+</li>
+</ul>
+<p>  可以看到，几乎每一个方法都会带有 Uri 这个参数，这个参数也正是调用 ContentResolver 的增删改查方法时传递过来的。<br>
+　　现在，我们需要对传入的 Uri 参数进行解析，从中分析出调用方期望访问的表和数据。之前一个标准的内容 URI 写法是这样的：</p>
+<ul>
+<li>content://com.example.app.provider/table1</li>
+</ul>
+<p>  除此之外，我们还可以在这个内容 URI 的后面加上一个id，如下所示：</p>
+<ul>
+<li>content://com.example.app.provider/table1/<font color='red'>1</font></li>
+</ul>
+<p>  内容 URI 的格式主要就只有以上两种，以路径结尾就表示期望访问该表中所有的数据，以 id 结尾就表示期望访问该表中拥有相应 id 的数据。我们可以使用通配符的方式来分别匹配这两种格式的内容 URI，规则如下：</p>
+<ul>
+<li>星号（<font color='red'>*</font>）：表示匹配任意长度的任意字符。</li>
+<li>井号（<font color='red'>#</font>） ：表示匹配任意长度的数字。</li>
+</ul>
+<p>  因此，一个能够匹配任意表的内容 URI 格式就可以写成：</p>
+<ul>
+<li>content://com.example.app.provider/*</li>
+</ul>
+<p>  而一个能够匹配 table1 表中任意一行数据的内容 URI 格式就可以写成：</p>
+<ul>
+<li>content://com.example.app.provider/table1/#</li>
+</ul>
+<p>  接着，再借助<code>UriMatcher</code>这个类就可以轻松地实现匹配内容 URI 的功能。<br>
+　　UriMatcher 提供了一个<code>addURI()</code>方法，这个方法接收 3 个参数，可以分别把<code>authority</code>、<code>path</code>和一个自定义代码传进去。这样，当调用 UriMatcher 的<code>match()</code>方法时，就可以将一个 Uri 对象传入，返回值是某个能够匹配这个 Uri 对象所对应的自定义代码，利用这个代码，我们就可以判断出调用方期望访问的是哪张表中的数据了。修改 MyProvider 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MyProvider extends ContentProvider {
+        public static final int TABLE1_DIR = 0;
+        public static final int TABLE1_ITEM = 1;
+        public static final int TABLE2_DIR = 2;
+        public static final int TABLE2_ITEM = 3;
+        private static UriMatcher uriMatcher;
+        static {
+            uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+            uriMatcher.addURI(&quot;com.example.app.provider&quot;,&quot;table1&quot;,TABLE1_DIR);
+            uriMatcher.addURI(&quot;com.example.app.provider&quot;,&quot;table1/#&quot;,TABLE1_ITEM);
+            uriMatcher.addURI(&quot;com.example.app.provider&quot;,&quot;table2&quot;,TABLE2_DIR);
+            uriMatcher.addURI(&quot;com.example.app.provider&quot;,&quot;table2/#&quot;,TABLE2_ITEM);
+        }
+        ...
+        @Nullable
+        @Override
+        public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, 
+                    @Nullable String[] strings1, @Nullable String s1) {
+            switch (uriMatcher.match(uri)) {
+                case TABLE1_DIR:
+                    //查询table1表中的所有数据
+                    break;
+                case TABLE1_ITEM:
+                    //查询table1表中的单条数据
+                    break;
+                case TABLE2_DIR:
+                    //查询table2表中的所有数据
+                    break;
+                case TABLE2_ITEM:
+                    //查询table2表中的单条数据
+                    break;
+                default:
+                    break;
+            }
+        ...
+        }
+        ...
+    }
+</code></pre>
+<p>  MyProvider 中新增了 4 个整型常量，其中：</p>
+<ul>
+<li>
+<p><code>TABLE1_DIR</code>表示访问 table1 表中的所有数据。</p>
+</li>
+<li>
+<p><code>TABLE1_ITEM</code>表示访问 table1 表中的单条数据。</p>
+</li>
+<li>
+<p><code>TABLE2_DIR</code>表示访问 table2 表中的所有数据。</p>
+</li>
+<li>
+<p><code>TABLE2_ITEM</code>表示访问 table2 表中的单条数据。</p>
+</li>
+</ul>
+<p>  然后在静态代码块里创建了<code>UriMatcher</code>的实例，并调用<code>addURI()</code>方法，将期望匹配的内容 URI 格式传递进去，注意这里传入的路径参数是可以使用通配符的。当<code>query()</code>方法被调用的时候，就会通过 UriMatcher 的<code>match()</code>方法对传入的 Uri 对象进行匹配，如果发现 UriMatcher 中某个内容 URI 格式成功匹配了该 Uri 对象，则会返回相应的自定义代码，然后我们就可以判断出调用方期望访问的到底是什么数据了。<br>
+　　上述代码只是以 query() 方法为例做了个示范，其实 insert()、update()、delete() 这几个方法的实现也是差不多的，它们都会携带 Uri 这个参数，然后同样利用 UriMatcher 的 match() 方法判断出调用方期望访问的是哪张表，再对该表中的数据进行相应的操作就可以了。<br>
+　　还有一个<code>getType()</code>方法。它是所有的内容提供器都必须提供的一个方法，用于获取 Uri 对象所对应的<code>MIME</code>类型。一个内容 URI 所对应的 MIME 字符串主要由 3 部分组成，Android 对这 3 个部分做了如下格式规定：</p>
+<ul>
+<li>
+<p>必须以 vnd 开头。</p>
+</li>
+<li>
+<p>如果内容 URI 以路径结尾，则后接<code>android.cursor.dir/</code>，如果内容 URI 以 id 结尾，则后接<code>android.cursor.item/</code>。</p>
+</li>
+<li>
+<p>最后接上<code>vnd.&lt;authority&gt;.&lt;path&gt;</code>。</p>
+</li>
+</ul>
+<p>  所以，对于<code>content://com.example.app.provider/table1</code>这个内容URI，它所对应的 MIME 类型就可以写成：</p>
+<ul>
+<li><font color='red'>vnd.android.cursor.dir/vnd.</font>com.example.app.provider.table1</li>
+</ul>
+<p>  对于<code>content://com.example.app.provider/table1/1</code>这个内容 URI，它所对应的 MIME 类型就可以写成：</p>
+<ul>
+<li><font color='red'>vnd.android.cursor.item/vnd.</font>com.example.app.provider.table1</li>
+</ul>
+<p>  可以继续完善 MyProvider 中的内容了，这次来实现<code>getType()</code>方法中的逻辑，代码如下所示：</p>
+<pre><code class="language-java">    ...
+        public class MyProvider extends ContentProvider {
+        ...
+        @Nullable
+        @Override
+        public String getType(@NonNull Uri uri) {
+            switch (uriMatcher.match(uri)) {
+                case TABLE1_DIR:
+                    return &quot;vnd.android.cursor.dir/vnd.com.example.app.provider.table1&quot;;
+                case TABLE1_ITEM:
+                    return &quot;vnd.android.cursor.item/vnd.com.example.app.provider.table1&quot;;
+                case TABLE2_DIR:
+                    return &quot;vnd.android.cursor.dir/vnd.com.example.app.provider.table2&quot;;
+                case TABLE2_ITEM:
+                    return &quot;vnd.android.cursor.item/vnd.com.example.app.provider.table2&quot;;
+                default:
+                    break;
+            }
+            return null;
+        }
+    }
+    ...
+</code></pre>
+<p>  到这里，一个完整的内容提供器就创建完成了，现在任何一个应用程序都可以使用 ContentResolver 来访问我们程序中的数据。<br>
+　　那么,如何才能保证隐私数据不会泄漏出去呢？所有的 CRUD 操作都一定要匹配到相应的内容 URI 格式才能进行的，而我们不可能向 UriMatcher 中添加隐私数据的 URI，所以这部分数据根本无法被外部程序访问到，安全问题也就不存在了。</p>
+<h3 id="实现跨程序数据共享">实现跨程序数据共享</h3>
+<p>  在之前数据库（SQLite）的项目 DatabaseTest 的基础上继续开发，通过内容提供器来给它加入外部访问接口。首先将 MyDatabaseHelper 中使用 Toast 弹出创建数据库成功的提示去除掉，因为跨程序访问时我们不能直接使用 Toast。<br>
+　　创建一个内容提供器，右击包名→New→Other→Content Provider，命名为<code>DatabaseProvider</code>。<code>authority</code>指定为<code>com.example. databasetest.provider</code>。下面两个属性都选中，<code>Exported</code>表示是否允许外部程序访问我们的内容提供器，<code>Enabled</code>表示是否启用内容提供器。修改 DatabaseProvider 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class DatabaseProvider extends ContentProvider {
+        public static final int BOOK_DIR = 0;   //访问Book表中的所有数据
+        public static final int BOOK_ITEM = 1;  //访问Book表中的单条数据
+        public static final int CATEGORY_DIR = 2;   //访问Category表中的所有数据
+        public static final int CATEGORY_ITEM = 3;  //访问Category表中的单条数据
+        public static final String AUTHORITY = &quot;com.example.databasetest.provider&quot;;
+        private static UriMatcher uriMatcher;
+        private MyDatabaseHelper dbHelper;
+
+        //初始化UriMatcher 添加期望匹配的几种URI格式
+        static {
+            uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+            //addURI(authority,path,自定义代码)
+            uriMatcher.addURI(AUTHORITY, &quot;book&quot;, BOOK_DIR);
+            uriMatcher.addURI(AUTHORITY, &quot;book/#&quot;, BOOK_ITEM);
+            uriMatcher.addURI(AUTHORITY, &quot;category&quot;, CATEGORY_DIR);
+            uriMatcher.addURI(AUTHORITY, &quot;category/#&quot;, CATEGORY_ITEM);
+        }
+
+        @Override
+        public boolean onCreate() {
+            dbHelper = new MyDatabaseHelper(getContext(), &quot;BookStore.db&quot;, null, 2);
+            return true;
+        }
+
+        //查询数据
+        @Override
+        public Cursor query(Uri uri, String[] projection, String selection,
+                            String[] selectionArgs, String sortOrder) {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = null;
+            /**
+            根据传入的Uri参数判断出用户想要访问哪张表 
+            match()返回值是某个能够匹配这个Uri对象的自定义代码
+            根据自定义代码判断出调用方期望访问的数据
+            */
+            switch (uriMatcher.match(uri)) {
+                case BOOK_DIR:  //访问全部数据 下同
+                    cursor = db.query(&quot;Book&quot;, projection, selection, selectionArgs,
+                            null, null, sortOrder);
+                    break;
+                case BOOK_ITEM: //访问单条数据（需要得到相关 id）下同
+                    /**
+                    getPathSegments() 方法将内容 URI 权限之后的部分以&quot;/&quot;符号进行分割
+                    把分割后的结果放到一个字符串列表中 
+                    第0个位置存放的是 path 第一个位置是 id
+                    */
+                    String bookId = uri.getPathSegments().get(1);
+                    cursor = db.query(&quot;Book&quot;, projection, &quot;id=?&quot;, new String[]{bookId},
+                            null, null, sortOrder);
+                    break;
+                case CATEGORY_DIR:
+                    cursor = db.query(&quot;Category&quot;, projection, selection, selectionArgs,
+                            null, null, sortOrder);
+                    break;
+                case CATEGORY_ITEM:
+                    String categoryId = uri.getPathSegments().get(1);
+                    cursor = db.query(&quot;Category&quot;, projection, &quot;id=?&quot;,
+                            new String[]{categoryId}, null, null, sortOrder);
+                    break;
+                default:
+                    break;
+            }
+            return cursor;
+        }
+
+        //添加数据 返回值是一个能够表示这条新增数据的 URI
+        @Override
+        public Uri insert(Uri uri, ContentValues values) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            Uri uriReturn = null;
+            //根据传入的 Uri 参数判断出用户想往哪张表里添加数据
+            switch (uriMatcher.match(uri)) {
+                case BOOK_DIR:
+                case BOOK_ITEM:
+                    long newBookId = db.insert(&quot;Book&quot;, null, values);
+                    //内容URI以新增数据的id结尾
+                    uriReturn = Uri.parse(&quot;content://&quot; + AUTHORITY + &quot;/book/&quot; + newBookId);
+                    break;
+                case CATEGORY_DIR:
+                case CATEGORY_ITEM:
+                    long newCategoryId = db.insert(&quot;Category&quot;, null, values);
+                    uriReturn = Uri.parse(&quot;content://&quot; + AUTHORITY + &quot;/category/&quot; + newCategoryId);
+                    break;
+                default:
+                    break;
+            }
+            return uriReturn;
+        }
+
+        //更新数据 返回值是受影响的行数
+        @Override
+        public int update(Uri uri, ContentValues values, String selection,
+                        String[] selectionArgs) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            int updatedRows = 0;
+            //根据传入的Uri参数判断出用户想要更新哪张表里的数据
+            switch (uriMatcher.match(uri)) {
+                case BOOK_DIR:
+                    updatedRows = db.update(&quot;Book&quot;, values, selection, selectionArgs);
+                    break;
+                case BOOK_ITEM:
+                    String bookId = uri.getPathSegments().get(1);
+                    updatedRows = db.update(&quot;Book&quot;, values, &quot;id=?&quot;,
+                            new String[]{bookId});
+                    break;
+                case CATEGORY_DIR:
+                    updatedRows = db.update(&quot;Category&quot;, values, selection, selectionArgs);
+                    break;
+                case CATEGORY_ITEM:
+                    String categoryId = uri.getPathSegments().get(1);
+                    updatedRows = db.update(&quot;Category&quot;, values, &quot;id=?&quot;,
+                            new String[]{categoryId});
+                    break;
+                default:
+                    break;
+            }
+            return updatedRows;
+        }
+
+        //删除数据 返回值是被删除的行数
+        @Override
+        public int delete(Uri uri, String selection, String[] selectionArgs) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            int deletedRows = 0;
+            switch (uriMatcher.match(uri)) {
+                case BOOK_DIR:
+                    deletedRows = db.delete(&quot;Book&quot;, selection, selectionArgs);
+                    break;
+                case BOOK_ITEM:
+                    String bookId = uri.getPathSegments().get(1);
+                    deletedRows = db.delete(&quot;Book&quot;, &quot;id=?&quot;, new String[]{bookId});
+                    break;
+                case CATEGORY_DIR:
+                    deletedRows = db.delete(&quot;Category&quot;, selection, selectionArgs);
+                    break;
+                case CATEGORY_ITEM:
+                    String categoryId = uri.getPathSegments().get(1);
+                    deletedRows = db.delete(&quot;Category&quot;, &quot;id=?&quot;,
+                            new String[]{categoryId});
+                    break;
+                default:
+                    break;
+            }
+            return deletedRows;
+        }
+
+        //按照之前介绍的格式规则编写
+        @Override
+        public String getType(Uri uri) {    
+            switch (uriMatcher.match(uri)) {
+                case BOOK_DIR:
+                    return &quot;vnd.android.cursor.dir/vnd.com.example.dataebasetest.provider.book&quot;;
+                case BOOK_ITEM:
+                    return &quot;vnd.android.cursor.item/vnd.com.example.dataebasetest.provider.book&quot;;
+                case CATEGORY_DIR:
+                    return &quot;vnd.android.cursor.dir/vnd.com.example.dataebasetest.provider.category&quot;;
+                case CATEGORY_ITEM:
+                    return &quot;vnd.android.cursor.item/vnd.com.example.dataebasetest.provider.category&quot;;
+            }
+            return null;
+        }
+    }
+</code></pre>
+<p>  内容提供器一定要在 AndroidManifest.xml 文件中注册才可以使用，由于是使用快捷方式创建的内容提供器，因此注册这一步已经被自动完成了。打开文件，代码如下所示：</p>
+<pre><code class="language-java">    &lt;provider
+                android:name=&quot;.DatabaseProvider&quot;
+                android:authorities=&quot;com.example.databasetest.provider&quot;
+                android:enabled=&quot;true&quot;
+                android:exported=&quot;true&quot;&gt;&lt;/provider&gt;
+</code></pre>
+<p>  创建一个新项目<code>ProviderTest</code>，我们将通过这个程序去访问 DatabaseTest 中的数据。在布局文件中放置 4 个按钮，分别用于添加、查询、修改和删除数据，然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MainActivity extends AppCompatActivity {
+        private String newId;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            //添加数据
+            Button addData = findViewById(R.id.add_data);
+            addData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri = Uri.parse(&quot;content://com.example.datebasetest.provider/book&quot;);
+                    ContentValues values = new ContentValues();
+                    values.put(&quot;name&quot;, &quot;A Clash of Kings&quot;);
+                    values.put(&quot;author&quot;, &quot;George Martin&quot;);
+                    values.put(&quot;pages&quot;, 1040);
+                    values.put(&quot;price&quot;, 12.1);
+                    //insert() 方法会返回一个 Uri 对象 包含了新增数据的 id
+                    Uri newUri = getContentResolver().insert(uri, values);
+                    newId = newUri.getPathSegments().get(1);
+                }
+            });
+            //查询数据
+            Button queryData = findViewById(R.id.query_data);
+            queryData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri = Uri.parse(&quot;content://com.example.datebasetest.provider/book&quot;);
+                    Cursor cursor = getContentResolver().query(uri, null, null,
+                            null, null);
+                    if (cursor != null) {
+                        while (cursor.moveToNext()) {
+                            @SuppressLint(&quot;Range&quot;) String name = cursor.getString
+                                    (cursor.getColumnIndex(&quot;name&quot;));
+                            @SuppressLint(&quot;Range&quot;) String author = cursor.getString
+                                    (cursor.getColumnIndex(&quot;author&quot;));
+                            @SuppressLint(&quot;Range&quot;) int pages = cursor.getInt
+                                    (cursor.getColumnIndex(&quot;pages&quot;));
+                            @SuppressLint(&quot;Range&quot;) double price = cursor.getDouble
+                                    (cursor.getColumnIndex(&quot;price&quot;));
+                            Log.d(&quot;MainActivity&quot;, &quot;book name is &quot; + name);
+                            Log.d(&quot;MainActivity&quot;, &quot;book author is &quot; + author);
+                            Log.d(&quot;MainActivity&quot;, &quot;book pages is &quot; + pages);
+                            Log.d(&quot;MainActivity&quot;, &quot;book price is &quot; + price);
+                        }
+                        cursor.close();
+                    }
+                }
+            });
+            //更新数据
+            Button updateData = findViewById(R.id.update_data);
+            updateData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /**
+                    避免 Book 表中的其他行受到影响 在内容 URI 尾部增加了一个 id
+                    这个 id 正是添加数据时所返回的 表示我们只希望更新刚刚添加的那条数据
+                    */
+                    Uri uri = Uri.parse(&quot;content://com.example.datebasetest.provider/book/&quot; + newId);
+                    ContentValues values = new ContentValues();
+                    values.put(&quot;name&quot;,&quot;A Storm of Swords&quot;);
+                    values.put(&quot;pages&quot;,1216);
+                    values.put(&quot;price&quot;,24.05);
+                    getContentResolver().update(uri,values,null,null);
+                }
+            });
+            //删除数据
+            Button deleteData = findViewById(R.id.delete_data);
+            deleteData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri = Uri.parse(&quot;content://com.example.datebasetest.provider/book/&quot;+newId);
+                    getContentResolver().delete(uri,null,null);
+                }
+            });
+        }
+    }
+</code></pre>
+<p>  之前所使用的模拟器的 SDK 是 API 30，启动 ProviderTest 项目会报错，因为该版本（Android 11）的更新中，改变了当前应用于本机其他应用进行交互的方式。<a href="https://blog.csdn.net/qq_34727886/article/details/110951082">参考博客</a><br>
+　　尝试在定义 Provider 的应用 Manifest 中声明可访问权限，然后在需要访问 Provider 的应用的 Manifest 中获取权限。<br>
+　　在定义 Provider 的项目 DatabaseTest 中声明可访问权限：</p>
+<pre><code class="language-java">    ...
+    &lt;permission
+        android:name=&quot;DatabaseProvider._READ_PERMISSION&quot;
+        android:protectionLevel=&quot;normal&quot; /&gt;
+    &lt;permission
+        android:name=&quot;DatabaseProvider._WRITE_PERMISSION&quot;
+        android:protectionLevel=&quot;normal&quot; /&gt;
+    ...
+</code></pre>
+<p>  在访问 Provider 的项目 ProviderTest 中声明访问权限：</p>
+<pre><code class="language-java">    ...
+    &lt;uses-permission android:name=&quot;DatabaseProvider._READ_PERMISSION&quot; /&gt;
+    &lt;uses-permission android:name=&quot;DatabaseProvider._WRITE_PERMISSION&quot; /&gt;
+    &lt;queries&gt;
+        &lt;package android:name=&quot;com.example.crossdatasharing&quot; /&gt;
+    &lt;/queries&gt;
+    ...
+</code></pre>
+<p>  更改完 AndroidManifest.xml 文件后，重新安装两个应用即可。<br>
+　　现在不仅是 ProviderTest 程序，任何一个程序都可以轻松访问 DatabaseTest 中的数据，而且还丝毫不用担心隐私数据泄漏的问题。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-chi-jiu-hua-ji-zhu/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — 持久化技术
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

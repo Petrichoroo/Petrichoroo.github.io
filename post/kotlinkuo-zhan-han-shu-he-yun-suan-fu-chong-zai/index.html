@@ -1,0 +1,348 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Kotlin：扩展函数和运算符重载 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Kotlin：扩展函数和运算符重载
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-19 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/f0WJ2wxNg/" class="post-tags">
+                            # Kotlin
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E6%89%A9%E5%B1%95%E5%87%BD%E6%95%B0">扩展函数</a></li>
+<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD">运算符重载</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="扩展函数">扩展函数</h2>
+<blockquote>
+<p>  扩展函数表示即使在不修改某个类的源码的情况下，仍然可以打开这个类，向该类添加新的函数。</p>
+</blockquote>
+<p>  比如一段字符串中可能包含字母、数字和特殊符号等字符，现在我们希望统计字符串中字母的数量，你要怎么实现这个功能呢？<br>
+　　如果按照一般的编程思维，可能大多数人会很自然地写出如下函数：</p>
+<pre><code class="language-java">    object StringUtil {
+        fun lettersCount(str: String): Int {
+            var count = 0
+            for (char in str) {
+                if (char.isLetter()) {
+                    count++
+                }
+            }
+            return count
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  这里先定义了一个<code>StringUtil</code>单例类，然后在这个单例类中定义了一个<code>lettersCount()</code>函数，该函数接收一个字符串参数。</p>
+</blockquote>
+<p>  现在，当我们需要统计某个字符串中的字母数量时，只需要编写如下代码即可：</p>
+<pre><code class="language-java">    val str = &quot;ABC123xyz!@#&quot;
+    val count = StringUtil.lettersCount(str)
+</code></pre>
+<p>  这是 Java 编程中最标准的实现思维。但是有了扩展函数之后就不一样了，我们可以使用一种更加面向对象的思维来实现这个功能，比如说将<code>lettersCount()</code>函数添加到<code>String</code>类当中。<br>
+　　定义扩展函数的语法结构如下所示：</p>
+<pre><code class="language-java">    fun ClassName.methodName(param1: Int, param2: Int): Int {
+        return 0
+    }
+</code></pre>
+<p>  相比于定义一个普通的函数，定义扩展函数只需要在函数名的前面加上一个<code>ClassName.</code>的语法结构，就表示将该函数添加到指定类当中了。<br>
+　　接下来我们就尝试使用扩展函数的方式来优化刚才的统计功能。<br>
+　　由于我们希望向<code>String</code>类中添加一个扩展函数，因此需要先创建一个<code>String.kt</code>文件。</p>
+<blockquote>
+<p>  建议向哪个类中添加扩展函数，就定义一个同名的<code>Kotlin</code>文件，这样便于以后查找。</p>
+</blockquote>
+<p>  当然，扩展函数也是可以定义在任何一个现有类当中的，并不一定非要创建新文件。不过通常来说，最好将它定义成顶层方法，这样可以让扩展函数拥有全局的访问域。现在在 String.kt 文件中编写如下代码：</p>
+<pre><code class="language-java">    fun String.lettersCount(): Int {
+        var count = 0
+        for (char in this) {
+            if (char.isLetter()) {
+                count++
+            }
+        }
+        return count
+    }
+</code></pre>
+<p>  现在我们将<code>lettersCount()</code>方法定义成了<code>String</code>类的扩展函数，那么函数中就自动拥有了 String 实例的上下文。因此 lettersCount() 函数就不再需要接收一个字符串参数了，而是直接遍历<code>this</code>即可，因为现在 this 就代表着字符串本身。<br>
+　　定义好了扩展函数之后，统计某个字符串中的字母数量只需要这样写即可：</p>
+<pre><code class="language-java">    val count = &quot;ABC123xyz!@#&quot;.lettersCount()
+</code></pre>
+<blockquote>
+<p>  扩展函数在很多情况下可以让 API 变得更加简洁、丰富，更加面向对象。</p>
+</blockquote>
+<p>  除了 String 类之外，我们还可以向任何类中添加扩展函数，Kotlin 对此基本没有限制。如果能利用好扩展函数这个功能，将会大幅度地提升代码质量和开发效率。</p>
+<h2 id="运算符重载">运算符重载</h2>
+<blockquote>
+<p>  Kotlin 允许我们将所有的运算符甚至其他的关键字进行重载，从而拓展这些运算符和关键字的用法。比如允许我们让任意两个对象进行相加，或者是进行更多其他的运算操作。</p>
+</blockquote>
+<p>  运算符重载使用的是<code>operator</code>关键字，只要在指定函数的前面加上 operator 关键字，就可以实现运算符重载的功能。<br>
+　　但问题在于这个指定函数是什么？这是运算符重载里面比较复杂的一个问题，因为不同的运算符对应的重载函数也是不同的。比如说加号运算符对应的是<code>plus()</code>函数，减号运算符对应的是<code>minus()</code>函数。<br>
+　　这里以加号运算符为例，如果想要实现让两个对象相加的功能，那么它的语法结构如下：</p>
+<pre><code class="language-java">    class Obj {
+        operator fun plus(obj: Obj): Obj {
+        // 处理相加的逻辑
+        }
+    }
+</code></pre>
+<p>  在上述语法结构中，关键字<code>operator</code>和函数名<code>plus</code>都是固定不变的，而接收的参数和函数返回值可以根据你的逻辑自行设定。<br>
+　　那么上述代码就表示一个 Obj 对象可以与另一个 Obj 对象相加，最终返回一个新的 Obj 对象。对应的调用方式如下：</p>
+<pre><code class="language-java">    val obj1 = Obj()
+    val obj2 = Obj()
+    val obj3 = obj1 + obj2
+</code></pre>
+<blockquote>
+<p>  这种<code>obj1 + obj2</code>的语法看上去好像很神奇，但其实这就是 Kotlin 给我们提供的一种语法糖，它会在编译的时候被转换成<code>obj1.plus(obj2)</code>的调用方式。</p>
+</blockquote>
+<p>  下面开始实现一个更加有意义功能：让两个<code>Money</code>对象相加。<br>
+　　首先定义 Money 类的结构，这里让 Money 的主构造函数接收一个<code>value</code>参数，用于表示钱的金额。创建<code>Money.kt</code>文件，代码如下所示：</p>
+<pre><code class="language-java">    class Money(val value: Int) {
+        operator fun plus(money: Money): Money {
+            val sum = value + money.value
+            return Money(sum)
+        }
+    }
+</code></pre>
+<p>  这里使用了<code>operator</code>关键字来修饰<code>plus()</code>函数，这是必不可少的。在 plus() 函数中，我们将当前 Money 对象的<code>value</code>和参数传入的 Money 对象的 value 相加，然后将得到的和传给一个新的 Money 对象并将该对象返回。<br>
+　　现在我们可以使用如下代码来对刚刚编写的功能进行测试：</p>
+<pre><code class="language-java">    val money1 = Money(5)
+    val money2 = Money(10)
+    val money3 = money1 + money2
+    println(money3.value)
+</code></pre>
+<blockquote>
+<p>  上述代码执行结果一定是 15</p>
+</blockquote>
+<p>   Money 对象只能允许和另一个 Money 对象相加是不够方便的，因此下面实现 Money 对象直接和数字相加的功能，因为 Kotlin 允许我们对同一个运算符进行多重重载，如下所示：</p>
+<pre><code class="language-java">    class Money(val value: Int) {
+        operator fun plus(money: Money): Money {
+            val sum = value + money.value
+            return Money(sum)
+        }
+        operator fun plus(newValue: Int): Money {
+            val sum = value + newValue
+            return Money(sum)
+        }
+    }
+</code></pre>
+<p>  这里我们又重载了一个<code>plus()</code>函数，不过这次接收的参数是一个整型数字。那么现在，<code>Money</code>对象就拥有了和数字相加的能力，如下：</p>
+<pre><code class="language-java">    val money1 = Money(5)
+    val money2 = Money(10)
+    val money3 = money1 + money2
+    val money4 = money3 + 20
+    println(money4.value)
+</code></pre>
+<blockquote>
+<p>  这里让 money3 对象再加上 20 的金额，最终打印的结果就变成了 35。</p>
+</blockquote>
+<p>  当然，我们还可以对这个例子进一步扩展，比如加上汇率转换的功能。让 1 人民币的 Money 对象和 1 美元的 Money 对象相加，然后根据实时汇率进行转换，从而返回一个新的 Money 对象。</p>
+<p>  实际上 Kotlin 允许我们重载的运算符和关键字多达十几个。下表列出了所有常用的可重载运算符和关键字对应的语法糖表达式，以及它们会被转换成的实际调用函数。如果我们想重载其中某一种运算符或关键字，只要参考刚才加号运算符重载的写法去实现即可。<br>
+<img src="https://Petrichoroo.github.io/post-images/1660934169029.png" alt="" loading="lazy"></p>
+<p>  之前多次使用了一个随机生成字符串长度的函数，代码如下所示：</p>
+<pre><code class="language-java">    fun getRandomLengthString(str: String): String {
+        val n = (1..20).random()
+        val builder = StringBuilder()
+        repeat(n) {
+            builder.append(str)
+        }
+        return builder.toString()
+    }
+</code></pre>
+<p>  这个函数的核心思想就是将传入的字符串重复 n 次，下面实现使用<code>str * n</code>这种写法来表示让 str 字符串重复 n 次。<br>
+　　要让一个字符串可以乘以一个数字，那么肯定要在<code>String</code>类中重载乘号运算符才行，但是 String 类是系统提供的类，我们无法修改这个类的代码。这个时候就可以借助扩展函数功能向 String 类中添加新函数了。<br>
+　　新建<code>String.kt</code>文件，然后加入如下代码：</p>
+<pre><code class="language-java">    operator fun String.times(n: Int): String {
+        val builder = StringBuilder()
+        repeat(n) {
+            builder.append(this)
+        }
+        return builder.toString()
+    }
+</code></pre>
+<p>  首先，<code>operator</code>关键字肯定是必不可少的，然后既然是要重载乘号运算符，参看上表可知，函数名必须是<code>times</code>，最后，由于是定义扩展函数，因此还要在函数名前面加上<code>String.</code>的语法结构。<br>
+　　现在，字符串就拥有了和一个数字相乘的能力，比如执行如下代码：</p>
+<pre><code class="language-java">    val str = &quot;abc&quot; * 3
+    println(str)
+</code></pre>
+<p>  最后，其实 Kotlin 的<code>String</code>类中已经提供了一个用于将字符串重复 n 遍的<code>repeat()</code>函数，因此<code>times()</code>函数还可以进一步精简成如下形式：</p>
+<pre><code class="language-java">    operator fun String.times(n: Int) = repeat(n)
+</code></pre>
+<p>  现在可以<code>getRandomLengthString()</code>函数中使用上述写法，如下：</p>
+<pre><code class="language-java">    fun getRandomLengthString(str: String) = str * (1..20).random()
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/jian-yi-ban-de-xin-wen-ying-yong-kotlin/" class="post-title gt-a-link">
+                    简易版的新闻应用（Kotlin）
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

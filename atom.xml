@@ -1,0 +1,3639 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://Petrichoroo.github.io</id>
+    <title>Petrichor</title>
+    <updated>2022-09-05T07:40:52.348Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://Petrichoroo.github.io"/>
+    <link rel="self" href="https://Petrichoroo.github.io/atom.xml"/>
+    <subtitle>Live well,love lots,and laugh often.</subtitle>
+    <logo>https://Petrichoroo.github.io/images/avatar.png</logo>
+    <icon>https://Petrichoroo.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2022, Petrichor</rights>
+    <entry>
+        <title type="html"><![CDATA[高级程序开发组件 Jetpack]]></title>
+        <id>https://Petrichoroo.github.io/post/gao-ji-cheng-xu-kai-fa-zu-jian-jetpack/</id>
+        <link href="https://Petrichoroo.github.io/post/gao-ji-cheng-xu-kai-fa-zu-jian-jetpack/">
+        </link>
+        <updated>2022-08-26T09:19:59.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#jetpack">Jetpack</a>
+<ul>
+<li><a href="#jetpack-%E7%AE%80%E4%BB%8B">Jetpack 简介</a></li>
+<li><a href="#viewmodel">ViewModel</a>
+<ul>
+<li><a href="#viewmodel-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">ViewModel 的基本用法</a></li>
+<li><a href="#%E5%90%91-viewmodel-%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0">向 ViewModel 传递参数</a></li>
+</ul>
+</li>
+<li><a href="#lifecycles">Lifecycles</a></li>
+<li><a href="#livedata">LiveData</a>
+<ul>
+<li><a href="#livedata-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">LiveData 的基本用法</a></li>
+<li><a href="#map-%E5%92%8C-switchmap">map 和 switchMap</a></li>
+</ul>
+</li>
+<li><a href="#room">Room</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8-room-%E8%BF%9B%E8%A1%8C%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5">使用 Room 进行增删改查</a></li>
+<li><a href="#room-%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8D%87%E7%BA%A7">Room 的数据库升级</a></li>
+</ul>
+</li>
+<li><a href="#workmanager">WorkManager</a>
+<ul>
+<li><a href="#workmanager-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">WorkManager 的基本用法</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-workmanager-%E5%A4%84%E7%90%86%E5%A4%8D%E6%9D%82%E7%9A%84%E4%BB%BB%E5%8A%A1">使用 WorkManager 处理复杂的任务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="jetpack">Jetpack</h1>
+<hr>
+<h2 id="jetpack-简介">Jetpack 简介</h2>
+<p>  长久以来，Android 官方并没有制定一个项目架构的规范，只要能够实现功能，代码怎么编写都是开发者的自由。但是不同的人技术水平不同，最终编写出来的代码质量是千差万别的。<br>
+　　于是在 2017 年，Google 推出了一个官方的架构组件库——Architecture Components，旨在帮助开发者编写出更加符合高质量代码规范、更具有架构设计的应用程序。2018年，Google 又推出了一个全新的开发组件工具集<code>Jetpack</code>，并将 Architecture Components 作为 Jetpack 的一部分纳入其中。</p>
+<h2 id="viewmodel">ViewModel</h2>
+<blockquote>
+<p>  在传统的开发模式下，Activity 的任务实在是太重了，既要负责逻辑处理，又要控制UI展示，甚至还得处理网络回调。<br>
+　　而<code>ViewModel</code>的一个重要作用就是可以帮助 Activity 分担一部分工作，它是专门用于存放与界面相关的数据的。也就是说，只要是界面上能看得到的数据，它的相关变量都应该存放在 ViewModel 中，而不是 Activity 中，这样可以在一定程度上减少 Activity 中的逻辑。</p>
+</blockquote>
+<p>  <code>ViewModel</code>还有一个非常重要的特性。我们都知道，当手机发生横竖屏旋转的时候， Activity 会被重新创建，同时存放在 Activity 中的数据也会丢失。而 ViewModel 的生命周期和 Activity 不同，它可以保证在手机屏幕发生旋转的时候不会被重新创建，只有当 Activity 退出的时候才会跟着 Activity 一起销毁。<br>
+　　因此，将与界面相关的变量存放在<code>ViewModel</code>当中，这样即使旋转手机屏幕，界面上显示的数据也不会丢失。</p>
+<h3 id="viewmodel-的基本用法">ViewModel 的基本用法</h3>
+<p>  通常来讲，比较好的编程规范是给每一个 Activity 和 Fragment 都创建一个对应的<code>ViewModel</code>。下面实现一个简单计数器的功能<br>
+　　因此这里为 MainActivity 创建一个对应的<code>MainViewModel</code>类，并让它继承自<code>ViewModel</code>，同时加入一个<code>counter</code>变量用于计数，代码如下所示：</p>
+<pre><code class="language-java">    class MainViewModel : ViewModel() {
+        var counter = 0
+    }
+</code></pre>
+<p>  在界面上添加一个按钮，每点击一次按钮就让计数器加 1，并且把最新的计数显示在界面上。修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;TextView
+            android:id=&quot;@+id/infoText&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;
+            android:textSize=&quot;32sp&quot; /&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/plusOneBtn&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;
+            android:text=&quot;Plus One&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  下面实现计数器的逻辑，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        lateinit var viewModel: MainViewModel
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+            plusOneBtn.setOnClickListener {
+                viewModel.counter++
+                refreshCounter()
+            }
+            refreshCounter()
+        }
+        private fun refreshCounter() {
+            infoText.text = viewModel.counter.toString()
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  绝对不可以直接去创建<code>ViewModel</code>的实例，而是一定要通过<code>ViewModelProvider</code>来获取 ViewModel 的实例</p>
+</blockquote>
+<p>  <code>ViewModel</code>有其独立的生命周期，并且其生命周期要长于 Activity。如果在<code>onCreate()</code>方法中创建 ViewModel 的实例，那么每次 onCreate() 方法执行的时候， ViewModel 都会创建一个新的实例，这样当手机屏幕发生旋转的时候，就无法保留其中的数据了。</p>
+<h3 id="向-viewmodel-传递参数">向 ViewModel 传递参数</h3>
+<blockquote>
+<p>  向<code>MainViewModel</code>的构造函数中传递参数需要借助<code>ViewModelProvider.Factory</code>来实现。</p>
+</blockquote>
+<p>  由于退出程序之后再重新打开，之前的计数会被清零，因此需要在退出程序的时候对当前的计数进行保存，然后再次打开程序的时候读取之前保存的计数，并传递给 MainViewModel。<br>
+　　因此，这里修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        var counter = countReserved
+    }
+</code></pre>
+<p>  <code>countReserved</code>参数，这个参数用于记录之前保存的计数值，并在初始化的时候赋值给<code>counter</code>变量。</p>
+<p>  新建一个<code>MainViewModelFactory</code>类，并让它实现<code>ViewModelProvider.Factory</code>接口，代码如下所示：</p>
+<pre><code class="language-java">    class MainViewModelFactory(private val countReserved: Int) : ViewModelProvider.Factory {
+        override fun &lt;T : ViewModel&gt; create(modelClass: Class&lt;T&gt;): T {
+            return MainViewModel(countReserved) as T
+        }
+    }
+</code></pre>
+<p>  <code>MainViewModelFactory</code>的构造函数中接收了一个<code>countReserved</code>参数。</p>
+<blockquote>
+<p>  ViewModelProvider.Factory 接口要求我们必须实现<code>create()</code>方法。</p>
+</blockquote>
+<p>  在<code>create()</code>方法中创建<code>MainViewModel</code>的实例，并传入<code>countReserved</code>参数。</p>
+<blockquote>
+<p>  注意，这里<code>create()</code>方法的执行时机和 Activity 的生命周期无关。</p>
+</blockquote>
+<p>  在界面上添加一个清零按钮，方便用户手动将计数器清零。修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;LinearLayout
+        xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+        ...
+        &lt;Button
+        android:id=&quot;@+id/clearBtn&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_gravity=&quot;center_horizontal&quot;
+        android:text=&quot;Clear&quot;/&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  最后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        lateinit var viewModel: MainViewModel
+        lateinit var sp: SharedPreferences
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            sp = getPreferences(Context.MODE_PRIVATE)
+            val countReserved = sp.getInt(&quot;count_reserved&quot;, 0)
+            viewModel = ViewModelProvider(this, MainViewModelFactory(countReserved))
+                .get(MainViewModel::class.java)
+            ...
+            clearBtn.setOnClickListener {
+                viewModel.counter = 0
+                refreshCounter()
+            }
+            refreshCounter()
+        }
+
+        override fun onPause() {
+            super.onPause()
+            sp.edit {
+                putInt(&quot;count_reserved&quot;, viewModel.counter)
+            }
+        }
+        ...
+    }
+</code></pre>
+<p>  onCreate() 获取到的<code>SharedPreferences</code>实例用于读取之前保存的计数值，在<code>ViewModelProvider</code>中，额外传入了一个<code>MainViewModelFactory</code>参数，并将读取到的计数值传给了它的构造函数。</p>
+<blockquote>
+<p>  注意，只有用这种写法才能将计数值最终传递给<code>MainViewModel</code>的构造函数。</p>
+</blockquote>
+<p>  在<code>onPause()</code>方法中对当前的计数进行保存，这样可以保证不管程序是退出还是进入后台，计数都不会丢失。</p>
+<h2 id="lifecycles">Lifecycles</h2>
+<p>  <code>Lifecycles</code>组件可以让任何一个类都能轻松感知到 Activity 的生命周期，同时又不需要在 Activity 中编写大量的逻辑处理。</p>
+<p>  新建一个<code>MyObserver</code>类，并让其实现<code>DefaultLifecycleObserver</code>接口，然后重写相关方法，代码如下所示：</p>
+<pre><code class="language-java">    class MyObserver : DefaultLifecycleObserver {
+        //此方法会感知到Activity的onStart方法后执行 下面同理
+        override fun onStart(owner: LifecycleOwner) {
+            super.onStart(owner)
+            Log.d(&quot;MyObserver&quot;, &quot;onStart&quot;)
+        }
+
+        override fun onStop(owner: LifecycleOwner) {
+            super.onStop(owner)
+            Log.d(&quot;MyObserver&quot;, &quot;onStop&quot;)
+        }
+    }
+</code></pre>
+<p>  不过现在当 Activity 的生命周期发生变化时，是无法通知到<code>MyObserver</code>的，因此我们需要借助<code>LifecycleOwner</code>来让 MyObserver 得到通知，相关语法结构如下：</p>
+<pre><code class="language-java">    lifecycleOwner.lifecycle.addObserver(MyObserver())
+</code></pre>
+<p>  首先调用<code>LifecycleOwner</code>的<code>getLifecycle()</code>方法，得到一个<code>Lifecycle</code>对象，然后调用它的<code>addObserver()</code>方法来观察 LifecycleOwner 的生命周期，并把 MyObserver 的实例传进去即可。<br>
+　　只要我们的 Activity 是继承自<code>AppCompatActivity</code>，那么它本身就是一个<code>LifecycleOwner</code>的实例，因为 AndroidX 库自动帮我们完成了这部分工作。</p>
+<blockquote>
+<p>  同理，若 Fragment 是继承自<code>androidx.fragment.app.Fragment</code>，那么它本身也是一个<code>LifecycleOwner</code>的实例。</p>
+</blockquote>
+<p>  因此，在 MainActivity 当中写法如下：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        ...
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            ...
+            lifecycle.addObserver(MyObserver())
+        }
+        ...
+    }
+</code></pre>
+<p>  目前<code>MyObserver</code>虽然能够自动感知到 Activity 的生命周期发生了变化，却无法主动去获取当前的生命周期状态。<br>
+　　可以在<code>MyObserver</code>的构造函数中将<code>Lifecycle</code>对象传进来，如下所示：</p>
+<pre><code class="language-java">    class MyObserver(val lifecycle: Lifecycle) : DefaultLifecycleObserver {
+        /*返回值是一个枚举类型 共五种：INITIALIZED、DESTROYED、CREATED、STARTED、RESUMED
+        if(owner.lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)){
+        }*/
+        ...
+    }
+</code></pre>
+<p>  然后可以在任何地方调用<code>lifecycle.currentState</code>来主动获知当前的生命周期状态。<br>
+　　当获取的生命周期状态是<code>CREATED</code>时，说明<code>onCreate()</code>方法已经执行了，但是<code>onStart()</code>方法还没有执行，以此类推。</p>
+<h2 id="livedata">LiveData</h2>
+<blockquote>
+<p>  <code>LiveData</code>是 Jetpack 提供的一种响应式编程组件，它可以包含任何类型的数据，并在数据发生变化的时候通知给观察者，另外 LiveData 特别适合与<code>ViewModel</code>结合在一起使用。</p>
+</blockquote>
+<h3 id="livedata-的基本用法">LiveData 的基本用法</h3>
+<p>  如果在<code>ViewModel</code>的内部开启了线程去执行一些耗时逻辑，那么以之前的写法，响应相关事件后就直接去获取数据，是无法得到最新的数据的。<br>
+　　之前一直都是在 Activity 中手动获取<code>ViewModel</code>中的数据，比如在<code>refreshCounter()</code>方法中获取 ViewModel 里的<code>counter</code>变量值来更新界面，ViewModel 是无法将数据的变化主动通知给 Activity 的。<br>
+　　如果将之前计数器的计数使用<code>LiveData</code>来包装，然后在 Activity 中去观察它，就可以主动将数据变化通知给 Activity 了。首先修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    /**
+    * MutableLiveData可以包含任何类型的数据，并在数据发生变化的时候通知给观察者 具有三种读取数据的写法：
+    * getValue()方法用于获取LiveData中包含的数据。
+    * setValue()方法用于给LiveData设置数据，但是只能在主线程中调用。
+    * postValue()方法用于在非主线程中给LiveData设置数据。
+    * */
+    class MainViewModel(countReserved: Int) : ViewModel() { //countReserved用于记录之前保存的计数值
+        val counter = MutableLiveData&lt;Int&gt;()   //MutableLiveData是一种可变的LiveData
+
+        init {
+            //语法糖写法
+            counter.value = countReserved  //使之前保存的计数值就可以在初始化的时候得到恢复
+        }
+
+        fun plusOne() { //先获取counter中包含的数据，然后给它加1
+            val count = counter.value ?: 0  //getValue()方法所获得的数据可能为空
+            counter.value = count + 1
+        }
+
+        fun clear() {
+            counter.value = 0
+        }
+    }
+</code></pre>
+<p>  然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        plusOneBtn.setOnClickListener { //增加计数
+            viewModel.plusOne()
+        }
+        clearBtn.setOnClickListener {   //清零计数
+            viewModel.clear()
+        }
+        /**
+         * counter现在是一个LiveData对象 任何LiveData对象都可以调用它的observe()方法来观察数据的变化
+         * observe()方法接收两个参数：
+         * 第一个参数是一个LifecycleOwner对象 Activity本身就是一个LifecycleOwner对象，因此直接传this即可
+         * 第二个参数是一个Observer接口 当counter中包含的数据发生变化时就会回调到这里 将最新的计数更新到界面上即可。
+         */
+        viewModel.counter.observe(this, Observer {
+            infoText.text = it.toString()
+        })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sp.edit {
+            //对当前的计数进行保存 保证不管程序是退出还是进入后台 计数都不会丢失
+            putInt(&quot;count_reserved&quot;, viewModel.counter.value ?: 0)
+        }
+    }
+}
+</code></pre>
+<p>  这里调用了<code>viewModel.counter</code>的<code>observe()</code>方法来观察数据的变化。经过对<code>MainViewModel</code>的改造，现在<code>counter</code>变量已经变成了一个<code>LiveData</code>对象。<br>
+　　现在也不用担心 ViewModel 的内部会不会开启线程执行耗时逻辑了·。</p>
+<blockquote>
+<p>  注意，如果需要在子线程中给<code>LiveData</code>设置数据，一定要调用<code>postValue()</code>方法，而不能再使用<code>setValue()</code>方法，否则会发生崩溃。</p>
+</blockquote>
+<p>  不过上面的写法仍然不是最规范的<code>LiveData</code>用法，问题就在于将<code>counter</code>这个可变的 LiveData 暴露给了外部。这样即使是在<code>ViewModel</code>的外面也是可以给 counter 设置数据的，从而破坏了 ViewModel 数据的封装性，同时也可能带来一定的风险。<br>
+　　比较推荐的做法是，永远只暴露不可变的<code>LiveData</code>给外部。这样在非<code>ViewModel</code>中就只能观察 LiveData 的数据变化，而不能给 LiveData 设置数据。<br>
+　　再次修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        private val _counter = MutableLiveData&lt;Int&gt;()
+        /**
+        * 当外部调用counter变量时 实际上获得的就是_counter的实例
+        * 但是无法给counter设置数据 从而保证了ViewModel的数据封装性*/
+        val counter: LiveData&lt;Int&gt;  //不可变的LiveData
+            get() = _counter    //返回_counter变量
+
+        init {
+            _counter.value = countReserved
+        }
+
+        fun plusOne() {
+            val count = _counter.value ?: 0
+            _counter.value = count + 1
+        }
+
+        fun clear() {
+            _counter.value = 0
+        }
+    }
+</code></pre>
+<p>  这里先将原来的 counter 变量改名为<code>_counter</code>变量，并给它加上<code>private</code>修饰符，这样<code>_counter</code>变量对于外部就是不可见的了。<br>
+　　目前这种写法可以说是非常规范的，也是 Android 官方最为推荐的写法。</p>
+<h3 id="map-和-switchmap">map 和 switchMap</h3>
+<blockquote>
+<p>  LiveData 为了能够应对各种不同的需求场景，提供了两种转换方法：<code>map()</code>和<code>switchMap()</code>方法。</p>
+</blockquote>
+<p>  <code>map()</code>方法的作用是将实际包含数据的<code>LiveData</code>和仅用于观察数据的<code>LiveData</code>进行转换。<br>
+　　比如说有一个<code>User</code>类，其中包含用户的姓名和年龄，定义如下：</p>
+<pre><code class="language-java">    data class User(var firstName: String, var lastName: String, var age: Int)
+</code></pre>
+<p>  然后可以在<code>ViewModel</code>中创建一个相应的<code>LiveData</code>来包含<code>User</code>类型的数据，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        val userLiveData = MutableLiveData&lt;User&gt;()
+        ...
+    }
+</code></pre>
+<p>  如果 MainActivity 中明确只会显示用户的姓名，而完全不关心用户的年龄，那么这个时候还将整个<code>User</code>类型的 LiveData 暴露给外部，就显得不合适了。<br>
+　　而<code>map()</code>方法就是专门用于解决这种问题的，它可以将<code>User</code>类型的<code>LiveData</code>自由地转型成任意其他类型的 LiveData，写法如下：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        //private声明以保证数据的封装性
+        private val userLiveData = MutableLiveData&lt;User&gt;()
+        val userName: LiveData&lt;String&gt; = Transformations.map(userLiveData) { user -&gt;
+            &quot;${user.firstName} ${user.lastName}&quot;    //将User对象转换成一个只包含用户姓名的字符串
+        }
+        ...
+    }
+</code></pre>
+<p>  这里调用<code>Transformations</code>的<code>map()</code>方法来对<code>LiveData</code>的数据类型进行转换。<br>
+　　<code>map()</code>方法接收两个参数：第一个参数是原始的 LiveData 对象；第二个参数是一个转换函数，在转换函数里编写具体的转换逻辑即可。<br>
+　　当<code>userLiveData</code>的数据发生变化时，<code>map()</code>方法会监听到变化并执行转换函数中的逻辑，然后再将转换之后的数据通知给<code>userName</code>的观察者。</p>
+<p>  之前所使用的<code>LiveData</code>对象的实例都是在 ViewModel 中创建的，而它也是有可能调用外部的方法获取的。<br>
+　　下面就来模拟一下这种情况，新建一个<code>Repository</code>单例类，代码如下所示：</p>
+<pre><code class="language-java">    object Repository {
+        fun getUser(userId: String): LiveData&lt;User&gt; {
+            val liveData = MutableLiveData&lt;User&gt;()
+            liveData.value = User(userId, userId, 0)
+            return liveData
+        }
+    }
+</code></pre>
+<p>  这里在 Repository 类中添加了一个<code>getUser()</code>方法，这个方法接收一个<code>userId</code>参数。按照正常的编程逻辑，我们应该根据传入的 userId 参数去服务器请求或者到数据库中查找相应的<code>User</code>对象，但这里只是模拟示例，因此每次将传入的 userId 当作用户姓名来创建一个新的 User 对象即可。<br>
+　　需要注意的是，<code>getUser()</code>方法返回的是一个包含<code>User</code>数据的<code>LiveData</code>对象，而且每次调用 getUser() 方法都会返回一个新的 LiveData 实例。<br>
+　　然后在<code>MainViewModel</code>中也定义一个<code>getUser()</code>方法，并且让它调用 Repository 的 getUser() 方法来获取<code>LiveData</code>对象，如下：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        ...
+        fun getUser(userId: String): LiveData&lt;User&gt; {
+            return Repository.getUser(userId)
+        }
+    }
+</code></pre>
+<p>  注意我们不能直接在 MainActivity 中使用如下写法来观察 LiveData 的数据变化：</p>
+<pre><code class="language-java">    viewModel.getUser(userId).observe(this) { user -&gt;
+    }
+</code></pre>
+<p>  因为每次调用<code>getUser()</code>方法返回的都是一个新的<code>LiveData</code>实例，而上述写法会一直观察之前的 LiveData 实例，从而根本无法观察到数据的变化。<br>
+　　此时就需要使用到<code>switchMap()</code>方法，它的使用场景非常固定：如果<code>ViewModel</code>中的某个<code>LiveData</code>对象是调用另外的方法获取的，那么就可以借助<code>switchMap()</code>方法，将这个 LiveData 对象转换成另外一个可观察的 LiveData 对象。<br>
+　　修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        ...
+        private val userIdLiveData = MutableLiveData&lt;String&gt;()
+        //Transformations.switchMap()对另一个可观察的LiveData对象进行转换
+        val user: LiveData&lt;User&gt; = Transformations.switchMap(userIdLiveData) { userId -&gt;
+            Repository.getUser(userId)
+        }
+
+        fun getUser(userId: String) {
+            userIdLiveData.value = userId
+        }
+    }
+</code></pre>
+<p>  这里定义了一个新的<code>userIdLiveData</code>对象，用来观察<code>userId</code>的数据变化。<br>
+　　<code>switchMap()</code>方法同样接收两个参数：</p>
+<ul>
+<li>
+<p>第一个参数传入新增的<code>userIdLiveData</code>，switchMap() 方法会对它进行观察。</p>
+</li>
+<li>
+<p>第二个参数是一个转换函数，必须在这个转换函数中返回一个<code>LiveData</code>对象，因为<code>switchMap()</code>方法的工作原理就是要将转换函数中返回的 LiveData 对象转换成另一个可观察的 LiveData 对象。</p>
+</li>
+</ul>
+<blockquote>
+<p>  <code>switchMap()</code>的整体工作流程：<br>
+　　首先，当外部调用 MainViewModel 的<code>getUser()</code>方法来获取用户数据时，并不会发起任何请求或者函数调用，只会将传入的<code>userId</code>值设置到<code>userIdLiveData</code>当中。<br>
+　　一旦 userIdLiveData 的数据发生变化，那么观察 userIdLiveData 的<code>switchMap()</code>方法就会执行，并且调用我们编写的转换函数。然后在转换函数中调用<code>Repository.getUser()</code>方法获取真正的用户数据。同时，<code>switchMap()</code>方法会将 Repository.getUser() 方法返回的<code>LiveData</code>对象转换成一个可观察的 LiveData 对象，对于 Activity 而言，只要去观察这个 LiveData 对象即可。</p>
+</blockquote>
+<p>  在上面的例子中，我们调用 MainViewModel 的<code>getUser()</code>方法时传入了一个<code>userId</code>参数，为了能够观察这个参数的数据变化，又构建了一个<code>userIdLiveData</code>，然后在<code>switchMap()</code>方法中再去观察这个 LiveData 对象。但是<code>ViewModel</code>中某个获取数据的方法有可能是没有参数的。<br>
+　　因此，在没有可观察数据的情况下，需要创建一个空的<code>LiveData</code>对象，写法如下：</p>
+<pre><code class="language-java">    class MyViewModel : ViewModel() {
+        private val refreshLiveData = MutableLiveData&lt;Any?&gt;()
+        val refreshResult = Transformations.switchMap(refreshLiveData) {
+            Repository.refresh() // 假设Repository中已经定义了refresh()方法
+        }
+
+        fun refresh() {
+            refreshLiveData.value = refreshLiveData.value
+        }
+    }
+</code></pre>
+<p>  这里定义了一个不带参数的<code>refresh()</code>方法，又对应地定义了一个<code>refreshLiveData</code>，但是它不需要指定具体包含的数据类型，因此这里将 LiveData 的泛型指定成<code>Any?</code>即可。<br>
+　　在<code>refresh()</code>方法中，我们只是将<code>refreshLiveData</code>原有的数据取出来（默认是空），再重新设置到 refreshLiveData 当中，这样就能触发一次数据变化。</p>
+<blockquote>
+<p>  LiveData 内部不会判断即将设置的数据和原有数据是否相同，只要调用了<code>setValue()</code>或<code>postValue()</code>方法，就一定会触发数据变化事件。</p>
+</blockquote>
+<p>  然后在 Activity 中观察<code>refreshResult</code>这个 LiveData 对象即可，这样只要调用了<code>refresh()</code>方法，观察者的回调函数中就能够得到最新的数据。</p>
+<p>  最后想说的是，LiveData 之所以能够成为<code>Activity</code>与<code>ViewModel</code>之间通信的桥梁，并且还不会有内存泄漏的风险，靠的是<code>Lifecycles</code>组件。<br>
+　　LiveData 在内部使用了<code>Lifecycles</code>组件来自我感知生命周期的变化，从而可以在 Activity 销毁的时候及时释放引用，避免产生内存泄漏的问题。<br>
+　　由于要减少性能消耗，当 Activity 处于不可见状态的时候（比如手机息屏，或者被其他的 Activity 遮挡），如果<code>LiveData</code>中的数据发生了变化，是不会通知给观察者的。只有当 Activity重新恢复可见状态时，才会将数据通知给观察者，而 LiveData 之所以能够实现这种细节的优化，依靠的还是 Lifecycles 组件。<br>
+　　另外，如果在 Activity 处于不可见状态的时候，<code>LiveData</code>发生了多次数据变化，当 Activity 恢复可见状态时，只有最新的那份数据才会通知给观察者，前面的数据在这种情况下相当于已经过期了，会被直接丢弃。</p>
+<h2 id="room">Room</h2>
+<p>  ORM 也叫对象关系映射。简单来讲，我们使用的编程语言是面向对象语言，而使用的数据库则是关系型数据库，将面向对象的语言和面向关系的数据库之间建立一种映射关系，即 ORM。<br>
+　　使用 ORM 框架有就可以用面向对象的思维来和数据库进行交互，绝大多数情况下不用再和 SQL 语句打交道了，同时也不用担心操作数据库的逻辑会让项目的整体代码变得混乱。<br>
+　　Android 官方推出了一个 ORM 框架，并将它加入了 Jetpack 当中，即<code>Room</code>。</p>
+<h3 id="使用-room-进行增删改查">使用 Room 进行增删改查</h3>
+<p>  <code>Room</code>主要由<code>Entity</code>、<code>Dao</code>和<code>Database</code>这 3 部分组成，每个部分都有明确的职责，详细说明如下：</p>
+<ul>
+<li>
+<p><code>Entity</code>：用于定义封装实际数据的实体类，每个实体类都会在数据库中有一张对应的表，并且表中的列是根据实体类中的字段自动生成的。</p>
+</li>
+<li>
+<p><code>Dao</code>：Dao 是数据访问对象的意思，通常会在这里对数据库的各项操作进行封装，在实际编程的时候，逻辑层就不需要和底层数据库打交道了，直接和 Dao 层进行交互即可。</p>
+</li>
+<li>
+<p><code>Database</code>：用于定义数据库中的关键信息，包括数据库的版本号、包含哪些实体类以及提供 Dao 层的访问实例。</p>
+</li>
+</ul>
+<p>  使用<code>Room</code>，需要在<code>app/build.gradle</code>文件中添加如下的依赖：</p>
+<pre><code class="language-java">    plugins {
+        ...
+        id 'kotlin-kapt'
+    }
+    ...
+    dependencies {
+        //room
+        def room_version = &quot;2.2.3&quot;
+        implementation &quot;androidx.room:room-runtime:$room_version&quot;
+        kapt &quot;androidx.room:room-compiler:$room_version&quot;
+        ...
+    }
+</code></pre>
+<p>  这里新增了一个<code>kotlin-kapt</code>插件，同时在<code>dependencies</code>闭包中添加了两个<code>Room</code>的依赖库。<br>
+　　由于 Room 会根据我们在项目中声明的注解来动态生成代码，因此这里一定要使用<code>kapt</code>引入 Room 的编译时注解库，而启用编译时注解功能则一定要先添加<code>kotlin-kapt</code>插件。</p>
+<blockquote>
+<p>  注意，<code>kapt</code>只能在 Kotlin 项目中使用，如果是 Java 项目的话，使用<code>annotationProcessor</code>即可。</p>
+</blockquote>
+<p>  首先是定义<code>Entity</code>，也就是实体类。JetpackTest 项目中已经存在一个实体类了，然而<code>User</code>类目前只包含<code>firstName</code>、<code>lastName</code>和<code>age</code>这 3 个字段，但是一个良好的数据库编程建议是，给每个实体类都添加一个<code>id</code>字段，并将这个字段设为主键。<br>
+　　于是对<code>User</code>类进行如下改造，并完成实体类的声明：</p>
+<pre><code class="language-java">    @Entity
+    data class User(var firstName: String, var lastName: String, var age: Int) {
+        @PrimaryKey(autoGenerate = true)
+        var id: Long = 0
+    }
+</code></pre>
+<p>  这里在<code>User</code>的类名上使用<code>@Entity</code>注解，将它声明成了一个实体类，然后在 User 类中添加了一个<code>id</code>字段，并使用<code>@PrimaryKey</code>注解将它设为了主键，再把<code>autoGenerate</code>参数指定成<code>true</code>，使得主键的值是自动生成的。<br>
+　　这样实体类部分就定义好了，不过这里简单起见，只定义了一个实体类，在实际项目当中，我们需要根据具体的业务逻辑定义很多个实体类。当然，每个实体类定义的方式都是差不多的，最多添加一些实体类之间的关联。<br>
+　　接下来开始定义<code>Dao</code>，这部分也是<code>Room</code>用法中最关键的地方，因为所有访问数据库的操作都是在这里封装的。Dao 要做的事情就是覆盖所有的业务需求，使得业务方永远只需要与 Dao层进行交互，而不必和底层的数据库打交道。<br>
+　　新建一个<code>UserDao</code>接口，注意必须使用接口，这点和<code>Retrofit</code>是类似的，然后在接口中编写如下代码：</p>
+<pre><code class="language-java">    @Dao
+    interface UserDao {
+        //将参数中传入的User对象插入数据库中 插入完成后将自动生成的主键id值返回
+        @Insert
+        fun insertUser(user: User): Long
+
+        //将参数中传入的User对象更新到数据库当中
+        @Update
+        fun updateUser(newUser: User)
+
+        //从数据库中查询所有的用户
+        @Query(&quot;select * from User&quot;)
+        fun loadAllUsers(): List&lt;User&gt;
+
+        //查询所有年龄大于指定参数的用户
+        @Query(&quot;select * from User where age &gt; :age&quot;)
+        fun loadUserOlderThan(age: Int): List&lt;User&gt;
+
+        //会将参数传入的User对象从数据库中删除
+        @Delete()
+        fun deleteUser(user: User)
+
+        //使用非实体类参数来增删改数据
+        @Query(&quot;delete from User where lastName = :lastName&quot;)
+        fun deleteUserByLastName(lastName: String): Int
+    }
+</code></pre>
+<p>  <code>UserDao</code>接口的上面使用了一个<code>@Dao</code>注解，这样<code>Room</code>才能进行识别。数据库操作通常有增删改查这 4 种，因此 Room 也提供了<code>@Insert</code>、<code>@Delete</code>、<code>@Update</code>和<code>@Query</code>这 4 种相应的注解。</p>
+<blockquote>
+<p>  需要注意的是，如果想要从数据库中查询数据，或者使用非实体类参数来增删改数据，那么就必须编写 SQL 语句，不然 Room 将无法知道用户想要操作哪些数据，Room 是支持在编译时动态检查 SQL 语句语法的。</p>
+</blockquote>
+<p>  最后来定义<code>Database</code>。这部分内容的写法是非常固定的，只需要定义好 3 个部分的内容：数据库的版本号、包含哪些实体类，以及提供<code>Dao</code>层的访问实例。<br>
+　　新建一个<code>AppDatabase.kt</code>文件，代码如下所示：</p>
+<pre><code class="language-java">    @Database(version = 1, entities = [User::class])    //多个实体类之间用逗号隔开即可
+    abstract class AppDatabase : RoomDatabase() {
+        abstract fun userDao(): UserDao
+
+        companion object {
+            private var instance: AppDatabase? = null   //缓存AppDatabase的实例
+
+            @Synchronized
+            fun getDatabase(context: Context): AppDatabase {    //返回一个AppDatabase对象
+                instance?.let { //instance变量不为空就直接返回
+                    return it
+                }
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java, &quot;app_database&quot;
+                )
+                    .build().apply {
+                        instance = this //this:AppDatabase
+                    }
+            }
+        }
+    }
+</code></pre>
+<p>  <code>AppDatabase</code>类必须继承自<code>RoomDatabase</code>类，并且一定要使用<code>abstract</code>关键字将它声明成抽象类，然后提供相应的抽象方法，用于获取之前编写的<code>Dao</code>的实例，比如这里提供的<code>userDao()</code>方法。不过只需要进行方法声明就可以了，具体的方法实现是由<code>Room</code>在底层自动完成的。</p>
+<p>  在<code>companion object</code>结构体中编写了一个单例模式，因为原则上全局应该只存在一份<code>AppDatabase</code>的实例。需要注意的是，当<code>instance</code>变量为空时，调用了<code>Room.databaseBuilder()</code>方法来构建一个 AppDatabase 的实例。<br>
+　　<code>databaseBuilder()</code>方法接收 3 个参数：</p>
+<ul>
+<li>
+<p>第一个参数一定要使用<code>applicationContext</code>，而不能使用普通的<code>context</code>，否则容易出现内存泄漏的情况。</p>
+</li>
+<li>
+<p>第二个参数是<code>AppDatabase</code>的<code>Class</code>类型。</p>
+</li>
+<li>
+<p>第三个参数是数据库名。</p>
+</li>
+</ul>
+<p>  最后调用<code>build()</code>方法完成构建，并将创建出来的实例赋值给<code>instance</code>变量，然后返回当前实例即可。<br>
+　　这样就定义好了 Room 所需要的一切，在布局文件中自行添加删改查四个按钮对它进行测试，然后修改 MainActivity 中的代码，分别在这四个按钮的点击事件中实现增删改查的逻辑，如下：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    ...
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        val userDao = AppDatabase.getDatabase(this).userDao()
+        //创建两个User对象
+        val user1 = User(&quot;Tom&quot;, &quot;Brady&quot;, 40)
+        val user2 = User(&quot;Tom&quot;, &quot;Hanks&quot;, 63)
+        addDataBtn.setOnClickListener {
+            thread {
+                //将insertUser()方法返回的主键id值赋值给原来的User对象 
+                user1.id = userDao.insertUser(user1)
+                user2.id = userDao.insertUser(user2)
+            }
+        }
+        updateDataBtn.setOnClickListener {
+            thread {
+                user1.age = 42
+                userDao.updateUser(user1)
+            }
+        }
+        deleteDataBtn.setOnClickListener {
+            thread {    //删除所有lastName是Hanks的用户
+                userDao.deleteUserByLastName(&quot;Hanks&quot;)
+            }
+        }
+        queryDataBtn.setOnClickListener {
+            thread {    //查询并打印数据库中所有的用户
+                for (user in userDao.loadAllUsers()) {
+                    Log.d(&quot;MainActivity&quot;, user.toString())
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>  需要注意的是，这里将<code>insertUser()</code>方法返回的主键<code>id</code>值赋值给原来的<code>User</code>对象，是因为使用<code>@Update</code>和<code>@Delete</code>注解去更新和删除数据时都是基于这个<code>id</code>值来操作的。<br>
+　　另外，由于数据库操作属于耗时操作，<code>Room</code>默认是不允许在主线程中进行数据库操作的。不过为了方便测试，Room 还提供了一个更加简单的方法，如下所示：</p>
+<pre><code class="language-java">    Room.databaseBuilder(context.applicationContext, AppDatabase::class.java,&quot;app_database&quot;)
+        .allowMainThreadQueries()
+        .build()
+</code></pre>
+<p>  这里加入了一个<code>allowMainThreadQueries()</code>方法，这样<code>Room</code>就允许在主线程中进行数据库操作了，但这个方法建议只在测试环境下使用。</p>
+<h3 id="room-的数据库升级">Room 的数据库升级</h3>
+<p>  随着需求和版本的变更，数据库也是需要升级的。不过<code>Room</code>在数据库升级方面设计得非常烦琐，每一次升级都需要手动编写升级逻辑。<br>
+　　若应用程序目前还只是在开发测试阶段，不想编写那么烦琐的数据库升级逻辑，<code>Room</code>提供了一个简单粗暴的方法，如下所示：</p>
+<pre><code class="language-java">    Room.databaseBuilder(context.applicationContext, AppDatabase::class.java,&quot;app_database&quot;)
+        .fallbackToDestructiveMigration()
+        .build()
+</code></pre>
+<p>  在构建<code>AppDatabase</code>实例时，加入了一个<code>fallbackToDestructiveMigration()</code>方法。这样只要数据库进行了升级，Room 就会将当前的数据库销毁，然后再重新创建，随之而来的副作用就是之前数据库中的所有数据就全部丢失了。因此下面使用<code>Room</code>升级数据库的正规写法。<br>
+　　<br>
+  随着业务逻辑的升级，现在要在数据库中添加一张<code>Book</code>表，那么首先要做的就是创建一个 Book 的实体类，如下所示：</p>
+<pre><code class="language-java">    @Entity
+    data class Book(var name: String, var pages: Int) { //书名、页数
+        @PrimaryKey(autoGenerate = true)    //主键id
+        var id: Long = 0
+    }
+</code></pre>
+<p>  然后创建一个<code>BookDao</code>接口，并在其中随意定义一些 API：</p>
+<pre><code class="language-java">    @Dao
+    interface BookDao {
+        @Insert
+        fun insertBook(book: Book): Long
+        @Query(&quot;select * from Book&quot;)
+        fun loadAllBooks(): List&lt;Book&gt;
+    }
+</code></pre>
+<p>  接下来修改<code>AppDatabase</code>中的代码，在里面编写数据库升级的逻辑，如下所示：</p>
+<pre><code class="language-java">    @Database(version = 2, entities = [User::class, Book::class])    //多个实体类之间用逗号隔开即可
+    abstract class AppDatabase : RoomDatabase() {
+        abstract fun userDao(): UserDao
+        abstract fun bookDao(): BookDao
+
+        companion object {
+            private val MIGRATION_1_2 = object : Migration(1, 2) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    database.execSQL(
+                        &quot;create table Book (id integer primary key autoincrement not null,name text not null,pages integer not null)&quot;
+                    )
+                }
+            }
+            private var instance: AppDatabase? = null   //缓存AppDatabase的实例
+
+            @Synchronized
+            fun getDatabase(context: Context): AppDatabase {    //返回一个AppDatabase对象
+                instance?.let { //instance变量不为空就直接返回
+                    return it
+                }
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java, &quot;app_database&quot;
+                )
+                    .addMigrations(MIGRATION_1_2)
+                    .build().apply {
+                        instance = this //this:AppDatabase
+                    }
+            }
+        }
+    }
+</code></pre>
+<p>  这里在<code>@Database</code>注解中，将版本号升级成了 2，并将<code>Book</code>类添加到了实体类声明中，然后又提供了一个<code>bookDao()</code>方法用于获取<code>BookDao</code>的实例。<br>
+　　在<code>companion object</code>结构体中，实现了一个<code>Migration</code>的匿名类，并传入了 1 和 2 这两个参数，表示当数据库版本从 1 升级到 2 的时候就执行这个匿名类中的升级逻辑。<br>
+　　由于要新增一张<code>Book</code>表，所以需要在<code>migrate()</code>方法中编写相应的建表语句。另外必须注意的是，Book 表的建表语句必须和 Book 实体类中声明的结构完全一致，否则<code>Room</code>就会抛出异常。<br>
+　　最后在构建<code>AppDatabase</code>实例的时候，加入一个<code>addMigrations()</code>方法，并把<code>MIGRATION_1_2</code>传入即可。<br>
+　　现在当我们进行任何数据库操作时，<code>Room</code>就会自动根据当前数据库的版本号执行这些升级逻辑，从而让数据库始终保证是最新的版本。</p>
+<p>  不过，每次数据库升级并不一定都要新增一张表，也有可能是向现有的表中添加新的列。这种情况只需要使用<code>alter</code>语句修改表结构。<br>
+　　现在<code>Book</code>的实体类中只有<code>id</code>、书名、页数这几个字段，而我们想要再添加一个作者字段，代码如下所示：</p>
+<pre><code class="language-java">    @Entity
+    data class Book(var name: String, var pages: Int, var author: String) {
+        @PrimaryKey(autoGenerate = true)
+        var id: Long = 0
+    }
+</code></pre>
+<p>  既然实体类的字段发生了变动，那么对应的数据库表也必须升级了，所以修改<code>AppDatabase</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    @Database(version = 3, entities = [User::class, Book::class])
+    abstract class AppDatabase : RoomDatabase() {
+        ...
+        companion object {
+            ...
+            val MIGRATION_2_3 = object : Migration(2, 3) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    database.execSQL(&quot;alter table Book add column author text not null default 'unknown'&quot;)
+                }
+            }
+            private var instance: AppDatabase? = null
+            fun getDatabase(context: Context): AppDatabase {
+                ...
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java, &quot;app_database&quot;
+                )
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .build().apply {
+                        instance = this
+                    }
+            }
+        }
+    }
+</code></pre>
+<p>  这里先将版本号升级成了 3，然后编写一个<code>MIGRATION_2_3</code>的升级逻辑并添加到<code>addMigrations()</code>方法中即可。</p>
+<h2 id="workmanager">WorkManager</h2>
+<blockquote>
+<p>  如何编写后台代码才能保证应用程序在不同系统版本上的兼容性呢？为了解决这个问题， Google 推出了<code>WorkManager</code>组件。</p>
+</blockquote>
+<p>  <code>WorkManager</code>很适合用于处理一些要求定时执行的任务，它可以根据操作系统的版本自动选择底层是使用<code>AlarmManager</code>实现还是<code>JobScheduler</code>实现，从而降低了使用成本。另外，它还支持周期性任务、链式任务处理等功能。<br>
+　　不过<code>WorkManager</code>和<code>Service</code>并不相同，也没有直接的联系。Service 是 Android 系统的四大组件之一，在没有被销毁的情况下是一直保持在后台运行。而 WorkManager 只是一个处理定时任务的工具，它保证即使在应用退出甚至手机重启的情况下，之前注册的任务仍然将会得到执行，因此 WorkManager 很适合用于执行一些定期和服务器进行交互的任务，比如周期性地同步数据。<br>
+　　另外，使用<code>WorkManager</code>注册的周期性任务不能保证一定会准时执行，这并不是 bug，而是系统为了减少电量消耗，可能会将触发时间临近的几个任务放在一起执行，这样可以大幅度地减少 CPU 被唤醒的次数，从而有效延长电池的使用时间。</p>
+<h3 id="workmanager-的基本用法">WorkManager 的基本用法</h3>
+<p>  想要使用 WorkManager，需要先在<code>app/build.gradle</code>文件中添加如下的依赖：</p>
+<pre><code class="language-java">    dependencies {
+        ...
+        implementation &quot;androidx.work:work-runtime:2.2.0&quot;
+    }
+</code></pre>
+<p>  <code>WorkManager</code>的基本用法其实比较简单，主要分为以下 3 步：</p>
+<ol>
+<li>定义一个后台任务，并实现具体的任务逻辑。</li>
+<li>配置该后台任务的运行条件和约束信息，并构建后台任务请求。</li>
+<li>将该后台任务请求传入<code>WorkManager</code>的<code>enqueue()</code>方法中，系统会在合适的时间运行。</li>
+</ol>
+<p>  第一步要定义一个后台任务，这里创建一个<code>SimpleWorker</code>类，代码如下所示：</p>
+<pre><code class="language-java">    class SimpleWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+        override fun doWork(): Result {
+            Log.d(&quot;SimpleWorker&quot;, &quot;do work in SimpleWorker&quot;)
+            return Result.success()
+        }
+    }
+</code></pre>
+<p>  首先每一个后台任务都必须继承自<code>Worker</code>类并调用它唯一的构造函数。然后重写父类中的<code>doWork()</code>方法，在这个方法中编写具体的后台任务逻辑即可。<br>
+　　<code>doWork()</code>方法不会运行在主线程当中，因此可以在这里执行耗时逻辑，这里简单地打印了一行日志。doWork() 方法要求返回一个<code>Result</code>对象，用于表示任务的运行结果，成功就返回<code>Result.success()</code>，失败就返回<code>Result.failure()</code>。除此之外，还有一个<code>Result.retry()</code>方法，它其实也代表着失败，只是可以结合<code>WorkRequest.Builder</code>的<code>setBackoffCriteria()</code>方法来重新执行任务</p>
+<p>  这样一个后台任务就定义好了。然后配置该后台任务的运行条件和约束信息。<br>
+　　可配置的内容非常多，这里只进行最基本的配置，代码如下所示：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java).build()
+</code></pre>
+<p>  只需要把刚才创建的后台任务所对应的<code>Class</code>对象传入<code>OneTimeWorkRequest.Builder</code>的构造函数中，然后调用<code>build()</code>方法即可完成构建。<br>
+　　<code>OneTimeWorkRequest.Builder</code>是<code>WorkRequest.Builder</code>的子类，用于构建单次运行的后台任务请求。WorkRequest.Builder 还有另外一个子类<code>PeriodicWorkRequest.Builder</code>，可用于构建周期性运行的后台任务请求，但是为了降低设备性能消耗，PeriodicWorkRequest.Builder 构造函数中传入的运行周期间隔不能短于 15 分钟，示例代码如下：</p>
+<pre><code class="language-java">    val request = PeriodicWorkRequest.Builder(SimpleWorker::class.java, 15,
+    TimeUnit.MINUTES).build()
+</code></pre>
+<p>  最后一步，将构建出的后台任务请求传入<code>WorkManager</code>的<code>enqueue()</code>方法中，系统就会在合适的时间去运行了：</p>
+<pre><code class="language-java">    WorkManager.getInstance(context).enqueue(request)
+</code></pre>
+<p>  可以在布局文件中添加一个<code>doWorkBtn</code>按钮用于测试，然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        ...
+        override fun onCreate(savedInstanceState: Bundle?) {
+            ...
+            doWorkBtn.setOnClickListener {
+                val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java).build()
+                WorkManager.getInstance(this).enqueue(request)
+            }
+        }
+        ...
+    }
+</code></pre>
+<p>  后台任务的具体运行时间是由我们所指定的约束以及系统自身的一些优化所决定的，由于这里没有指定任何约束，因此后台任务基本上会在点击按钮之后立刻运行。</p>
+<h3 id="使用-workmanager-处理复杂的任务">使用 WorkManager 处理复杂的任务</h3>
+<p>  上面虽然成功运行了一个后台任务，但是我们没有设置相关方法来控制它的具体运行时间。事实上除了运行时间之外，<code>WorkManager</code>还允许我们控制许多其他方面的东西。<br>
+　　比如借助<code>setInitialDelay()</code>方法让后台任务在指定的延迟时间后运行，代码如下所示：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java)
+        .setInitialDelay(5, TimeUnit.MINUTES)
+        .build()
+</code></pre>
+<p>  这里表示希望让<code>SimpleWorker</code>这个后台任务在 5 分钟后运行，我们可以自由选择时间的单位。<br>
+　　可以控制运行时间之后，可以再增加一些别的功能，比如说给后台任务请求添加标签：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java)
+        ...
+        .addTag(&quot;simple&quot;)
+        .build()
+</code></pre>
+<p>  标签的主要功能在于我们可以通过标签来取消后台任务请求：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this).cancelAllWorkByTag(&quot;simple&quot;)
+</code></pre>
+<p>  当然，即使没有标签，也可以通过<code>id</code>来取消后台任务请求：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this).cancelWorkById(request.id)
+</code></pre>
+<p>  但是，使用<code>id</code>只能取消单个后台任务请求，而使用标签的话，则可以将同一标签名的所有后台任务请求全部取消，这个功能在逻辑复杂的场景下尤其有用。<br>
+　　除此之外，我们也可以使用如下代码来一次性取消所有后台任务请求：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this).cancelAllWork()
+</code></pre>
+<p>  另外，若后台任务的<code>doWork()</code>方法返回<code>Result.retry()</code>，那么可以结合<code>setBackoffCriteria()</code>方法来重新执行任务，具体代码如下所示：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java)
+        ...
+        .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+        .build()
+</code></pre>
+<p>  <code>setBackoffCriteria()</code>方法接收 3 个参数：第二个和第三个参数用于指定在多久之后重新执行任务，时间最短不能少于 10 秒钟，第一个参数则用于指定如果任务再次执行失败，下次重试的时间应该以什么样的形式延迟。</p>
+<blockquote>
+<p>  假如任务一直执行失败，不断地重新执行似乎并没有什么意义，只会徒增设备的性能消耗。而随着失败次数的增多，下次重试的时间也应该进行适当的延迟，这才是更加合理的机制。第一个参数的可选值有两种，分别是<code>LINEAR</code>和<code>EXPONENTIAL</code>，前者代表下次重试时间以线性的方式延迟，后者代表下次重试时间以指数的方式延迟。</p>
+</blockquote>
+<p>  <code>doWork()</code>的返回值其实就是用于通知任务运行结果的，我们可以使用如下代码对后台任务的运行结果进行监听：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this)
+        .getWorkInfoByIdLiveData(request.id)    //传入后台任务请求的id，会返回一个LiveData对象
+        .observe(this) { workInfo -&gt;    //调用LiveData对象的observe()观察数据变化以监听后台任务的运行结果
+                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    Log.d(&quot;MainActivity&quot;, &quot;do work succeeded&quot;)
+                } else if (workInfo.state == WorkInfo.State.FAILED) {
+                    Log.d(&quot;MainActivity&quot;, &quot;do work failed&quot;)
+                }
+        }
+</code></pre>
+<p>  另外，也可以调用<code>getWorkInfosByTagLiveData()</code>方法，监听同一标签名下所有后台任务请求的运行结果。<br>
+　　<code>WorkManager</code>中有一个比较有特色的功能——链式任务。假设这里定义了 3 个独立的后台任务：同步数据、压缩数据和上传数据。现在想要实现先同步、再压缩、最后上传的功能，就可以借助链式任务来实现，代码示例如下：</p>
+<pre><code class="language-java">    val sync = ...
+    val compress = ...
+    val upload = ...
+    WorkManager.getInstance(this)
+        .beginWith(sync)
+        .then(compress)
+        .then(upload)
+        .enqueue()
+</code></pre>
+<p>  <code>beginWith()</code>方法用于开启一个链式任务，至于后面要接上什么样的后台任务，只需要使用<code>then()</code>方法来连接即可。另外<code>WorkManager</code>还要求，必须在前一个后台任务运行成功之后，下一个后台任务才会运行。也就是说，如果某个后台任务运行失败，或者被取消了，那么接下来的后台任务就都得不到运行了。</p>
+<blockquote>
+<p>  可能由于有太多的恶意应用总是想要无限占用后台，绝大多数的国产手机厂商在进行 Android 系统定制的时候会增加一个一键关闭的功能，允许用户一键杀死所有非白名单的应用程序。而被杀死的应用程序既无法接收广播，也无法运行<code>WorkManager</code>的后台任务。<br>
+　　因此，我们不要依赖<code>WorkManager</code>去实现什么核心功能，因为它在国产手机上可能会非常不稳定。</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kotlin：编写好用的工具方法]]></title>
+        <id>https://Petrichoroo.github.io/post/kotlinbian-xie-hao-yong-de-gong-ju-fang-fa/</id>
+        <link href="https://Petrichoroo.github.io/post/kotlinbian-xie-hao-yong-de-gong-ju-fang-fa/">
+        </link>
+        <updated>2022-08-25T07:03:48.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E6%B1%82-n-%E4%B8%AA%E6%95%B0%E7%9A%84%E6%9C%80%E5%A4%A7%E6%9C%80%E5%B0%8F%E5%80%BC">求 N 个数的最大最小值</a></li>
+<li><a href="#%E7%AE%80%E5%8C%96-toast-%E7%9A%84%E7%94%A8%E6%B3%95">简化 Toast 的用法</a></li>
+<li><a href="#%E7%AE%80%E5%8C%96-snackbar-%E7%9A%84%E7%94%A8%E6%B3%95">简化 Snackbar 的用法</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<blockquote>
+<p>  Kotlin 提供的丰富语法特性给我们提供了无限扩展的可能，各种复杂的 API 经过特殊的<br>
+封装处理之后都能变得简单易用。</p>
+</blockquote>
+<hr>
+<h2 id="求-n-个数的最大最小值">求 N 个数的最大最小值</h2>
+<p>  Java 中规定，所有类型的数字都是可比较的，因此必须实现<code>Comparable</code>接口，这个规则在 Kotlin 中也同样成立。那么我们就可以借助泛型，将<code>max()</code>函数修改成接收任意多个实现 Comparable 接口的参数，代码如下所示：</p>
+<pre><code class="language-java">    fun &lt;T : Comparable&lt;T&gt;&gt; max(vararg nums: T): T {
+        if (nums.isEmpty()) throw RuntimeException(&quot;Params can not be empty.&quot;)
+        var maxNum = nums[0]
+        for (num in nums) {
+            if (num &gt; maxNum) {
+                maxNum = num
+            }
+        }
+        return maxNum
+    }
+</code></pre>
+<p>  这里<code>max()</code>函数的参数声明中使用了<code>vararg</code>关键字，也就是说现在它可以接收任意多个整型参数。并将泛型<code>T</code>的上界指定成了<code>Comparable&lt;T&gt;</code>，那么参数 T 就必然是<code>Comparable&lt;T&gt;</code>的子类型。<br>
+　　接下来，判断<code>nums</code>参数列表是否为空，若为空的话就主动抛出一个异常，提醒调用者<code>max()</code>函数必须传入参数。紧接着将<code>maxNum</code>的值赋值成 nums 参数列表中第一个参数的值，然后遍历参数列表，如果发现了更大的值就对 maxNum 进行更新。<br>
+　　现在可以更加灵活地使用<code>max()</code>函数，比如求 3 个浮点型数字的最大值，如下：</p>
+<pre><code class="language-java">    val a = 3.5
+    val b = 3.8
+    val c = 4.1
+    val largest = max(a, b, c)
+</code></pre>
+<p>  现在不管是双精度浮点型、单精度浮点型，还是短整型、整型、长整型，只要是实现<code>Comparable</code>接口的子类型，<code>max()</code>函数全部支持获取它们的最大值。</p>
+<blockquote>
+<p>  获取 N 个数的最小值的实现方式也是类似的，只需要定义一个<code>min()</code>函数即可。</p>
+</blockquote>
+<h2 id="简化-toast-的用法">简化 Toast 的用法</h2>
+<p>  <code>Toast</code>的标准用法：</p>
+<pre><code class="language-java">    Toast.makeText(context, &quot;This is Toast&quot;, Toast.LENGTH_SHORT).show()
+</code></pre>
+<p>  Toast 的<code>makeText()</code>方法接收 3 个参数：</p>
+<ul>
+<li>第一个参数是 Toast 显示的上下文环境，必不可少。</li>
+<li>第二个参数是 Toast 显示的内容，需要由调用方进行指定，可以传入字符串和字符串资源<code>id</code>两种类型。</li>
+<li>第三个参数是 Toast 显示的时长，只支持<code>Toast.LENGTH_SHORT</code>和<code>Toast.LENGTH_LONG</code>这两种值。</li>
+</ul>
+<p>  因此可以给<code>String</code>类和<code>Int</code>类各添加一个扩展函数，并在里面封装弹出<code>Toast</code>的具体逻辑。这样以后每次想要弹出 Toast 提示时，只需调用它们的扩展函数即可。<br>
+　　新建一个<code>Toast.kt</code>文件，并在其中编写如下代码：</p>
+<pre><code class="language-java">    fun String.showToast(context: Context, duration: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(context, this, duration).show()
+    }
+    fun Int.showToast(context: Context, duration: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(context, this, duration).show()
+    }
+</code></pre>
+<p>  这里分别给<code>String</code>类和<code>Int</code>类新增了一个<code>showToast()</code>函数，并让它们都接收一个<code>Context</code>参数和显示时长的参数，后者指定了一个参数默认值。<br>
+　　因此使用<code>showToast()</code>函数时默认会使用<code>Toast.LENGTH_SHORT</code>类型的显示时长，如下：</p>
+<pre><code class="language-java">    &quot;This is Toast&quot;.showToast(context)
+</code></pre>
+<p>  而如果想要使用<code>Toast.LENGTH_LONG</code>的显示时长，只需要这样写即可：</p>
+<pre><code class="language-java">    &quot;This is Toast&quot;.showToast(context, Toast.LENGTH_LONG)
+</code></pre>
+<h2 id="简化-snackbar-的用法">简化 Snackbar 的用法</h2>
+<p>  <code>Snackbar</code>的常规用法如下所示：</p>
+<pre><code class="language-java">    Snackbar.make(view, &quot;This is Snackbar&quot;, Snackbar.LENGTH_SHORT)
+        .setAction(&quot;Action&quot;) {
+        // 处理具体的逻辑
+        }
+        .show()
+</code></pre>
+<p>  由于<code>make()</code>方法接收一个<code>View</code>参数，Snackbar 会使用这个 View 自动查找最外层的布局，用于展示 Snackbar。<br>
+　　因此，我们就可以给<code>View</code>类添加一个扩展函数，并在里面封装显示<code>Snackbar</code>的具体逻辑。新建一个 Snackbar.kt 文件，并编写如下代码：</p>
+<pre><code class="language-java">    fun View.showSnackbar(
+        text: String, actionText: String? = null,
+        duration: Int = Snackbar.LENGTH_SHORT, block: (() -&gt; Unit)? = null
+    ) {
+        val snackbar = Snackbar.make(this, text, duration)
+        if (actionText != null &amp;&amp; block != null) {
+            snackbar.setAction(actionText) {
+                block()
+            }
+        }
+        snackbar.show()
+    }
+
+    fun View.showSnackbar(
+        resId: Int, actionResId: Int? = null,
+        duration: Int = Snackbar.LENGTH_SHORT, block: (() -&gt; Unit)? = null
+    ) {
+        val snackbar = Snackbar.make(this, resId, duration)
+        if (actionResId != null &amp;&amp; block != null) {
+            snackbar.setAction(actionResId) {
+                block()
+            }
+        }
+        snackbar.show()
+    }
+</code></pre>
+<blockquote>
+<p>  Snackbar 和 Toast 类似，显示的内容也是支持传入字符串和字符串资源<code>id</code>两种类型的，因此这里给<code>showSnackbar()</code>函数进行了两种参数类型的函数重载。</p>
+</blockquote>
+<p>  首先将扩展函数添加到了<code>View</code>类中，并且参数列表中依次声明了<code>Snackbar</code>要显示的内容、用于传递给<code>setAction()</code>方法的字符串或字符串资源<code>id</code>、显示的时长以及一个函数类型参数。<br>
+　　这里需要将第二和第四个参数都设置成可为空的类型，并将默认值都设置成空，然后只有当两个参数都不为空的时候，我们才去调用<code>Snackbar</code>的<code>setAction()</code>方法来设置额外的点击事件，若触发了点击事件，只需要调用函数类型参数将事件传递给外部的 Lambda 表达式即可。<br>
+　　现在可以使用如下写法来使用 Snackbar：</p>
+<pre><code class="language-java">    view.showSnackbar(&quot;This is Snackbar&quot;, &quot;Action&quot;) {
+        // 处理具体的逻辑
+    }
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Material Design 设计]]></title>
+        <id>https://Petrichoroo.github.io/post/material-design-she-ji/</id>
+        <link href="https://Petrichoroo.github.io/post/material-design-she-ji/">
+        </link>
+        <updated>2022-08-23T14:29:26.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#material-design">Material Design</a>
+<ul>
+<li><a href="#toolbar">Toolbar</a></li>
+<li><a href="#%E6%BB%91%E5%8A%A8%E8%8F%9C%E5%8D%95">滑动菜单</a>
+<ul>
+<li><a href="#drawerlayout">DrawerLayout</a></li>
+<li><a href="#navigationview">NavigationView</a></li>
+</ul>
+</li>
+<li><a href="#%E6%82%AC%E6%B5%AE%E6%8C%89%E9%92%AE%E5%92%8C%E5%8F%AF%E4%BA%A4%E4%BA%92%E6%8F%90%E7%A4%BA">悬浮按钮和可交互提示</a>
+<ul>
+<li><a href="#floatingactionbutton">FloatingActionButton</a></li>
+<li><a href="#snackbar">Snackbar</a></li>
+<li><a href="#coordinatorlayout">CoordinatorLayout</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%A1%E7%89%87%E5%BC%8F%E5%B8%83%E5%B1%80">卡片式布局</a>
+<ul>
+<li><a href="#materialcardview">MaterialCardView</a></li>
+<li><a href="#appbarlayout">AppBarLayout</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%8B%E6%8B%89%E5%88%B7%E6%96%B0">下拉刷新</a></li>
+<li><a href="#%E5%8F%AF%E6%8A%98%E5%8F%A0%E5%BC%8F%E6%A0%87%E9%A2%98%E6%A0%8F">可折叠式标题栏</a>
+<ul>
+<li><a href="#collapsingtoolbarlayout">CollapsingToolbarLayout</a></li>
+<li><a href="#%E5%85%85%E5%88%86%E5%88%A9%E7%94%A8%E7%B3%BB%E7%BB%9F%E7%8A%B6%E6%80%81%E6%A0%8F%E7%A9%BA%E9%97%B4">充分利用系统状态栏空间</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="material-design">Material Design</h1>
+<blockquote>
+<p>  Material Design 是由 Google 的设计工程师们基于传统优秀的设计原则，结合丰富的创意和科学技术所开发的一套全新的界面设计语言，包含了视觉、运动、互动效果等特性。</p>
+</blockquote>
+<hr>
+<h2 id="toolbar">Toolbar</h2>
+<p>  每个 Activity 最顶部的那个标题栏是<code>ActionBar</code>，而<code>Toolbar</code>的强大之处在于，它不仅继承了 ActionBar 的所有功能，而且灵活性很高，可以配合其它控件完成一些 Material Design 的效果。<br>
+　　任何一个新建的项目，默认都是会显示<code>ActionBar</code>的，这个 ActionBar 其实这是根据项目中指定的主题来显示的。<br>
+　　在<code>AndroidManifest.xml</code>文件中，可以通过<code>android:theme</code>属性指定一个主题，打开<code>res/values/styles.xml</code>文件，可以看到这个主题，如下所示：</p>
+<pre><code class="language-java">    &lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;&gt;
+        &lt;style name=&quot;Theme.MaterialTest&quot; parent=&quot;Theme.MaterialComponents.DayNight.DarkActionBar&quot;&gt;
+            ...
+        &lt;/style&gt;
+    &lt;/resources&gt;
+</code></pre>
+<p>  可以看到，这里的<code>DarkActionBar</code>是一个深色的<code>ActionBar</code>主题，现在需要使用<code>Toolbar</code>来替代 ActionBar，因此需要指定一个不带 ActionBar 的主题。<br>
+　　这里使用<code>Theme.MaterialComponents.Light.NoActionBar</code>，其表示浅色主题，它会将界面的主体颜色设成浅色，陪衬颜色设成深色。<br>
+　　然后修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;androidx.appcompat.widget.Toolbar
+            android:id=&quot;@+id/toolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;?attr/actionBarSize&quot;
+            android:background=&quot;@color/design_default_color_primary&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:popupTheme=&quot;@style/ThemeOverlay.AppCompat.Light&quot; /&gt;
+    &lt;/FrameLayout&gt;
+</code></pre>
+<p>  由于许多 Material 属性是在新系统中新增的，为了能够兼容旧系统，这里使用<code>xmlns:app</code>指定了一个新的命名空间，因此可以使用<code>app:attribute</code>这样的写法。<br>
+　　由于在<code>styles.xml</code>中将程序的主题指定成了浅色主题，因此<code>Toolbar</code>现在也是浅色主题，那么 Toolbar 上面的各种元素就会自动使用深色系，从而和主体颜色区别开。<br>
+　　但为了与主体的浅色区别开，<code>Toolbar</code>中的文字变成黑色会很难看。那么为了能让<code>Toolbar</code>单独使用深色主题，这里使用<code>android:theme</code>将主题指定成<code>ThemeOverlay.AppCompat.Dark.ActionBar</code>。<br>
+　　但是这样指定之后又会出现新的问题，若<code>Toolbar</code>中有菜单按钮，那么弹出的菜单项也会变成深色主题，这样就再次变得十分难看，于是这里又使用了<code>app:popupTheme</code>属性，单独将弹出的菜单项指定成浅色主题。<br>
+　　接下来修改 MainActivity，代码如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            setSupportActionBar(toolbar)
+        }
+    }
+</code></pre>
+<p>  这里调用<code>setSupportActionBar()</code>方法并将<code>Toolbar</code>的实例传入即可。</p>
+<p>  下面在<code>AndroidManifest.xml</code>中修改标题栏上显示的文字内容，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    package=&quot;com.example.materialtest&quot;&gt;
+
+    &lt;application
+        ...
+        &lt;activity
+            android:name=&quot;.MainActivity&quot;
+            android:label=&quot;Fruits&quot;&gt;
+            ...
+    &lt;/application&gt;
+
+&lt;/manifest&gt;
+</code></pre>
+<p>  这里给 activity 增加了一个<code>android:label</code>属性，用于指定在<code>Toolbar</code>中显示的文字内容，如果没有指定的话，会默认使用 application 中指定的<code>label</code>内容，即应用名称。</p>
+<p>  下面在<code>Toolbar</code>上添加一些 action 按钮，将图片资源放在<code>drawable-xxhdpi</code>中，然后在<code>res</code>目录下创建一个<code>menu</code>文件夹，接着在 menu 下创建一个<code>toolbar.xml</code>文件，并编写如下代码：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
+        &lt;item
+            android:id=&quot;@+id/backup&quot;
+            android:icon=&quot;@drawable/ic_backup&quot;
+            android:title=&quot;Backup&quot;
+            app:showAsAction=&quot;always&quot; /&gt;
+        &lt;item
+            android:id=&quot;@+id/delete&quot;
+            android:icon=&quot;@drawable/ic_delete&quot;
+            android:title=&quot;Delete&quot;
+            app:showAsAction=&quot;ifRoom&quot; /&gt;
+        &lt;item
+            android:id=&quot;@+id/settings&quot;
+            android:icon=&quot;@drawable/ic_settings&quot;
+            android:title=&quot;Settings&quot;
+            app:showAsAction=&quot;never&quot; /&gt;
+    &lt;/menu&gt;
+</code></pre>
+<p>  通过<code>&lt;item&gt;</code>标签来定义<code>action</code>按钮，<code>android:id</code>用于指定按钮的 id，<code>android:icon</code>用于指定按钮的图标，<code>android:title</code>用于指定按钮的文字。<br>
+　　接着使用<code>app:showAsAction</code>来指定按钮的显示位置：</p>
+<ul>
+<li>
+<p><code>always</code>：表示永远显示在<code>Toolbar</code>中，如果屏幕空间不够则不显示。</p>
+</li>
+<li>
+<p><code>ifRoom</code>：表示屏幕空间足够的情况下显示在<code>Toolbar</code>中，不够的话就显示在菜单当中。</p>
+</li>
+<li>
+<p><code>never</code>：表示永远显示在菜单当中。</p>
+</li>
+</ul>
+<blockquote>
+<p>  注意，<code>Toolbar</code>中的 action 按钮只会显示图标，菜单中的 action 按钮只会显示文字。</p>
+</blockquote>
+<p>  下面修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            setSupportActionBar(toolbar)
+        }
+
+        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+            menuInflater.inflate(R.menu.toolbar, menu)
+            return true
+        }
+
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.backup -&gt; Toast.makeText(
+                    this, &quot;You clicked Backup&quot;,
+                    Toast.LENGTH_SHORT
+                ).show()
+                R.id.delete -&gt; Toast.makeText(
+                    this, &quot;You clicked Delete&quot;,
+                    Toast.LENGTH_SHORT
+                ).show()
+                R.id.settings -&gt; Toast.makeText(
+                    this, &quot;You clicked Settings&quot;,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            return true
+        }
+    }
+</code></pre>
+<p>  在<code>onCreateOptionsMenu()</code>中加载<code>toolbar.xml</code>菜单文件，然后在<code>onOptionsItemSelected()</code>方法中处理各个按钮的点击事件。<br>
+　　运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661339081892.png" alt="" loading="lazy"></p>
+<p>  可以看到，<code>Toolbar</code>上显示了两个 action 按钮，这是因为<code>Backup</code>按钮指定的显示位置是<code>always</code>，<code>Delete</code>按钮指定的显示位置是<code>ifRoom</code>，而现在屏幕空间很充足，因此两个按钮都会显示在 Toolbar 中。另外一个<code>Settings</code>按钮由于指定的显示位置是<code>never</code>，所以不会显示在 Toolbar 中，另外，这些 action 按钮都是可以响应点击事件的。</p>
+<h2 id="滑动菜单">滑动菜单</h2>
+<h3 id="drawerlayout">DrawerLayout</h3>
+<blockquote>
+<p>  滑动菜单，就是将一些菜单选项隐藏起来，而不是放置在主屏幕上，然后可以通过滑动的方式将菜单显示出来。</p>
+</blockquote>
+<p>  <code>DrawerLayout</code>是一个布局，在其中允许放入两个直接子控件：第一个子控件是主屏幕中显示的内容，第二个子控件是滑动菜单中显示的内容。<br>
+　　修改 activity_main.xml 中的代码，如下：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:id=&quot;@+id/drawerLayout&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;FrameLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                android:id=&quot;@+id/toolbar&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;?attr/actionBarSize&quot;
+                android:background=&quot;@color/design_default_color_primary&quot;
+                android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+                app:popupTheme=&quot;@style/ThemeOverlay.AppCompat.Light&quot; /&gt;
+        &lt;/FrameLayout&gt;
+
+        &lt;TextView
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_gravity=&quot;start&quot;
+            android:background=&quot;#FFF&quot;
+            android:text=&quot;This is menu&quot;
+            android:textSize=&quot;30sp&quot; /&gt;
+    &lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  最外层的控件使用了<code>DrawerLayout</code>。其中放置了两个直接子控件：第一个子控件是<code>FrameLayout</code>，用于作为主屏幕中显示的内容，里面是之前定义的<code>Toolbar</code>；第二个子控件是一个<code>TextView</code>，用于作为滑动菜单中显示的内容，其实使用什么都可以，DrawerLayout 并没有限制只能使用固定的控件。<br>
+　　第二个子控件的<code>layout_gravity</code>这个属性是必须指定的，因为需要告诉滑动菜单是在屏幕的左边还是右边，这里指定的<code>start</code>表示会根据系统语言进行判断，如果系统语言是从左往右的，比如英语、汉语，滑动菜单就在左边，如果系统语言是从右往左的，比如阿拉伯语，滑动菜单就在右边。<br>
+　　运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661339908001.png" alt="" loading="lazy"><br>
+  在屏幕的左侧边缘向右拖动，就可以让滑动菜单显示出来了。</p>
+<blockquote>
+<p>  不过有个问题，因为只有在屏幕的左侧边缘进行拖动时才能将菜单拖出来，而很多用户可能根本就不知道有这个功能，那么该怎么提示他们呢？</p>
+</blockquote>
+<p>  Material Design 建议的做法是在<code>Toolbar</code>的最左边加入一个导航按钮，点击按钮也会将滑动菜单的内容展示出来。<br>
+　　修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            ...
+            supportActionBar?.let {
+                it.setDisplayHomeAsUpEnabled(true)  //让导航按钮显示出来
+                it.setHomeAsUpIndicator(R.drawable.ic_menu) //设置导航按钮图标
+            }
+        }
+        ...
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                ...
+                android.R.id.home -&gt; drawerLayout.openDrawer(GravityCompat.START)
+            }
+            return true
+        }
+    }
+</code></pre>
+<p>  调用<code>getSupportActionBar()</code>方法得到了<code>ActionBar</code>的实例，虽然这个 ActionBar 的具体实现是由<code>Toolbar</code>来完成的。<br>
+　　实际上，<code>Toolbar</code>最左侧的这个按钮就叫作<code>Home</code>按钮，它默认的图标是一个返回的箭头，含义是返回上一个 Activity。很明显，这里将它默认的样式和作用都进行了修改。<br>
+　　对<code>Home</code>按钮的点击事件进行处理，其 id 永远都是<code>android.R.id.home</code>。然后调用<code>DrawerLayout</code>的<code>openDrawer()</code>方法将滑动菜单展示出来。</p>
+<blockquote>
+<p>  注意，<code>openDrawer()</code>方法要求传入一个<code>Gravity</code>参数，为了保证这里的行为和 XML 中定义的一致，传入了<code>GravityCompat.START</code>。</p>
+</blockquote>
+<p>  运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661340658124.png" alt="" loading="lazy"><br>
+  可以看到，在 Toolbar 的最左边出现了一个导航按钮。</p>
+<h3 id="navigationview">NavigationView</h3>
+<p>  上面菜单页面仅仅使用了一个<code>TextView</code>，非常单调并且比较难看。可以使用<code>NavigationView</code>来对页面进行优化。<br>
+　　<code>NavigationView</code>是 Material 库中提供的一个控件，它不仅是严格按照 Material Design 的要求来设计的，而且可以将滑动菜单页面的实现变得非常简单。<br>
+　　在<code>app/build.gradle</code>文件的 dependencies 闭包中添加如下内容：</p>
+<pre><code class="language-java">dependencies {
+    implementation 'de.hdodenhof:circleimageview:3.0.1' //实现图片圆形化
+    ...
+}
+</code></pre>
+<p>  在开始使用<code>NavigationView</code>之前，需要准备好两个东西：<code>menu</code>和<code>headerLayout</code>。<br>
+　　<code>menu</code>用来在 NavigationView 中显示具体的菜单项，<code>headerLayout</code>则用来在 NavigationView 中显示头部布局。<br>
+　　在<code>menu</code>文件夹下创建一个<code>nav_menu.xml</code>文件，并编写如下代码：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+        &lt;group android:checkableBehavior=&quot;single&quot;&gt;
+            &lt;item
+                android:id=&quot;@+id/navCall&quot;
+                android:icon=&quot;@drawable/nav_call&quot;
+                android:title=&quot;Call&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navFriends&quot;
+                android:icon=&quot;@drawable/nav_friends&quot;
+                android:title=&quot;Friends&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navLocation&quot;
+                android:icon=&quot;@drawable/nav_location&quot;
+                android:title=&quot;Location&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navMail&quot;
+                android:icon=&quot;@drawable/nav_mail&quot;
+                android:title=&quot;Mail&quot; /&gt;
+            &lt;item
+                android:id=&quot;@+id/navTask&quot;
+                android:icon=&quot;@drawable/nav_task&quot;
+                android:title=&quot;Tasks&quot; /&gt;
+        &lt;/group&gt;
+    &lt;/menu&gt;
+</code></pre>
+<p>  首先在<code>&lt;menu&gt;</code>中嵌套了一个<code>&lt;group&gt;</code>标签，然后将 group 的<code>checkableBehavior</code>属性指定为<code>single</code>。group 表示一个组，checkableBehavior 指定为<code>single</code>表示组中的所有菜单项只能单选。<br>
+　　接下来应该准备<code>headerLayout</code>了，这是一个可以随意定制的布局。简单起见，只在其中放置头像、用户名、邮箱地址这 3 项内容。<br>
+　　在<code>layout</code>文件夹下创建一个<code>nav_header.xml</code>文件。修改其中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;180dp&quot;
+        android:background=&quot;@color/design_default_color_primary&quot;
+        android:padding=&quot;10dp&quot;&gt;
+
+        &lt;de.hdodenhof.circleimageview.CircleImageView
+            android:id=&quot;@+id/iconImage&quot;
+            android:layout_width=&quot;70dp&quot;
+            android:layout_height=&quot;70dp&quot;
+            android:layout_centerInParent=&quot;true&quot;
+            android:src=&quot;@drawable/nav_icon&quot; /&gt;
+
+        &lt;TextView
+            android:id=&quot;@+id/mailText&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_alignParentBottom=&quot;true&quot;
+            android:text=&quot;tony@gmail.com&quot;
+            android:textColor=&quot;#FFF&quot;
+            android:textSize=&quot;14sp&quot; /&gt;
+
+        &lt;TextView
+            android:id=&quot;@+id/userText&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_above=&quot;@+id/mailText&quot;
+            android:text=&quot;Tony Purple&quot;
+            android:textColor=&quot;#FFF&quot;
+            android:textSize=&quot;14sp&quot; /&gt;
+
+    &lt;/RelativeLayout&gt;
+</code></pre>
+<p>  在<code>RelativeLayout</code>中我们放置了 3 个控件，<code>CircleImageView</code>是一个用于将图片圆形化的控件，这里给它指定了一张图片作为头像，然后设置为居中显示。另外两个<code>TextView</code>分别用于显示用户名和邮箱地址。<br>
+　　现在<code>menu</code>和<code>headerLayout</code>都准备好了，可以使用<code>NavigationView</code>了。修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:id=&quot;@+id/drawerLayout&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+        ...
+        &lt;com.google.android.material.navigation.NavigationView
+            android:id=&quot;@+id/navView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_gravity=&quot;start&quot;
+            app:headerLayout=&quot;@layout/nav_header&quot;
+            app:menu=&quot;@menu/nav_menu&quot; /&gt;
+    &lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里将之前的 TextView 换成<code>NavigationView</code>，又通过<code>app:menu</code>和<code>app:headerLayout</code>属性将刚才准备好的<code>menu</code>和<code>headerLayout</code>设置进去，这样就完成 NavigationView 的定义。<br>
+　　然后处理<code>NavigationView</code>中菜单项的点击事件。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
+        ...
+        navView.setCheckedItem(R.id.navCall)    //将Call菜单项设置为默认选中
+        navView.setNavigationItemSelectedListener {
+            //当用户点击了任意菜单项时 就会回调到Lambda表达式当中 可以在这里写相应的逻辑处理
+            /*when(it.itemId){
+                R.id.navCall -&gt; ...
+                R.id.navFriends -&gt; ...
+            }*/
+            drawerLayout.closeDrawers() //这里简单起见 无论点击那个按钮 都将滑动菜单关闭
+            true    //表示此事件已被处理
+        }
+        ...
+    }
+}
+</code></pre>
+<p>  运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661344614072.png" alt="" loading="lazy"></p>
+<h2 id="悬浮按钮和可交互提示">悬浮按钮和可交互提示</h2>
+<blockquote>
+<p>  立面设计是 Material Design 中一条非常重要的设计思想，也就是说，按照 Material Design 的理念，应用程序的界面不仅仅是一个平面，而应该是有立体效果的。</p>
+</blockquote>
+<h3 id="floatingactionbutton">FloatingActionButton</h3>
+<p>  <code>FloatingActionButton</code>是 Material 库中提供的一个控件，这个控件可以比较轻松地实现悬浮按钮的效果。<br>
+　　修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;FrameLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+        ...
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id=&quot;@+id/fab&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;bottom|right&quot;
+            android:layout_margin=&quot;16dp&quot;
+            android:src=&quot;@drawable/ic_done&quot; /&gt;
+    &lt;/FrameLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661345203439.png" alt="" loading="lazy"></p>
+<p>  修改 MainActivity 中的代码，处理<code>FloatingActionButton</code>的点击事件，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        fab.setOnClickListener {
+            Toast.makeText(this, &quot;FAB clicked&quot;, Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+</code></pre>
+<p>  <code>FloatingActionButton</code>也是调用<code>setOnClickListener()</code>方法来设置按钮的点击事件，这里简单地弹出了一个<code>Toast</code>。</p>
+<h3 id="snackbar">Snackbar</h3>
+<p>  <code>Snackbar</code>并不是<code>Toast</code>的替代品，它们有着不同的应用场景。Toast 的作用是告诉用户现在发生了什么事情，但用户只能被动接收这个事情。而<code>Snackba</code>r则在这方面进行了扩展，它允许在提示中加入一个可交互按钮，当用户点击按钮的时候，可以执行一些额外的逻辑操作。<br>
+　　修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        fab.setOnClickListener { view -&gt;
+            Snackbar.make(view, &quot;Data deleted&quot;, Snackbar.LENGTH_SHORT)
+                .setAction(&quot;Undo&quot;) {
+                    Toast.makeText(this, &quot;Data resorted&quot;, Toast.LENGTH_SHORT).show()
+                }
+                .show()
+        }
+    }
+}
+</code></pre>
+<p>  这里调用了<code>Snackbar</code>的<code>make()</code>方法来创建一个 Snackba r对象。make() 方法的第一个参数需要传入一个<code>View</code>，只要是当前界面布局的任意一个 View 即可，Snackbar 会使用这个 View 自动查找最外层的布局，用于展示提示信息；第二个参数就是 Snackbar 中显示的内容；第三个参数是 Snackbar 显示的时长。<br>
+　　接着又调用了一个<code>setAction()</code>方法来设置一个动作，从而让 Snackbar 不仅仅是一个提示，而是可以和用户进行交互的。。<br>
+　　运行程序，并点击悬浮按钮，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661346030690.png" alt="" loading="lazy"></p>
+<p>  可以看到，<code>Snackbar</code>从屏幕底部出现了，上面有设置的提示文字，还有一个“Undo”按钮，并且可以点击。<br>
+　　不过问题是这个<code>Snackbar</code>将悬浮按钮给遮挡住了。虽说 Snackbar 过一会儿就会自动消失，但这种用户体验总归是不友好的。可以借助<code>CoordinatorLayout</code>来解决这个问题。</p>
+<h3 id="coordinatorlayout">CoordinatorLayout</h3>
+<p>  <code>CoordinatorLayout</code>可以说是一个加强版的<code>FrameLayout</code>它在普通情况下的作用和 FrameLayout 基本一致，但是它拥有一些额外的 Material 能力。<br>
+　　<code>CoordinatorLayout</code>可以监听其所有子控件的各种事件，并自动帮助我们做出最为合理的响应。比如刚才弹出的<code>Snackbar</code>提示将悬浮按钮遮挡住了，而如果能让 CoordinatorLayout 监听到 Snackbar 的弹出事件，那么它会自动将内部的<code>FloatingActionButton</code>向上偏移，从而确保不会被 Snackbar 遮挡。<br>
+　　至于<code>CoordinatorLayout</code>的使用也非常简单，只需要将原来的<code>FrameLayout</code>替换即可。修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;androidx.appcompat.widget.Toolbar
+            .../&gt;
+
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            ... /&gt;
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  由于<code>CoordinatorLayout</code>本身就是一个加强版的<code>FrameLayout</code>，因此这种替换不会有任何的副作用。重新运行程序，并点击悬浮按钮，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661346587267.png" alt="" loading="lazy"><br>
+  可以看到，悬浮按钮自动向上偏移了<code>Snackbar</code>的同等高度，从而确保不会被遮挡。当<code>Snackbar</code>消失的时候，悬浮按钮会自动向下偏移回到原来的位置。</p>
+<blockquote>
+<p>  在<code>Snackbar</code>的<code>make()</code>方法中传入的第一个参数用来指定 Snackbar 是基于哪个<code>View</code>触发的，刚才传入的是<code>FloatingActionButton</code>本身，而 FloatingActionButton 是<code>CoordinatorLayout</code>中的子控件，因此 Snackbar 这个事件就理所应当能被监听到。<br>
+　　若给<code>Snackbar</code>的<code>make()</code>方法传入一个<code>DrawerLayout</code>，那么 Snackbar 就会再次遮挡悬浮按钮，因为 DrawerLayout 不是<code>CoordinatorLayout</code>的子控件。</p>
+</blockquote>
+<h2 id="卡片式布局">卡片式布局</h2>
+<h3 id="materialcardview">MaterialCardView</h3>
+<p>  <code>MaterialCardView</code>是用于实现卡片式布局效果的重要控件，由 Material 库提供。实际上，它也是一个<code>FrameLayout</code>，只是额外提供了圆角和阴影等效果，看上去会有立体的感觉。<br>
+　　MaterialCardView 用法非常简单，如下所示：</p>
+<pre><code class="language-java">    &lt;com.google.android.material.card.MaterialCardView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        app:cardCornerRadius=&quot;4dp&quot;
+        app:elevation=&quot;5dp&quot;&gt;
+        &lt;TextView
+            android:id=&quot;@+id/infoText&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;/&gt;
+    &lt;/com.google.android.material.card.MaterialCardView&gt;
+</code></pre>
+<p>  这里定义了一个<code>MaterialCardView</code>布局，我们可以通过<code>app:cardCornerRadius</code>属性指定卡片圆角的弧度，数值越大，圆角的弧度也越大。<br>
+　　另外，还可以通过<code>app:elevation</code>属性指定卡片的高度：高度值越大，投影范围也越大，但是投影效果越淡；高度值越小，投影范围也越小，但是投影效果越浓。这一点和<code>FloatingActionButton</code>是一致的。<br>
+　　然后，我们在<code>MaterialCardView</code>布局中放置了一个<code>TextView</code>，那么这个 TextView 就会显示在一张卡片当中。<br>
+　　但是显然不可能在如此宽阔的一块空白区域内只放置一张卡片。为了能够充分利用屏幕的空间，这里使用<code>RecyclerView</code>填充主界面部分。<br>
+　　首先添加一个 Glide 库的依赖，在<code>app/build.gradle</code>文件中声明如下：</p>
+<pre><code class="language-java">dependencies {
+    implementation 'com.github.bumptech.glide:glide:4.9.0'  //实现复杂的图片加载功能
+    ...
+}
+</code></pre>
+<p>  Glide 是一个超级强大的开源图片加载库，它不仅可以用于加载本地图片，还可以加载网络图片、GIF 图片甚至是本地视频。最重要的是，Glide 的用法非常简单，只需几行代码就能轻松实现复杂的图片加载功能，因此这里使用它来加载水果图片。<br>
+　　接下来开始具体的代码实现，修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;androidx.appcompat.widget.Toolbar
+            .../&gt;
+
+        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id=&quot;@+id/recyclerView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot; /&gt;
+
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            ... /&gt;
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里在<code>CoordinatorLayout</code>中添加了一个<code>RecyclerView</code>，并使其占满整个布局的空间。<br>
+　　接着定义一个实体类<code>Fruit</code>，代码如下所示：</p>
+<pre><code class="language-java">    class Fruit(val name: String, val imageId: Int)
+</code></pre>
+<p>  <code>Fruit</code>类中只有两个字段：<code>name</code>表示水果的名字，<code>imageId</code>表示水果对应图片的资源id。<br>
+　　然后为<code>RecyclerView</code>的子项指定一个自定义的布局，在<code>layout</code>目录下新建<code>fruit_item.xml</code>，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;com.google.android.material.card.MaterialCardView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_margin=&quot;5dp&quot;
+        app:cardCornerRadius=&quot;4dp&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:orientation=&quot;vertical&quot;&gt;
+
+            &lt;ImageView
+                android:id=&quot;@+id/fruitImage&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;100dp&quot;
+                android:scaleType=&quot;centerCrop&quot; /&gt;
+
+            &lt;TextView
+                android:id=&quot;@+id/fruitName&quot;
+                android:layout_width=&quot;wrap_content&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_horizontal&quot;
+                android:layout_margin=&quot;5dp&quot;
+                android:textSize=&quot;16sp&quot; /&gt;
+        &lt;/LinearLayout&gt;
+    &lt;/com.google.android.material.card.MaterialCardView&gt;
+</code></pre>
+<p>  这里使用了<code>MaterialCardView</code>来作为子项的最外层布局，从而使得<code>RecyclerView</code>中的每个元素都是在卡片当中的。<br>
+　　注意，在<code>ImageView</code>中使用了一个<code>scaleType</code>属性，这个属性可以指定图片的缩放模式。由于各张水果图片的长宽比例可能会不一致，为了让所有的图片都能填充满整个 ImageView，这里使用<code>centerCrop</code>模式，它可以让图片保持原有比例填充满 ImageView，并将超出屏幕的部分裁剪掉。<br>
+　　接下来需要为<code>RecyclerView</code>准备一个适配器，新建<code>FruitAdapter</code>类，代码如下所示：</p>
+<pre><code class="language-java">    class FruitAdapter(val context: Context, val fruitList: List&lt;Fruit&gt;) :
+        RecyclerView.Adapter&lt;FruitAdapter.ViewHolder&gt;() {
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val fruitImage: ImageView = itemView.findViewById(R.id.fruitImage)
+            val fruitName: TextView = itemView.findViewById(R.id.fruitName)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.fruit_item, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val fruit = fruitList[position]
+            holder.fruitName.text = fruit.name
+            Glide.with(context).load(fruit.imageId).into(holder.fruitImage)
+        }
+
+        override fun getItemCount(): Int {
+            return fruitList.size
+        }
+    }
+</code></pre>
+<p>  需要注意的是，在<code>onBindViewHolder()</code>方法中使用了<code>Glide</code>来加载水果图片。<br>
+　　首先调用<code>Glide.with()</code>并传入一个<code>Context</code>、<code>Activity</code>或<code>Fragment</code>参数，然后调用<code>load()</code>方法加载图片，可以是一个 URL 地址，也可以是一个本地路径，或者是一个资源<code>id</code>，最后调用<code>into()</code>方法将图片设置到具体某一个<code>ImageView</code>中即可。</p>
+<blockquote>
+<p>  为什么要使用<code>Glide</code>而不是传统的设置图片方式呢？因为如果所使用的水果图片像素非常高的话，不进行压缩就直接展示，很容易引起内存溢出。<br>
+　　而<code>Glide</code>在内部做了许多非常复杂的逻辑操作，其中就包括了图片压缩，我们只需要安心按照 Glide的标准用法去加载图片即可。</p>
+</blockquote>
+<p>  这样就将<code>RecyclerView</code>的适配器准备好了，最后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    private val fruits = mutableListOf(
+        Fruit(&quot;Apple&quot;, R.drawable.apple), Fruit(
+            &quot;Banana&quot;,
+            R.drawable.banana
+        ), Fruit(&quot;Orange&quot;, R.drawable.orange), Fruit(
+            &quot;Watermelon&quot;,
+            R.drawable.watermelon
+        ), Fruit(&quot;Pear&quot;, R.drawable.pear), Fruit(
+            &quot;Grape&quot;,
+            R.drawable.grape
+        ), Fruit(&quot;Pineapple&quot;, R.drawable.pineapple), Fruit(
+            &quot;Strawberry&quot;,
+            R.drawable.strawberry
+        ), Fruit(&quot;Cherry&quot;, R.drawable.cherry), Fruit(
+            &quot;Mango&quot;,
+            R.drawable.mango
+        )
+    )
+    private val fruitList = ArrayList&lt;Fruit&gt;()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        initFruits()
+        val layoutManager = GridLayoutManager(this, 2)
+        recyclerView.layoutManager = layoutManager
+        val adapter = FruitAdapter(this, fruitList)
+        recyclerView.adapter = adapter
+    }
+
+    private fun initFruits() {
+        fruitList.clear()
+        repeat(50) {
+            val index = (0 until fruits.size).random()
+            fruitList.add(fruits[index])
+        }
+    }
+}
+</code></pre>
+<p>  首先定义了一个水果集合，集合里面存放了多个<code>Fruit</code>的实例，每个实例都代表一种水果。然后在<code>initFruits()</code>方法中，从刚才定义的<code>Fruit</code>数组中随机挑选一个水果放入<code>fruitList</code>当中，这样每次打开程序看到的水果数据都会是不同的。<br>
+　　这里使用到了<code>GridLayoutManager</code>布局方式，它的构造函数接收两个参数：第一个是<code>Context</code>，第二个是列数。这里每一行中会有两列数据。<br>
+　　现在重新运行一下程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661350933876.png" alt="" loading="lazy"><br>
+  可以看到，每个水果都是在一张单独的卡片当中的，并且还拥有圆角和投影。</p>
+<blockquote>
+<p>  不过又出现了一个问题，<code>Toolbar</code>被<code>RecyclerView</code>给挡住了，这就需要借助另外一个工具<code>AppBarLayout</code>来解决了。</p>
+</blockquote>
+<h3 id="appbarlayout">AppBarLayout</h3>
+<p>  由于<code>RecyclerView</code>和<code>Toolbar</code>都是放置在<code>CoordinatorLayout</code>中的，而CoordinatorLayout 就是一个加强版的<code>FrameLayout</code>，那么 FrameLayout 中的所有控件在不进行明确定位的情况下，默认都会摆放在布局的左上角，从而产生了遮挡的现象。<br>
+　　在传统情况下，使用偏移是唯一的解决办法，即让<code>RecyclerView</code>向下偏移一个<code>Toolbar</code>的高度，从而保证不会遮挡到 Toolbar。<br>
+　　不过这里准备使用 Material 库中提供的另外一个工具——<code>AppBarLayout</code>。AppBarLayout 实际<br>
+上是一个垂直方向的<code>LinearLayout</code>，它在内部做了很多滚动事件的封装。<br>
+　　使用<code>AppBarLayout</code>解决前面的遮挡问题只需要两步即可，第一步将<code>Toolbar</code>嵌套到 AppBarLayout 中，第二步给<code>RecyclerView</code>指定一个布局行为。<br>
+　　修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;com.google.android.material.appbar.AppBarLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                .../&gt;
+        &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+
+        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id=&quot;@+id/recyclerView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot; /&gt;
+
+        &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+            ... /&gt;
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里首先定义了一个<code>AppBarLayout</code>，并将<code>Toolbar</code>放置在其中，然后在<code>RecyclerView</code>中使用<code>app:layout_behavior</code>属性指定了一个布局行为。其中<code>appbar_scrolling_view_behavior</code>这个字符串也是由Material库提供的。<br>
+　　重新运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661351735102.png" alt="" loading="lazy"></p>
+<p>  当<code>AppBarLayout</code>接收到滚动事件的时候，它内部的子控件其实是可以指定如何去响应这些事件的，通过<code>app:layout_scrollFlags</code>属性就能实现。修改 activity_main.xml中 的代码，如下：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;com.google.android.material.appbar.AppBarLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                ...
+                app:layout_scrollFlags=&quot;scroll|enterAlways|snap&quot; /&gt;
+        &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+
+        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id=&quot;@+id/recyclerView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot; /&gt;
+        ...
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  这里在<code>Toolbar</code>中添加了一个<code>app:layout_scrollFlags</code>属性，并将这个属性的值指定成了<code>scroll|enterAlways|snap</code>。</p>
+<ul>
+<li>
+<p><code>scroll</code>：表示当 RecyclerView 向上滚动的时候，Toolbar 会跟着一起向上滚动并实现隐藏。</p>
+</li>
+<li>
+<p><code>enterAlways</code>：表示当 RecyclerView 向下滚动的时候，Toolbar 会跟着一起向下滚动并重新显示。</p>
+</li>
+<li>
+<p><code>snap</code>：表示当 Toolbar 还没有完全隐藏或显示的时候，会根据当前滚动的距离，自动选择是隐藏还是显示。</p>
+</li>
+</ul>
+<p>  现在重新运行程序，并向上滚动<code>RecyclerView</code>，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661352211620.png" alt="" loading="lazy"></p>
+<p>  可以看到，随着我们向上滚动<code>RecyclerView</code>，<code>Toolbar</code>自动消失了！而向下滚动 RecyclerView时，Toolbar 又会重新出现。</p>
+<h2 id="下拉刷新">下拉刷新</h2>
+<p>  <code>SwipeRefreshLayout</code>是用于实现下拉刷新功能的核心类，把想要实现下拉刷新功能的控件放置其中，就可以迅速让这个控件支持下拉刷新。那么在此项目中，支持下拉刷新功能的控件自然是<code>RecyclerView</code>。<br>
+　　使用<code>SwipeRefreshLayout</code>之前首先需要在<code>app/build.gradle</code>文件中添加如下依赖：</p>
+<pre><code class="language-java">dependencies {
+    implementation &quot;androidx.swiperefreshlayout:swiperefreshlayout:1.0.0&quot; //下拉刷新
+    ...
+}
+</code></pre>
+<p>  然后修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.drawerlayout.widget.DrawerLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+        ...
+        &lt;androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id=&quot;@+id/swipeRefresh&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;&gt;
+
+            &lt;androidx.recyclerview.widget.RecyclerView
+                android:id=&quot;@+id/recyclerView&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;match_parent&quot; /&gt;
+        &lt;/androidx.swiperefreshlayout.widget.SwipeRefreshLayout&gt;
+        ...
+    &lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+    ...
+&lt;/androidx.drawerlayout.widget.DrawerLayout&gt;
+</code></pre>
+<p>  可以看到，这里在<code>RecyclerView</code>的外面又嵌套了一层<code>SwipeRefreshLayout</code>，这样 RecyclerView 就自动拥有下拉刷新功能了。</p>
+<blockquote>
+<p>  注意，由于<code>RecyclerView</code>现在变成了<code>SwipeRefreshLayout</code>的子控件，因此之前使用<code>app:layout_behavior</code>声明的布局行为现在也要移到 SwipeRefreshLayout 中才行。</p>
+</blockquote>
+<p>  然后在代码中处理具体的刷新逻辑。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    ...
+    @SuppressLint(&quot;ResourceAsColor&quot;)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        swipeRefresh.setColorSchemeColors(R.color.design_default_color_primary)
+        swipeRefresh.setOnRefreshListener {
+            refreshFruits(adapter)
+        }
+    }
+
+    private fun refreshFruits(adapter: FruitAdapter) {
+        thread {
+            Thread.sleep(2000)
+            runOnUiThread { //切回主线程
+                initFruits()    //重新生成水果数据
+                adapter.notifyDataSetChanged()  //通知数据发生变化
+                swipeRefresh.isRefreshing = false   //刷新事件结束，并隐藏刷新进度条
+            }
+        }
+    }
+    ...
+}
+</code></pre>
+<p>  当当用户进行了下拉刷新操作时，就会回调到<code>Lambda</code>表达式当中，然后在这里去处理具体的刷新逻辑就即可。<br>
+　　通常情况下，当触发了下拉刷新事件，应该是去网络上请求最新的数据，然后再将这些数据展示出来。这里简单起见，没有和网络进行交互，而是调用一个<code>refreshFruits()</code>方法进行本地刷新操作<br>
+　　<code>refreshFruits()</code>方法中先是开启了一个线程，然后将线程沉睡两秒钟。之所以这么做，是因为本地刷新操作速度非常快，如果不将线程沉睡的话，刷新立刻就结束了，从而看不到刷新的过程。<br>
+　　重新运行程序，在屏幕的主界面向下拖动，会有一个下拉刷新的进度条出现，松手后就会自动进行刷新了，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661353512940.png" alt="" loading="lazy"></p>
+<p>  下拉刷新的进度条只会停留两秒钟，之后就会自动消失，界面上的水果数据也会随之更新。</p>
+<h2 id="可折叠式标题栏">可折叠式标题栏</h2>
+<h3 id="collapsingtoolbarlayout">CollapsingToolbarLayout</h3>
+<p>  <code>CollapsingToolbarLayout</code>是一个作用于<code>Toolbar</code>基础之上的布局，可以让 Toolbar 的效果变得更加丰富，但它是不能独立存在的，它在设计的时候就被限定只能作为<code>AppBarLayout</code>的直接子布局来使用。而 AppBarLayout 又必须是<code>CoordinatorLayout</code>的子布局。<br>
+　　首先需要一个额外的 Activity 作为水果的详情展示界面，创建一个<code>FruitActivity</code>，并将布局名指定成<code>activity_fruit.xml</code>，然后开始编写水果详情展示界面的布局。<br>
+　　由于整个布局文件比较复杂，这里采用分段编写的方式。<code>activity_fruit.xml</code>中的内容主要分为两部分，一个是水果标题栏，一个是水果内容详情，我们来一步步实现。<br>
+　　首先实现标题栏部分，这里使用<code>CoordinatorLayout</code>作为最外层布局，并在其中嵌套一个<code>AppBarLayout</code>，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot; /&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  接下来在<code>AppBarLayout</code>中再嵌套一个<code>CollapsingToolbarLayout</code>，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;&gt;
+
+        &lt;com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id=&quot;@+id/collapsingToolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:contentScrim=&quot;@color/design_default_color_primary&quot;
+            app:layout_scrollFlags=&quot;scroll|exitUntilCollapsed&quot; /&gt;
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  为了实现更加高级的<code>Toolbar</code>效果，这里通过<code>android:theme</code>属性将<code>activity_main.xml</code>中给 Toolbar 设置的主题提到上一层来。<br>
+　　<code>app:contentScrim</code>属性用于指定<code>CollapsingToolbarLayout</code>在趋于折叠状态以及折叠之后的背景色。<br>
+　　<code>app:layout_scrollFlags</code>属性所设置的值中，<code>scroll</code>表示<code>CollapsingToolbarLayout</code>会随着水果内容详情的滚动一起滚动，<code>exitUntilCollapsed</code>表示当 CollapsingToolbarLayout 随着滚动完成折叠之后就保留在界面上，不再移出屏幕。<br>
+　　接下来，在<code>CollapsingToolbarLayout</code>中定义标题栏的具体内容，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;&gt;
+
+        &lt;com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id=&quot;@+id/collapsingToolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:contentScrim=&quot;@color/design_default_color_primary&quot;
+            app:layout_scrollFlags=&quot;scroll|exitUntilCollapsed&quot;&gt;
+
+            &lt;ImageView
+                android:id=&quot;@+id/fruitImage&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;match_parent&quot;
+                android:scaleType=&quot;centerCrop&quot;
+                app:layout_collapseMode=&quot;parallax&quot; /&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                android:id=&quot;@+id/toolbar&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;?attr/actionBarSize&quot;
+                app:layout_collapseMode=&quot;pin&quot; /&gt;
+        &lt;/com.google.android.material.appbar.CollapsingToolbarLayout&gt;
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  在<code>CollapsingToolbarLayout</code>中定义了一个<code>ImageView</code>和一个<code>Toolbar</code>，也就意味着，这个高级版的标题栏将是由普通的标题栏加上图片组合而成的。<br>
+　　<code>app:layout_collapseMode</code>用于指定当前控件在<code>CollapsingToolbarLayout</code>折叠过程中的折叠模式。</p>
+<ul>
+<li>
+<p><code>Toolbar</code>指定成<code>pin</code>：表示在折叠的过程中位置始终保持不变。</p>
+</li>
+<li>
+<p><code>ImageView</code>指定成<code>parallax</code>：表示会在折叠的过程中产生一定的错位偏移，这种模式的视觉效果会非常好。</p>
+</li>
+</ul>
+<p>  这样就将水果标题栏的界面编写完成了，然后编写水果内容详情部分。继续修改 activity_fruit.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;&gt;
+        ...
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+
+    &lt;androidx.core.widget.NestedScrollView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot; /&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  水果内容详情的最外层布局使用了一个<code>NestedScrollView</code>，注意它和<code>AppBarLayout</code>是平级的。<br>
+　　<code>ScrollView</code>允许使用滚动的方式来查看屏幕以外的数据，而<code>NestedScrollView</code>在此基础之上还增加了嵌套响应滚动事件的功能。由于<code>CoordinatorLayout</code>本身已经可以响应滚动事件了，因此在它的内部就需要使用 NestedScrollView 或 RecyclerView 这样的布局。<br>
+　　另外，这里还通过<code>app:layout_behavior</code>属性指定了一个布局行为，这和之前在<code>RecyclerView</code>中的用法是一模一样的。<br>
+　　不管是<code>ScrollView</code>还是<code>NestedScrollView</code>，它们的内部都只允许存在一个直接子布局。因此，如果想要在里面放入很多东西的话，通常会先嵌套一个<code>LinearLayout</code>，然后再在 LinearLayout 中放入具体的内容即可，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+    ...
+    &lt;androidx.core.widget.NestedScrollView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:orientation=&quot;vertical&quot;&gt;
+
+            &lt;com.google.android.material.card.MaterialCardView
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_marginLeft=&quot;15dp&quot;
+                android:layout_marginTop=&quot;35dp&quot;
+                android:layout_marginRight=&quot;15dp&quot;
+                android:layout_marginBottom=&quot;15dp&quot;
+                app:cardCornerRadius=&quot;4dp&quot;&gt;
+
+                &lt;TextView
+                    android:id=&quot;@+id/fruitContentText&quot;
+                    android:layout_width=&quot;wrap_content&quot;
+                    android:layout_height=&quot;wrap_content&quot;
+                    android:layout_margin=&quot;10dp&quot; /&gt;
+            &lt;/com.google.android.material.card.MaterialCardView&gt;
+        &lt;/LinearLayout&gt;
+    &lt;/androidx.core.widget.NestedScrollView&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  为了让界面更加美观，这里在<code>MaterialCardView</code>和<code>TextView</code>上都加了一些边距。</p>
+<p>  这样就把水果标题栏和水果内容详情的界面都编写完了，不过还可以在界面上再添加一个悬浮按钮。这个悬浮按钮并不是必需的，根据具体的需求添加即可，若加入的话，将获得一些额外的动画效果。<br>
+　　这是一个水果详情展示界面，那么可以加入一个表示评论作用的悬浮按钮。修改<code>activity_fruit.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+    ...
+    &lt;androidx.core.widget.NestedScrollView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:orientation=&quot;vertical&quot;&gt;
+            ...
+    &lt;/androidx.core.widget.NestedScrollView&gt;
+
+    &lt;com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_margin=&quot;16dp&quot;
+        android:src=&quot;@drawable/ic_comment&quot;
+        app:layout_anchor=&quot;@id/appBar&quot;
+        app:layout_anchorGravity=&quot;bottom|end&quot; /&gt;
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  这里加入了一个<code>FloatingActionButton</code>，它和<code>AppBarLayout</code>以及<code>NestedScrollView</code>是平级的。<br>
+　　<code>app:layout_anchor</code>属性指定了一个锚点，我们将锚点设置为<code>AppBarLayout</code>，这样悬浮按钮就会出现在水果标题栏的区域内，接着又使用<code>app:layout_anchorGravity</code>属性将悬浮按钮定位在标题栏区域的右下角。<br>
+　　完成界面设计后，接下来开始编写功能逻辑，修改<code>FruitActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">class FruitActivity : AppCompatActivity() {
+    companion object {
+        const val FRUIT_NAME = &quot;fruit_name&quot;
+        const val FRUIT_IMAGE_ID = &quot;fruit_image_id&quot;
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_fruit)
+        val fruitName = intent.getStringExtra(FRUIT_NAME) ?: &quot;&quot;
+        val fruitImageId = intent.getIntExtra(FRUIT_IMAGE_ID, 0)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        collapsingToolbar.title = fruitName
+        Glide.with(this).load(fruitImageId).into(fruitImageView)
+        fruitContentText.text = generateFruitContent(fruitName)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -&gt; {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun generateFruitContent(fruitName: String) = fruitName.repeat(500)
+}
+</code></pre>
+<p>  这里通过<code>Intent</code>获取了传入的水果名和水果图片的资源<code>id</code>。接着使用了<code>Toolbar</code>的标准用法，将它作为<code>ActionBar</code>显示，并启用<code>Home</code>按钮。由于 Home 按钮的默认图标就是一个返回箭头，因此就不用额外设置别的图标。<br>
+　　接下来开始填充界面上的内容，调用<code>CollapsingToolbarLayout</code>的<code>setTitle()</code>方法，将水果名设置成当前界面的标题，然后使用<code>Glide</code>加载传入的水果图片，并设置到标题栏的<code>ImageView</code>上面。接着需要填充水果的内容详情，这里只是将水果名循环拼接 500 次，从而生成了一个比较长的字符串，将它设置到了<code>TextView</code>上面。</p>
+<p>  最后需要处理<code>RecyclerView</code>的点击事件，不然的话，根本就无法打开<code>FruitActivity</code>。修改<code>FruitAdapter</code>中的代码，如下所示：</p>
+<pre><code class="language-java">class FruitAdapter(val context: Context, val fruitList: List&lt;Fruit&gt;) :
+    RecyclerView.Adapter&lt;FruitAdapter.ViewHolder&gt;() {
+    ...
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.fruit_item, parent, false)
+        val holder = ViewHolder(view)
+        holder.itemView.setOnClickListener {
+            val position = holder.adapterPosition
+            val fruit = fruitList[position]
+            val intent = Intent(context, FruitActivity::class.java).apply {
+                putExtra(FruitActivity.FRUIT_NAME, fruit.name)
+                putExtra(FruitActivity.FRUIT_IMAGE_ID, fruit.imageId)
+            }
+            context.startActivity(intent)
+        }
+        return holder
+    }
+}
+</code></pre>
+<p>  这里给<code>fruit_item.xml</code>的最外层布局注册了一个点击事件监听器，然后在点击事件中获取当前点击项的水果名和水果图片资源<code>id</code>，把它们传入<code>Intent</code>中，然后启动<code>FruitActivity</code>。<br>
+　　重新运行程序，并点击界面上的任意一个水果，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661363703391.png" alt="" loading="lazy"></p>
+<p>  这个界面上的内容分为 3 部分：水果标题栏、水果内容详情和悬浮按钮。<code>Toolbar</code>和水果背景图完美地融合到了一起，既保证了图片的展示空间，又不影响 Toolbar 的任何功能，那个向左的箭头就是用来返回上一个 Activity 的。<br>
+　　尝试向上拖动水果内容详情，我们会发现水果背景图上的标题会慢慢缩小，并且背景图会产生一些错位偏移的效果，如图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661363838064.png" alt="" loading="lazy"><br>
+  这是由于用户想要查看水果的内容详情，此时界面的重点在具体的内容上面，因此标题栏就会自动进行折叠，从而节省屏幕空间。<br>
+　　继续向上拖动，直到标题栏变成完全折叠状态，效果如图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661363890156.png" alt="" loading="lazy"><br>
+  可以看到，标题栏的背景图片不见了，悬浮按钮也自动消失了，现在水果标题栏变成了一个最普通的<code>Toolbar</code>。这是由于用户正在阅读具体的内容，需要给他们提供最充分的阅读空间。<br>
+　　而如果这个时候向下拖动水果内容详情，就会执行一个完全相反的动画过程，最终恢复成开始的界面效果。</p>
+<h3 id="充分利用系统状态栏空间">充分利用系统状态栏空间</h3>
+<p>  虽然现在水果详情展示界面的效果已经非常华丽了，但我们会发现水果的背景图片和系统的状态栏总有一些不搭的感觉，若能将背景图和状态栏融合到一起，那视觉体验绝对能提升几个档次。<br>
+　　想要让背景图能够和系统状态栏融合，需要借助<code>android:fitsSystemWindows</code>这个属性来实现。在<code>CoordinatorLayout</code>、<code>AppBarLayout</code>、<code>CollapsingToolbarLayout</code>这种嵌套结构的布局中，将控件的 android:fitsSystemWindows 属性指定成<code>true</code>，就表示该控件会出现在系统状态栏里。<br>
+　　对应到我们的程序，那就是水果标题栏中的<code>ImageView</code>应该设置这个属性了。不过只给 ImageView 设置这个属性是没有用的，必须将 ImageView 布局结构中的所有父布局都设置上这个属性才可以，修改<code>activity_fruit.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:fitsSystemWindows=&quot;true&quot;&gt;
+
+    &lt;com.google.android.material.appbar.AppBarLayout
+        android:id=&quot;@+id/appBar&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;250dp&quot;
+        android:fitsSystemWindows=&quot;true&quot;&gt;
+
+        &lt;com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id=&quot;@+id/collapsingToolbar&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:fitsSystemWindows=&quot;true&quot;
+            android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+            app:contentScrim=&quot;@color/design_default_color_primary&quot;
+            app:layout_scrollFlags=&quot;scroll|exitUntilCollapsed&quot;&gt;
+
+            &lt;ImageView
+                android:id=&quot;@+id/fruitImageView&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;match_parent&quot;
+                android:fitsSystemWindows=&quot;true&quot;
+                android:scaleType=&quot;centerCrop&quot;
+                app:layout_collapseMode=&quot;parallax&quot; /&gt;
+
+            &lt;androidx.appcompat.widget.Toolbar
+                android:id=&quot;@+id/toolbar&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;?attr/actionBarSize&quot;
+                app:layout_collapseMode=&quot;pin&quot; /&gt;
+        &lt;/com.google.android.material.appbar.CollapsingToolbarLayout&gt;
+    &lt;/com.google.android.material.appbar.AppBarLayout&gt;
+    ...
+&lt;/androidx.coordinatorlayout.widget.CoordinatorLayout&gt;
+</code></pre>
+<p>  然后需要在程序的主题中将状态栏颜色指定成透明色。指定成透明色的方法很简单，在主题中将<code>android:statusBarColor</code>属性的值指定成<code>@android:color/transparent</code>即可。<br>
+　　打开<code>res/values/themes.xml</code>文件，对主题的内容进行修改，如下所示：</p>
+<pre><code class="language-java">&lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;&gt;
+    &lt;style name=&quot;Theme.MaterialTest&quot; parent=&quot;Theme.MaterialComponents.Light.NoActionBar&quot;&gt;
+    ...
+    &lt;/style&gt;
+    &lt;style name=&quot;FruitActivityTheme&quot; parent=&quot;Theme.MaterialTest&quot;&gt;
+        &lt;item name=&quot;android:statusBarColor&quot;&gt;@android:color/transparent&lt;/item&gt;
+    &lt;/style&gt;
+&lt;/resources&gt;
+</code></pre>
+<p>  这里定义了一个<code>FruitActivityTheme</code>主题，并将其中状态栏的颜色指定成透明色，它是专门给<code>FruitActivity</code>使用的。<br>
+　　最后，修改 AndroidManifest.xml 中的代码，让<code>FruitActivity</code>使用这个主题，如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    package=&quot;com.example.materialtest&quot;&gt;
+    &lt;application
+        ...
+        &lt;activity
+            android:name=&quot;.FruitActivity&quot;
+            android:theme=&quot;@style/FruitActivityTheme&quot;&gt;&lt;/activity&gt;
+        ...
+    &lt;/application&gt;
+&lt;/manifest&gt;
+</code></pre>
+<p>  这里使用<code>android:theme</code>属性单独给 FruitActivity 指定了<code>FruitActivityTheme</code>这个主题。<br>
+　　重新运行程序，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661365806860.png" alt="" loading="lazy"><br>
+  可以发现，系统状态栏和背景图融合到一起了。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kotlin：使用协程编写高效的并发程序]]></title>
+        <id>https://Petrichoroo.github.io/post/kotlinshi-yong-xie-cheng-bian-xie-gao-xiao-de-bing-fa-cheng-xu/</id>
+        <link href="https://Petrichoroo.github.io/post/kotlinshi-yong-xie-cheng-bian-xie-gao-xiao-de-bing-fa-cheng-xu/">
+        </link>
+        <updated>2022-08-23T12:45:35.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E5%8D%8F%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">协程的基本用法</a></li>
+<li><a href="#%E6%9B%B4%E5%A4%9A%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%9E%84%E9%80%A0%E5%99%A8">更多的作用域构造器</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E7%AE%80%E5%8C%96%E5%9B%9E%E8%B0%83%E7%9A%84%E5%86%99%E6%B3%95">使用协程简化回调的写法</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="协程的基本用法">协程的基本用法</h2>
+<p>  线程需要依靠操作系统的调度才能实现不同线程之间的切换，而使用协程可以仅在编程语言的层面就能实现不同协程之间的切换，从而提升了并发编程的运行效率。<br>
+　　Kotlin 没有将协程纳入标准库的 API 当中，而是以依赖库的形式提供，可到<a href="https://github.com/Kotlin/kotlinx.coroutines">Github</a>查看最新版本，然后在app/build.gradle文件当中添加如下依赖库：</p>
+<pre><code class="language-java">    dependencies {
+        ...
+        implementation &quot;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4&quot;
+        implementation &quot;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4&quot; //Android项目中使用
+    }
+</code></pre>
+<p>  如何开启一个协程？最简单的方式就是使用<code>Global.launch</code>函数，如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        GlobalScope.launch {
+            println(&quot;codes run in coroutine scope&quot;)
+        }
+    }
+</code></pre>
+<p>  <code>GlobalScope.launch</code>函数创建一个协程的作用域，这样传递给<code>launch</code>函数的代码块（Lambda表达式）就是在协程中运行的了。<br>
+　　运行<code>main()</code>函数，我们会发现是没有日志输出的。由于<code>Global.launch</code>函数每次创建的都是一个顶层协程，这种协程当应用程序运行结束时也会跟着一起结束，因此代码块中的代码还没来得及运行时，应用程序就结束了。</p>
+<p>  <code>runBlocking</code>函数可以应用程序在协程中所有代码都运行完了之后再结束，如下：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            println(&quot;codes run in coroutine scope&quot;)
+            delay(1500)
+            println(&quot;codes run in coroutine scope finished&quot;)
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  <code>delay()</code>函数让当前协程延迟指定时间后再运行，但它和<code>Thread.sleep()</code>方法不同。<br>
+　　delay() 函数是一个非阻塞式的挂起函数，它只会挂起当前协程，并不会影响其他协程的运行。而Thread.sleep() 方法会阻塞当前的线程，这样运行在该线程下的所有协程都会被阻塞。<br>
+　　注意，delay() 函数只能在协程的作用域或其他挂起函数中调用。</p>
+</blockquote>
+<p>  <code>runBlocking</code>函数会创建一个协程的作用域，它可以保证在协程作用域内的所有代码和子协程没有全部执行完之前一直阻塞当前线程。</p>
+<blockquote>
+<p>  需要注意的是，<code>runBlocking</code>函数通常只应该在测试环境下使用，在正式环境中使用容易产生一些性能上的问题。</p>
+</blockquote>
+<p>  <code>launch</code>函数可以创建多个协程，如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            launch {
+                println(&quot;launch1&quot;)
+                delay(1000)
+                println(&quot;launch1 finished&quot;)
+            }
+            launch {
+                println(&quot;launch2&quot;)
+                delay(1000)
+                println(&quot;launch2 finished&quot;)
+            }
+        }
+    }
+</code></pre>
+<p>  注意这里的<code>launch</code>函数和刚才所使用的<code>GlobalScope.launch</code>函数不同。首先它必须在协程的作用域中才能调用，其次它会在当前协程的作用域下创建子协程。子协程的特点是如果外层作用域的协程结束了，该作用域下的所有子协程也会一同结束。</p>
+<p>  不过，随着<code>launch</code>函数中的逻辑越来越复杂，可能需要将部分代码提取到一个单独的函数中。这个时候就产生了一个问题：在 launch 函数中编写的代码是拥有协程作用域的，但是提取到一个单独的函数中就没有协程作用域了，那么该如何调用像<code>delay()</code>这样的挂起函数呢？<br>
+　　为此 Kotlin 提供了一个<code>suspend</code>关键字，使用它可以将任意函数声明成挂起函数，而挂起函数之间都是可以互相调用的，如下所示：</p>
+<pre><code class="language-java">    suspend fun printDot() {
+        println(&quot;.&quot;)
+        delay(1000)
+    }
+</code></pre>
+<p>  <code>suspend</code>关键字只能将一个函数声明成挂起函数，是无法给它提供协程作用域的。<br>
+　　比如尝试在<code>printDot()</code>函数中调用 launch 函数，一定是无法调用成功的，因为 launch 函数要求必须在协程作用域当中才能调用。<br>
+　　这个问题可以借助<code>coroutineScope</code>函数来解决。coroutineScope 函数也是一个挂起函数，因此可以在任何其他挂起函数中调用。它的特点是会继承外部的协程的作用域并创建一个子协程，借助这个特性，我们就可以给任意挂起函数提供协程作用域。示例写法如下：</p>
+<pre><code class="language-java">    suspend fun printDot() = coroutineScope {
+        launch {
+            println(&quot;.&quot;)
+            delay(1000)
+        }
+    }
+</code></pre>
+<p>  另外，<code>coroutineScope</code>函数和<code>runBlocking</code>函数还有点类似，它可以保证其作用域内的所有代码和子协程在全部执行完之前，外部的协程会一直被挂起。示例代码如下：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            coroutineScope {
+                launch {
+                    for (i in 1..10) {
+                        println(i)
+                        delay(1000)
+                    }
+                }
+            }
+            println(&quot;coroutineScope finished&quot;)
+        }
+        println(&quot;runBlocking finished&quot;)
+    }
+</code></pre>
+<p>  这里先使用<code>runBlocking</code>函数创建了一个协程作用域，然后调用<code>coroutineScope</code>函数创建了一个子协程。在 coroutineScope 的作用域中，又调用 launch 函数创建了一个子协程。<br>
+　　运行<code>main()</code>函数，控制台会以 1 秒钟的间隔依次输出数字 1 到 10，然后才会打印<code>coroutineScope</code>函数结尾的日志，最后打印<code>runBlocking</code>函数结尾的日志。<br>
+　　由此可见，coroutineScope 函数确实是将外部协程挂起了，只有当它作用域内的所有代码和子协程都执行完毕之后，coroutineScope 函数之后的代码才能得到运行。</p>
+<blockquote>
+<p>  <code>coroutineScope</code>函数只会阻塞当前协程，既不影响其它协程，也不影响任何线程，因此是不会造成性能上的问题。而<code>runBlocking</code>函数由于会挂起外部线程，若在主线程中当中调用它的话，那么就有可能会导致界面卡死的情况，所以不太推荐在实际项目中使用。</p>
+</blockquote>
+<h2 id="更多的作用域构造器">更多的作用域构造器</h2>
+<p>  <code>GlobalScope.launch</code>、<code>runBlocking</code>、<code>launch</code>、<code>coroutineScope</code>这几种作用域构建器，它们都可以用于创建一个新的协程作用域。不过 GlobalScope.launch 和 runBlocking 函数是可以在任意地方调用的，coroutineScope 函数可以在协程作用域或挂起函数中调用，而 launch 函数只能在协程作用域中调用。</p>
+<p>  如何取消协程呢？其实不管是<code>GlobalScope.launch</code>函数还是<code>launch</code>函数，它们都会返回一个<code>Job</code>对象，只需要调用 Job 对象的<code>cancel()</code>方法就可以取消协程了，实际项目中比较常用的写法如下所示：</p>
+<pre><code class="language-java">    val job = Job()
+    val scope = CoroutineScope(job)
+    scope.launch {
+        // 处理具体的逻辑
+    }
+    job.cancel()
+</code></pre>
+<p>  这里先创建了一个<code>Job</code>对象，然后把它传入<code>CoroutineScope()</code>函数当中，这个函数会返回一个 CoroutineScope 对象，有了这个对象之后，就可以随时调用它的<code>launch</code>函数来创建一个协程。<br>
+　　现在所有调用<code>CoroutineScope</code>的<code>launch</code>函数所创建的协程，都会被关联在<code>Job</code>对象的作用域下面。这样只需要调用一次<code>cancel()</code>方法，就可以将同一作用域内的所有协程全部取消，从而大大降低了协程管理的成本。</p>
+<p>  调用<code>launch</code>函数可以创建一个新的协程，但是 launch 函数只能用于执行一段逻辑，却不能获取执行的结果，因为它的返回值永远是一个<code>Job</code>对象。</p>
+<blockquote>
+<p>  那么有没有什么办法能够创建一个协程并获取它的执行结果呢？使用<code>async</code>函数就可以实现。</p>
+</blockquote>
+<p>  <code>async</code>函数必须在协程作用域当中才能调用，它会创建一个新的子协程并返回一个<code>Deferred</code>对象，如果想要获取 async 函数代码块的执行结果，只需要调用 Deferred 对象的<code>await()</code>方法即可，代码如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            val result = async {
+                5 + 5
+            }.await()
+            println(result) //日志输出10
+        }
+    }
+</code></pre>
+<p>  注意，在调用了<code>async</code>函数之后，代码块中的代码就会立刻开始执行。当调用<code>await()</code>方法时，如果代码块中的代码还没执行完，那么 await() 方法会将当前协程阻塞住，直到可以获得 async 函数的执行结果。</p>
+<blockquote>
+<p>  注意，可以不用在每次调用<code>async</code>函数之后就立刻使用<code>await()</code>方法获取结果，而是仅在需要用到 async 函数的执行结果时才调用 await() 方法进行获取，这样两个 async 函数就变成一种并行关系，即两个<code>async</code>函数完全可以同时执行任务从而提高运行效率。</p>
+</blockquote>
+<p>  <code>withContext()</code>函数是一个挂起函数，示例写法如下：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            val result = withContext(Dispatchers.Default) {
+                5 + 5
+            }
+            println(result) //日志输出10
+        }
+    }
+</code></pre>
+<p>  调用<code>withContext()</code>函数之后，会立即执行代码块中的代码，同时将外部协程挂起。当代码块中的代码全部执行完之后，会将最后一行的执行结果作为 withContext() 函数的返回值返回。</p>
+<blockquote>
+<p>  注意，<code>withContext()</code>函数强制要求我们指定一个线程参数。</p>
+</blockquote>
+<p>  线程参数主要有以下 3 种值可选：</p>
+<ul>
+<li>
+<p><code>Dispatchers.Default</code>：表示会使用一种默认低并发的线程策略，当要执行的代码属于计算密集型任务时，开启过高的并发反而可能会影响任务的运行效率。</p>
+</li>
+<li>
+<p><code>Dispatchers.IO</code>：表示会使用一种较高并发的线程策略，当要执行的代码大多数时间是在阻塞和等待中，比如说执行网络请求时，为了能够支持更高的并发数量。</p>
+</li>
+<li>
+<p><code>Dispatchers.Main</code>：表示不会开启子线程，而是在 Android 主线程中执行代码，但是这个值只能在 Android 项目中使用，纯 Kotlin 程序使用这种类型的线程参数会出现错误。</p>
+</li>
+</ul>
+<h2 id="使用协程简化回调的写法">使用协程简化回调的写法</h2>
+<p>  回调机制基本上是依靠匿名类来实现的，但是匿名类的写法通常比较烦琐。比如如下代码：</p>
+<pre><code class="language-java">    HttpUtil.sendHttpRequest(address, object : HttpCallbackListener {
+        override fun onFinish(response: String) {
+            // 得到服务器返回的具体内容
+        }
+        override fun onError(e: Exception) {
+            // 在这里对异常情况进行处理
+        }
+    })
+</code></pre>
+<p>  在多少个地方发起网络请求，就需要编写多少次这样的匿名类实现。而借助<code>suspendCoroutine</code>函数就能将传统回调机制的写法大幅简化。</p>
+<p>  <code>suspendCoroutine</code>函数必须在协程作用域或挂起函数中才能调用，它接收一个 Lambda 表达式参数，主要作用是将当前协程立即挂起，然后在一个普通的线程中执行 Lambda 表达式中的代码。<br>
+　　Lambda 表达式的参数列表上会传入一个<code>Continuation</code>参数，调用它的<code>resume(</code>)方法或<code>resumeWithException()</code>可以让协程恢复执行。<br>
+　　首先定义一个<code>request()</code>函数，代码如下所示：</p>
+<pre><code class="language-java">    suspend fun request(address: String): String {
+        return suspendCoroutine { continuation -&gt;
+            HttpUtil.sendHttpRequest(address, object : HttpCallbackListener {
+                override fun onFinish(response: String) {
+                    continuation.resume(response)
+                }
+
+                override fun onError(e: Exception) {
+                    continuation.resumeWithException(e)
+                }
+            })
+        }
+    }
+</code></pre>
+<p>  可以看到，<code>request()</code>函数是一个挂起函数，并且接收一个<code>address</code>参数。在 request() 函数的内部，调用了<code>suspendCoroutine</code>函数，这样当前协程就会被立刻挂起，而 Lambda 表达式中的代码则会在普通线程中执行。<br>
+　　接着我们在 Lambda 表达式中调用<code>HttpUtil.sendHttpRequest()</code>方法发起网络请求，并通过传统回调的方式监听请求结果。如果请求成功就调用 Continuation 的<code>resume()</code>方法恢复被挂起的协程，并传入服务器响应的数据，该值会成为 suspendCoroutine 函数的返回值。如果请求失败，就调用 Continuation 的<code>resumeWithException()</code>恢复被挂起的协程，并传入具体的异常原因。</p>
+<p>  之后，不管要发起多少次网络请求，都不需要再重复进行回调实现。比如说获取百度首页的响应数据，可以这样写：</p>
+<pre><code class="language-java">    suspend fun getBaiduResponse() {
+        try {
+            val response = request(&quot;https://www.baidu.com/&quot;)
+            // 对服务器响应的数据进行处理
+        } catch (e: Exception) {
+            // 对异常情况进行处理
+        }
+    }
+</code></pre>
+<p>  由于<code>getBaiduResponse()</code>是一个挂起函数，因此当它调用了<code>request()</code>函数时，当前的协程就会被立刻挂起，然后一直等待网络请求成功或失败后，当前协程才能恢复运行。这样即使不使用回调的写法，我们也能够获得异步网络请求的响应数据，而如果请求失败，则会直接进入<code>catch</code>语句当中。</p>
+<blockquote>
+<p>  注意，<code>getBaiduResponse()</code>函数被声明成了挂起函数，这样它也只能在协程作用域或其他挂起函数中调用了。但是可以通过合理的项目架构设计，轻松地将各种协程的代码应用到一个普通的项目当中。</p>
+</blockquote>
+<p>  事实上，<code>suspendCoroutine</code>函数几乎可以用于简化任何回调的写法，比如之前使用<code>Retrofit</code>来发起网络请求需要这样写：</p>
+<pre><code class="language-java">    val appService = ServiceCreator.create&lt;AppService&gt;()
+    appService.getAppData().enqueue(object : Callback&lt;List&lt;App&gt;&gt; {
+        override fun onResponse(call: Call&lt;List&lt;App&gt;&gt;, response: Response&lt;List&lt;App&gt;&gt;) {
+            // 得到服务器返回的数据
+        }
+
+        override fun onFailure(call: Call&lt;List&lt;App&gt;&gt;, t: Throwable) {
+            // 在这里对异常情况进行处理
+        }
+    })
+</code></pre>
+<p>  使用<code>suspendCoroutine</code>函数，可以对上述写法进行大幅度的简化。<br>
+　　由于不同的<code>Service</code>接口返回的数据类型也不同，所以这次不能像刚才那样针对具体的类型进行编程了，而是要使用泛型的方式。定义一个<code>await()</code>函数，代码如下所示：</p>
+<pre><code class="language-java">    suspend fun &lt;T&gt; Call&lt;T&gt;.await(): T {
+        return suspendCoroutine { continuation -&gt;
+            enqueue(object : Callback&lt;T&gt; {
+                override fun onResponse(call: Call&lt;T&gt;, response: Response&lt;T&gt;) {
+                    val body = response.body()
+                    if (body != null) continuation.resume(body)
+                    else continuation.resumeWithException(
+                        RuntimeException(&quot;response body is null&quot;)
+                    )
+                }
+
+                override fun onFailure(call: Call&lt;T&gt;, t: Throwable) {
+                    continuation.resumeWithException(t)
+                }
+            })
+        }
+    }
+</code></pre>
+<p>  这里<code>await()</code>函数仍然是一个挂起函数，然后给它声明了一个泛型<code>T</code>，并将 await() 函数定义成了<code>Call&lt;T&gt;</code>的扩展函数，这样所有返回值是<code>Call</code>类型的<code>Retrofit</code>网络请求接口就都可以直接调用 await() 函数了。<br>
+　　接着，<code>await()</code>函数中使用了<code>suspendCoroutine</code>函数来挂起当前协程，并且由于扩展函数的原因，我们现在拥有了<code>Call</code>对象的上下文，那么这里就可以直接调用<code>enqueue()</code>方法让 Retrofit 发起网络请求。接下来，使用同样的方式对 Retrofit 响应的数据或者网络请求失败的情况进行处理即可。<br>
+　　另外还有一点需要注意，在<code>onResponse()</code>回调当中，我们调用<code>body()</code>方法解析出来的对象是可能为空的。如果为空的话，这里的做法是手动抛出一个异常，我们也可以根据自己的逻辑进行更加合适的处理。<br>
+　　有了<code>await()</code>函数之后，调用所有<code>Retrofit</code>的<code>Service</code>接口都会变得极其简单，比如刚才同样的功能就可以使用如下写法进行实现：</p>
+<pre><code class="language-java">    suspend fun getAppData() {
+        try {
+            val appList = ServiceCreator.create&lt;AppService&gt;().getAppData().await()
+            // 对服务器响应的数据进行处理
+        } catch (e: Exception) {
+            // 对异常情况进行处理
+        }
+    }
+</code></pre>
+<p>  没有了冗长的匿名类实现，只需要简单调用一下<code>await()</code>函数就可以让<code>Retrofit</code>发起网络请求，并直接获得服务器响应的数据。</p>
+<blockquote>
+<p>  每次发起网络请求都要进行一次<code>try catch</code>处理也比较麻烦，其实这里也可以选择不处理。在不处理的情况下，如果发生了异常就会一层层向上抛出，一直到被某一层的函数处理了为止。因此，我们也可以在某个统一的入口函数中只进行一次<code>try catch</code>，从而让代码变得更加精简。</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Retrofit 网络库]]></title>
+        <id>https://Petrichoroo.github.io/post/retrofit-wang-luo-ku/</id>
+        <link href="https://Petrichoroo.github.io/post/retrofit-wang-luo-ku/">
+        </link>
+        <updated>2022-08-22T16:35:52.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#retrofit">Retrofit</a>
+<ul>
+<li><a href="#retrofit-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">Retrofit 的基本用法</a></li>
+<li><a href="#%E5%A4%84%E7%90%86%E5%A4%8D%E6%9D%82%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%9C%B0%E5%9D%80%E7%B1%BB%E5%9E%8B">处理复杂的接口地址类型</a></li>
+<li><a href="#retrofit-%E6%9E%84%E5%BB%BA%E5%99%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E5%86%99%E6%B3%95">Retrofit 构建器的最佳写法</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="retrofit">Retrofit</h1>
+<hr>
+<h2 id="retrofit-的基本用法">Retrofit 的基本用法</h2>
+<blockquote>
+<p>  OkHttp 侧重的是底层通信的实现，而 Retrofit 侧重的是上层接口的封装。事实上，Retrofit 就是 Square 公司在 OkHttp 的基础上进一步开发出来的应用层网络通信库，使得我们可以用更加面向对象的思维进行网络操作。</p>
+</blockquote>
+<p>  <code>Retrofit</code>的基本设计思想。Retrofit 的设计基于以下几个事实：</p>
+<ul>
+<li>
+<p>同一款应用程序中所发起的网络请求绝大多数指向的是同一个服务器域名。</p>
+</li>
+<li>
+<p>服务器提供的接口通常是可以根据功能来归类的。比如新增用户、修改用户数据等接口可以归为一类，上架新书、销售图书等接口也可以归为一类。将服务器接口合理归类能够让代码结构变得更加合理，从而提高可阅读性和可维护性。</p>
+</li>
+<li>
+<p>开发者更加习惯于“调用一个接口，获取它的返回值”这样的编码方式，但当调用的是服务器接口时，却很难想象该如何使用这样的编码方式。其实大多数人并不关心网络的具体通信细节，但是传统网络库的用法却需要编写太多网络相关的代码。</p>
+</li>
+</ul>
+<p>  而<code>Retrofit</code>的用法就是基于以上几点来设计的，首先我们可以配置好一个根路径，然后在指定服务器接口地址时只需要使用相对路径即可，这样就不用每次都指定完整的<code>URL</code>地址了。</p>
+<p>  另外，<code>Retrofit</code>允许我们对服务器接口进行归类，将功能同属一类的服务器接口定义到同一个接口文件当中，从而让代码结构变得更加合理。</p>
+<p>  最后，我们也不用关心网络通信的细节，只需要在接口文件中声明一系列方法和返回值，然后通过注解的方式指定该方法对应哪个服务器接口，以及需要提供哪些参数。当在程序中调用该方法时，<code>Retrofit</code>会自动向对应的服务器接口发起请求，并将响应的数据解析成返回值声明的类型。这就使得我们可以用更加面向对象的思维来进行网络操作。</p>
+<p>  为了使用<code>Retrofit</code>，我们需要先在项目中添加必要的依赖库，可到<a href="https://github.com/square/retrofit">GitHub</a>查看最新版本，然后编辑<code>app/build.gradle</code>文件，在<code>dependencies</code>闭包中添加如下内容：</p>
+<pre><code class="language-java">    dependencies {
+        ...
+        implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+        implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    }
+</code></pre>
+<p>  由于<code>Retrofit</code>是基于 OkHttp 开发的，因此添加上述第一条依赖会自动将Retrofit、OkHttp 和 Okio这几个库一起下载，我们无须再手动引入<code>OkHttp</code>库。<br>
+　　另外，<code>Retrofit</code>还会将服务器返回的<code>JSON</code>数据自动解析成对象，因此上述第二条依赖就是一个 Retrofit 的转换库，它是借助<code>GSON</code>来解析 JSON 数据的，所以会自动将 GSON 库一起下载下来，这样我们也不用手动引入 GSON 库了。</p>
+<p>  之前在 Apache 安装目录下的 htdocs 中创建了一个名为<code>get_data.json</code>的文件，里面的数据如下：</p>
+<pre><code class="language-json">    [{&quot;id&quot;:&quot;5&quot;,&quot;version&quot;:&quot;5.5&quot;,&quot;name&quot;:&quot;Clash of Clans&quot;},
+    {&quot;id&quot;:&quot;6&quot;,&quot;version&quot;:&quot;7.0&quot;,&quot;name&quot;:&quot;Boom Beach&quot;},
+    {&quot;id&quot;:&quot;7&quot;,&quot;version&quot;:&quot;3.5&quot;,&quot;name&quot;:&quot;Clash Royale&quot;}]
+</code></pre>
+<p>  由于<code>Retrofit</code>会借助 GSON 将 JSON 数据转换成对象，因此这里同样需要新增一个<code>App</code>类，并加入<code>id</code>、<code>name</code>和<code>version</code>这 3 个字段，如下所示：</p>
+<pre><code class="language-java">    class App(val id: String, val name: String, val version: String)
+</code></pre>
+<p>  接下来，我们可以根据服务器接口的功能进行归类，创建不同种类的接口文件，并在其中定义对应具体服务器接口的方法。<br>
+　　不过由于我们的 Apache 服务器上其实只有一个获取<code>JSON</code>数据的接口，因此这里只需要定义一个接口文件，并包含一个方法即可。新建<code>AppService</code>接口，代码如下所示：</p>
+<pre><code class="language-java">    interface AppService {
+        @GET(&quot;get_data.json&quot;)
+        fun getAppData(): Call&lt;List&lt;App&gt;&gt;
+    }
+</code></pre>
+<blockquote>
+<p>  通常<code>Retrofit</code>的接口文件建议以具体的功能种类名开头，并以<code>Service</code>结尾，这是一种比较好的命名习惯。</p>
+</blockquote>
+<p>  上述代码中有两点需要注意。</p>
+<ul>
+<li>
+<p>在<code>getAppData()</code>方法上面添加的注解，这里使用了一个<code>@GET</code>注解，表示当调用 getAppData() 方法时 Retrofit 会发起一条<code>GET</code>请求，请求的地址就是我们在 @GET 注解中传入的具体参数。注意，这里只需要传入请求地址的相对路径即可，根路径我们会在稍后设置。</p>
+</li>
+<li>
+<p><code>getAppData()</code>方法的返回值必须声明成 Retrofit 中内置的<code>Call</code>类型，并通过泛型来指定服务器响应的数据应该转换成什么对象。由于服务器响应的是一个包含<code>App</code>数据的 JSON 数组，因此这里我们将泛型声明成<code>List&lt;App&gt;</code>。当然，Retrofit 还提供了强大的<code>Call Adapters</code>功能来允许我们自定义方法返回值的类型。</p>
+</li>
+</ul>
+<p>  为了使用<code>AppService</code>接口，我们在界面上添加一个按钮用于简单的测试。修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/getAppDataBtn&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;Get App Data&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            val getAppDataBtn: Button = findViewById(R.id.getAppDataBtn)
+            getAppDataBtn.setOnClickListener {
+                //使用Retrofit.Builder()构建一个Retrofit对象
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(&quot;http://10.0.2.2&quot;) //指定所有Retrofit请求的根路径
+                    .addConverterFactory(GsonConverterFactory.create()) //指定Retrofit在解析数据时所使用的转换库
+                    .build()
+                val appService = retrofit.create(AppService::class.java)   //创建一个AppService接口的动态代理对象
+                appService.getAppData().enqueue(object : Callback&lt;List&lt;App&gt;&gt; {  //Retrofit就会根据注解中配置的服务器接口地址去进行网络请求
+                    override fun onResponse(call: Call&lt;List&lt;App&gt;&gt;, response: Response&lt;List&lt;App&gt;&gt;) {
+                        val list = response.body()
+                        if (list != null) {
+                            for (app in list) {
+                                Log.d(&quot;MainActivity&quot;, &quot;id is ${app.id}&quot;)
+                                Log.d(&quot;MainActivity&quot;, &quot;name is ${app.name}&quot;)
+                                Log.d(&quot;MainActivity&quot;, &quot;version is ${app.version}&quot;)
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call&lt;List&lt;App&gt;&gt;, t: Throwable) {
+                        t.printStackTrace()
+                    }
+                })
+            }
+        }
+    }
+</code></pre>
+<p>  通过<code>Retrofit.Builder</code>构建一个<code>Retrofit</code>对象后，调用它的<code>create()</code>方法并传入具体 Service 接口所对应的<code>Class</code>类型，创建一个该接口的动态代理对象。有了动态代理对象之后，我们就可以随意调用接口中定义的所有方法，而 Retrofit 会自动执行具体的处理。<br>
+　　当调用了 AppService 的<code>getAppData()</code>方法时，会返回一个<code>Call&lt;List&lt;App&gt;&gt;</code>对象，这时我们再调用一下它的<code>enqueue()</code>方法，Retrofit 就会根据注解中配置的服务器接口地址去进行网络请求了，服务器响应的数据会回调到<code>enqueue()</code>方法中传入的<code>Callback</code>实现里面。</p>
+<blockquote>
+<p>  需要注意的是，当发起请求的时候，Retrofit 会自动在内部开启子线程，当数据回调到 Callback 中之后，Retrofit 又会自动切换回主线程，整个操作过程中我们都不用考虑线程切换问题。</p>
+</blockquote>
+<p>  在 Callback 的<code>onResponse()</code>方法中，调用<code>response.body()</code>方法将会得到 Retrofit 解析后的对象，也就是<code>List&lt;App&gt;</code>类型的数据，最后遍历 List，将其中的数据打印出来即可。</p>
+<p>  这里使用的服务器接口是 HTTP，因此需要进行网络安全配置，将之前所用到的<code>network_config.xml</code>文件复制到此项目中。然后修改 AndroidManifest.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        package=&quot;com.example.retrofittest&quot;&gt;
+
+        &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+        &lt;application
+            ...
+            android:networkSecurityConfig=&quot;@xml/network_config&quot;&gt;
+        ...
+        &lt;/application&gt;
+
+    &lt;/manifest&gt;
+</code></pre>
+<p>  这里设置了允许使用明文的方式来进行网络请求，同时声明了网络权限。然后运行此项目，然后点击“Get App Data”按钮，观察 Logcat 中的打印日志，如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661192091966.png" alt="" loading="lazy"></p>
+<h2 id="处理复杂的接口地址类型">处理复杂的接口地址类型</h2>
+<p>  上面的示例程序只是向一个非常简单的服务器接口地址发送请求，然而在真实的开发环境当中，服务器所提供的接口地址不可能一直如此简单。<br>
+　　为了方便举例，这里先定义一个<code>Data</code>类，并包含<code>id</code>和<code>content</code>这两个字段，如下所示：</p>
+<pre><code class="language-java">    class Data(val id: String, val content: String)
+</code></pre>
+<p>  先从最简单的看起，比如服务器的接口地址如下所示：</p>
+<pre><code class="language-java">    GET http://example.com/get_data.json
+</code></pre>
+<p>  这是最简单的一种情况，接口地址是静态的，永远不会改变。那么对应到 Retrofit 当中，使用如下的写法即可：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;get_data.json&quot;)
+        fun getData(): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  但是显然服务器不可能总是给我们提供静态类型的接口，在很多场景下，接口地址中的部分内容可能会是动态变化的，比如如下的接口地址：</p>
+<pre><code class="language-java">    GET http://example.com/&lt;page&gt;/get_data.json
+</code></pre>
+<p>  在这个接口当中，<code>&lt;page&gt;</code>部分代表页数，我们传入不同的页数，服务器返回的数据也会不同。这种接口地址对应到 Retrofit 中写法如下：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;{page}/get_data.json&quot;)
+        fun getData(@Path(&quot;page&quot;) page: Int): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  在<code>@GET</code>注解指定的接口地址当中，这里使用了一个<code>{page}</code>的占位符，然后又在<code>getData()</code>方法中添加了一个 page 参数，并使用<code>@Path(&quot;page&quot;)</code>注解来声明这个参数。这样当调用 getData() 方法发起请求时，Retrofit 就会自动将<code>page</code>参数的值替换到占位符的位置，从而组成一个合法的请求地址。</p>
+<p>  另外，很多服务器接口还会要求我们传入一系列的参数，格式如下：</p>
+<pre><code class="language-java">    GET http://example.com/get_data.json?u=&lt;user&gt;&amp;t=&lt;token&gt;
+</code></pre>
+<p>  这是一种标准的带参数<code>GET</code>请求的格式。接口地址的最后使用问号来连接参数部分，每个参数都是一个使用等号连接的键值对，多个参数之间使用“&amp;”符号进行分隔。<br>
+　　那么很显然，在上述地址中，服务器要求我们传入<code>user</code>和<code>token</code>这两个参数的值。对于这种格式的服务器接口，我们可以使用<code>@Path</code>注解的方式来解决，但是这样会有些麻烦，Retrofit 针对这种带参数的GET请求，专门提供了一种语法支持：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;get_data.json&quot;)
+        fun getData(@Query(&quot;u&quot;) user: String, @Query(&quot;t&quot;) token: String): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  这里在<code>getData()</code>方法中添加了<code>user</code>和<code>token</code>这两个参数，并使用<code>@Query</code>注解对它们进行声明。这样当发起网络请求的时候，Retrofit 就会自动按照带参数<code>GET</code>请求的格式将这两个参数构建到请求地址当中。</p>
+<p>  <code>HTTP</code>有很多种类型，其中比较常用的有<code>GET</code>、<code>POST</code>、<code>PUT</code>、<code>PATCH</code>、<code>DELETE</code>这几种。它们之间的分工也很明确，简单概括的话，GET 请求用于从服务器获取数据，POST 请求用于向服务器提交数据，PUT 和 PATCH 请求用于修改服务器上的数据，DELETE 请求用于删除服务器上的数据。<br>
+　　而 Retrofit 对所有常用的 HTTP 请求类型都进行了支持，使用<code>@GET</code>、<code>@POST</code>、<code>@PUT</code>、<code>@PATCH</code>、<code>@DELETE</code>注解，就可以让 Retrofit 发出相应类型的请求了。<br>
+　　比如服务器提供了如下接口地址：</p>
+<pre><code class="language-java">    DELETE http://example.com/data/&lt;id&gt;
+</code></pre>
+<p>  这种接口通常意味着要根据<code>id</code>删除一条指定的数据，而我们在 Retrofit 当中想要发出这种请求就可以这样写：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @DELETE(&quot;data/{id}&quot;)
+        fun deleteData(@Path(&quot;id&quot;) id: String): Call&lt;ResponseBody&gt;
+    }
+</code></pre>
+<p>  这里使用了<code>@DELETE</code>注解来发出<code>DELETE</code>类型的请求，并使用了<code>@Path</code>注解来动态指定<code>id</code>。</p>
+<blockquote>
+<p>  但是在返回值声明的时候，将<code>Call</code>的泛型指定成了<code>ResponseBody</code>，这是什么意思呢？</p>
+</blockquote>
+<p>  由于 POST、PUT 、PATCH、DELETE 这几种请求类型与<code>GET</code>请求不同，它们更多是用于操作服务器上的数据，而不是获取服务器上的数据，所以通常它们对于服务器响应的数据并不关心。<br>
+　　这个时候就可以使用<code>ResponseBody</code>，表示 Retrofit 能够接收任意类型的响应数据，并且不会对响应数据进行解析。<br>
+　　那么如果我们需要向服务器提交数据该怎么写呢？比如如下的接口地址：</p>
+<pre><code class="language-java">    POST http://example.com/data/create
+    {&quot;id&quot;: 1, &quot;content&quot;: &quot;The description for this data.&quot;}
+</code></pre>
+<p>  使用<code>POST</code>请求来提交数据，需要将数据放到 HTTP 请求的<code>body</code>部分，这个功能在 Retrofit 中可以借助<code>@Body</code>注解来完成：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @POST(&quot;data/create&quot;)
+        fun createData(@Body data: Data): Call&lt;ResponseBody&gt;
+    }
+</code></pre>
+<p>  这里在<code>createData()</code>方法中声明了一个<code>Data</code>类型的参数，并加上了<code>@Body</code>注解。这样当 Retrofit 发出<code>POST</code>请求时，就会自动将 Data 对象中的数据转换成 JSON 格式的文本，并放到 HTTP 请求的<code>body</code>部分，服务器在收到请求之后只需要从 body 中将这部分数据解析出来即可。这种写法同样也可以用来给 PUT、PATCH、DELETE 类型的请求提交数据。<br>
+　　最后，有些服务器接口还可能会要求我们在<code>HTTP</code>请求的<code>header</code>中指定参数，比如：</p>
+<pre><code class="language-java">    GET http://example.com/get_data.json
+    User-Agent: okhttp
+    Cache-Control: max-age=0
+</code></pre>
+<p>  这些<code>header</code>参数其实就是一个个的键值对，我们可以在 Retrofit 中直接使用<code>@Headers</code>注解来对它们进行声明。</p>
+<pre><code class="language-java">    interface ExampleService {
+        @Headers(&quot;User-Agent: okhttp&quot;, &quot;Cache-Control: max-age=0&quot;)
+        @GET(&quot;get_data.json&quot;)
+        fun getData(): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  但是这种写法只能进行静态<code>header</code>声明，如果想要动态指定 header 的值，则需要使用<code>@Header</code>注解，如下所示：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;get_data.json&quot;)
+        fun getData(@Header(&quot;User-Agent&quot;) userAgent: String,
+        @Header(&quot;Cache-Control&quot;) cacheControl: String): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  现在当发起网络请求时，Retrofit 就会自动将参数中传入的值设置到<code>User-Agent</code>和<code>Cache-Control</code>这两个 header 当中，从而实现了动态指定 header 值的功能。</p>
+<h2 id="retrofit-构建器的最佳写法">Retrofit 构建器的最佳写法</h2>
+<p>  获取 Service 接口的动态代理对象的写法是比较麻烦的，比如想要得到<code>AppService</code>的动态代理对象，需要先使用<code>Retrofit.Builder</code>构建出一个<code>Retrofit</code>对象，然后再调用它的<code>create()</code>方法创建动态代理对象。<br>
+　　由于构建出的<code>Retrofit</code>对象是全局通用的，只需要在调用<code>create()</code>方法时针对不同的 Service 接口传入相应的<code>Class</code>类型即可。<br>
+　　因此，我们可以将通用的这部分功能封装起来，从而简化获取 Service 接口动态代理对象的过程。</p>
+<p>  新建一个<code>ServiceCreator</code>单例类，代码如下所示：</p>
+<pre><code class="language-java">    object ServiceCreator {
+        private const val BASE_URL = &quot;http://10.0.2.2/&quot;
+        private val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        fun &lt;T&gt; create(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)
+    }
+</code></pre>
+<p>  这里使用<code>object</code>关键字让<code>ServiceCreator</code>成为了一个单例类，并在它的内部定义了一个<code>BASE_URL</code>常量，用于指定 Retrofit 的根路径。<br>
+　　然后同样是在内部使用<code>Retrofit.Builder</code>构建一个 Retrofit 对象，注意这些都是用 private 修饰符来声明的，相当于对于外部而言它们都是不可见的。<br>
+　　最后，提供了一个外部可见的<code>create()</code>方法，并接收一个<code>Class</code>类型的参数。当在外部调用这个方法时，实际上就是调用了 Retrofit 对象的 create() 方法，从而创建出相应<code>Service</code>接口的动态代理对象。<br>
+　　经过这样的封装之后，Retrofit 的用法将会变得异常简单，比如我们想获取一个<code>AppService</code>接口的动态代理对象，只需要使用如下写法即可：</p>
+<pre><code class="language-java">    val appService = ServiceCreator.create(AppService::class.java)
+</code></pre>
+<p>  之后就可以随意调用 AppService 接口中定义的任何方法了</p>
+<p>  不过上述代码可以通过泛型实化功能来进行优化，修改 ServiceCreator 中的代码，如下所示：</p>
+<pre><code class="language-java">    object ServiceCreator {
+        ...
+        inline fun &lt;reified T&gt; create(): T = create(T::class.java)
+    }
+</code></pre>
+<p>  这里又定义了一个不带参数的<code>create()</code>方法，并使用<code>inline</code>关键字来修饰方法，使用<code>reified</code>关键字来修饰泛型，这是泛型实化的两大前提条件。<br>
+　　接下来就可以使用<code>T::class.java</code>这种语法了，这里调用刚才定义的带有 Class 参数的<code>create()</code>方法即可。<br>
+　　那么现在就又有了一种新的方式来获取<code>AppService</code>接口的动态代理对象，如下所示：</p>
+<pre><code class="language-java">    val appService = ServiceCreator.create&lt;AppService&gt;()
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kotlin：泛型的高级特性]]></title>
+        <id>https://Petrichoroo.github.io/post/kotlinfan-xing-de-gao-ji-te-xing/</id>
+        <link href="https://Petrichoroo.github.io/post/kotlinfan-xing-de-gao-ji-te-xing/">
+        </link>
+        <updated>2022-08-22T07:27:39.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E5%AF%B9%E6%B3%9B%E5%9E%8B%E8%BF%9B%E8%A1%8C%E5%AE%9E%E5%8C%96">对泛型进行实化</a></li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E5%AE%9E%E5%8C%96%E7%9A%84%E5%BA%94%E7%94%A8">泛型实化的应用</a></li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%8D%8F%E5%8F%98">泛型的协变</a></li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E9%80%86%E5%8F%98">泛型的逆变</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="对泛型进行实化">对泛型进行实化</h2>
+<p>  在 JDK 1.5 中，Java 引入了泛型。Java 的泛型功能是通过类型擦除机制来实现的。这种机制就是说泛型对于类型的约束只在编译时期存在，在进入 JVM 之前，与泛型相关的信息会被擦除掉，运行时 JVM 是识别不出来我们在代码中指定的泛型类型的。</p>
+<blockquote>
+<p>  类型擦除，是泛型能够与之前的 java 版本代码兼容共存的原因。</p>
+</blockquote>
+<p>  例如，假设我们创建了一个<code>List&lt;String&gt;</code>集合，虽然在编译时期只能向集合中添加字符串类型的元素，但是在运行时期 JVM 并不能知道它本来只打算包含哪种类型的元素，只能识别出来它是个<code>List</code>。</p>
+<p>  所有基于 JVM 的语言，它们的泛型功能都是通过类型擦除机制来实现的，其中当然也包括了 Kotlin。这种机制使得我们不可能使用<code>a is T</code>或者<code>T::class.java</code>这样的语法，因为<code>T</code>的实际类型在运行的时候已经被擦除了。<br>
+　　然而不同的是，Kotlin 提供了一个内联函数的概念。内联函数中的代码会在编译的时候自动被替换到调用它的地方，这样的话也就不存在什么泛型擦除的问题了，因为代码在编译之后会直接使用实际的类型来替代内联函数中的泛型声明，其工作原理如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661155707845.png" alt="" loading="lazy"><br>
+  最终代码会被替换成下图所示的样子：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661155757979.png" alt="" loading="lazy"></p>
+<p>  可以看到，<code>bar()</code>是一个带有泛型类型的内联函数，<code>foo()</code>函数调用了 bar() 函数，在代码编译之后，bar() 函数中的代码将可以获得泛型的实际类型。</p>
+<blockquote>
+<p>  这就意味着，Kotlin 中是可以将内联函数中的泛型进行实化的。</p>
+</blockquote>
+<p>  如何让才能将泛型实化呢？首先，该函数必须是内联函数，即用<code>inline</code>关键字来修饰该函数。其次，在声明泛型的地方必须加上<code>reified</code>关键字来表示该泛型要进行实化。示例代码如下：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; getGenericType() {
+    }
+</code></pre>
+<p>  上述函数中的泛型<code>T</code>就是一个被实化的泛型，下面实现一个获取泛型实际类型的功能，代码如下所示：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; getGenericType() = T::class.java
+</code></pre>
+<p>  <code>getGenericType()</code>函数直接返回了当前指定泛型的实际类型。<code>T.class</code>这样的语法在 Java 中是不合法的，而在 Kotlin 中，借助泛型实化功能就可以使用<code>T::class.java</code>这样的语法了。现在我们可以使用如下代码对 getGenericType() 函数进行测试：</p>
+<pre><code class="language-java">    fun main() {
+        val result1 = getGenericType&lt;String&gt;()
+        val result2 = getGenericType&lt;Int&gt;()
+        println(&quot;result1 is $result1&quot;)
+        println(&quot;result2 is $result2&quot;)
+    }
+</code></pre>
+<p>  这里给<code>getGenericType()</code>函数指定了两种不同的泛型，由于 getGenericType() 函数会将指定泛型的具体类型返回，因此这里我们将返回的结果进行打印，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661156457970.png" alt="" loading="lazy"></p>
+<h2 id="泛型实化的应用">泛型实化的应用</h2>
+<p>  使用 Intent 启动一个 Activity ：</p>
+<pre><code class="language-java">    val intent = Intent(context, TestActivity::class.java)
+    context.startActivity(intent)
+</code></pre>
+<p>  <code>TestActivity::class.java</code>这样的语法是很难受的，Kotlin 的泛型实化功能使得我们拥有了更好的选择。新建一个<code>reified.kt</code>文件，然后在里面编写如下代码：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; startActivity(context: Context) {
+        val intent = Intent(context, T::class.java)
+        context.startActivity(intent)
+    }
+</code></pre>
+<p>  这里同时使用<code>inline</code>和<code>reified</code>关键字让泛型<code>T</code>成为了一个被实化的泛型，因此在 Intent 接受的第二个参数里可以直接传入<code>T::class.java</code>。<br>
+　　现在启动 TestActivity，只需要这样写即可：</p>
+<pre><code class="language-java">    startActivity&lt;TestActivity&gt;(context)
+</code></pre>
+<p>  Kotlin 将能够识别出指定泛型的实际类型，并启动相应的 Activity。</p>
+<p>  通常在启用 Activity 的时候可能会使用 Intent 附带一些参数，而经过刚才的封装之后，我们就无法进行传参了。<br>
+　　使用高阶函数可以解决这个问题，在<code>reified.kt</code>文件中添加一个新的<code>startActivity()</code>函数重载，如下所示：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; startActivity(context: Context, block: Intent.() -&gt; Unit) {
+        val intent = Intent(context, T::class.java)
+        intent.block()
+        context.startActivity(intent)
+    }
+</code></pre>
+<p>  这里在<code>startActivity()</code>函数中增加了一个函数类型参数，并且它的函数类型是定义在<code>Intent</code>类当中的。在创建完 Intent 的实例之后，随即调用该函数类型参数，并把 Intent 的实例传入，这样调用 startActivity() 函数的时候就可以在 Lambda 表达式中为 Intent 传递参数了，如下所示：</p>
+<pre><code class="language-java">    startActivity&lt;TestActivity&gt;(context) {
+        putExtra(&quot;param1&quot;, &quot;data&quot;)
+        putExtra(&quot;param2&quot;, 123)
+    }
+</code></pre>
+<h2 id="泛型的协变">泛型的协变</h2>
+<p>  Kotlin 的内置 API 中使用了很多协变和逆变的特性。<br>
+　　一个泛型类或者泛型接口中的方法，它的参数列表是接收数据的地方，因此可以称它为<code>in</code>位置，而它的返回值是输出数据的地方，因此可以称它为<code>out</code>位置。如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661157760612.png" alt="" loading="lazy"><br>
+　　首先定义如下 3 个类：</p>
+<pre><code class="language-java">    open class Person(val name: String, val age: Int)
+    class Student(name: String, age: Int) : Person(name, age)
+    class Teacher(name: String, age: Int) : Person(name, age)
+</code></pre>
+<p>  这里先定义了一个<code>Person</code>类，类中包含<code>name</code>和<code>age</code>两个字段。然后又定义了<code>Student</code>和<code>Teacher</code>这两个类，让它们成为 Person 类的子类。</p>
+<blockquote>
+<p>  Student 是 Person 的子类，但<code>List&lt;Student&gt;</code>不能直接成为<code>List&lt;Person&gt;</code>的子类，否则将可能存在类型转换的安全隐患。</p>
+</blockquote>
+<p>  为什么会存在类型转换的安全隐患呢？下面通过一个具体的例子进行说明。自定义一个<code>SimpleData</code>类，代码如下所示：</p>
+<pre><code class="language-java">    class SimpleData&lt;T&gt; {
+        private var data: T? = null
+        fun set(t: T?) {
+            data = t
+        }
+
+        fun get(): T? {
+            return data
+        }
+    }
+</code></pre>
+<p>  SimpleData 是一个泛型类，它的内部封装了一个泛型<code>data</code>字段，调用<code>set()</code>方法可以给 data 字段赋值，调用<code>get()</code>方法可以获取 data 字段的值。<br>
+　　假设：若编程语言允许向某个接收<code>SimpleData&lt;Person&gt;</code>参数的方法传入<code>SimpleData&lt;Student&gt;</code>的实例，那么如下代码就会是合法的：</p>
+<pre><code class="language-java">    fun main() {
+        val student = Student(&quot;Tom&quot;, 19)
+        val data = SimpleData&lt;Student&gt;()
+        data.set(student)
+        handleSimpleData(data) // 实际上这行代码会报错，这里假设它能编译通过
+        val studentData = data.get()
+    }
+
+    fun handleSimpleData(data: SimpleData&lt;Person&gt;) {
+        val teacher = Teacher(&quot;Jack&quot;, 35)
+        data.set(teacher)
+    }
+</code></pre>
+<p>  在<code>main()</code>方法中创建一个<code>Student</code>的实例，并将它封装到<code>SimpleData&lt;Student&gt;</code>中，然后将 SimpleData<Student> 作为参数传递给<code>handleSimpleData()</code>方法。但是此方法接收一个<code>SimpleData&lt;Person&gt;</code>参数（这里假设可以编译通过），那么在 handleSimpleData() 方法中，我们就可以创建一个<code>Teacher</code>的实例，并用它来替换 SimpleData<Person> 参数中的原有数据。这种操作肯定是合法的，因为 Teacher 也是 Person 的子类。<br>
+　　但是问题马上来了，回到<code>main()</code>方法当中，我们调用<code>SimpleData&lt;Student&gt;</code>的<code>get()</code>方法来获取它内部封装的<code>Student</code>数据，可现在 SimpleData<Student> 中实际包含的却是一个 Teacher 的实例，那么此时必然会产生类型转换异常。</p>
+<blockquote>
+<p>  问题发生的主要原因是我们在<code>handleSimpleData()</code>方法中向 SimpleData<Person> 里设置了一个 Teacher 的实例。如果 SimpleData 在泛型<code>T</code>上是只读的话，肯定就没有类型转换的安全隐患了。</p>
+</blockquote>
+<p>  下面给出泛型协变的定义：假如定义了一个<code>MyClass&lt;T&gt;</code>的泛型类，其中 A 是 B 的子类型，同时 <code>MyClass&lt;A&gt;</code>又是<code>MyClass&lt;B&gt;</code>的子类型，那么我们就可以称<code>MyClass</code>在<code>T</code>这个泛型上是协变的。<br>
+　　<br>
+  但是如何才能让<code>MyClass&lt;A&gt;</code>成为<code>MyClass&lt;B&gt;</code>的子类型呢？即让<code>MyClass&lt;T&gt;</code>类中的所有方法都不能接收<code>T</code>类型的参数。换句话说，<code>T</code>只能出现在<code>out</code>位置上，而不能出现在<code>in</code>位置上。<br>
+　　修改 SimpleData 类的代码，如下所示：</p>
+<pre><code class="language-java">    class SimpleData&lt;out T&gt;(val data: T?) {
+        fun get(): T? {
+            return data
+        }
+    }
+</code></pre>
+<p>  这里对 SimpleData 类进行了改造，在泛型<code>T</code>的声明前面加上了一个<code>out</code>关键字。这就意味着现在 T 只能出现在 out 位置上，而不能出现在<code>in</code>位置上，同时也意味着<code>SimpleData</code>在泛型 T 上是协变的。<br>
+　　由于泛型 T 不能出现在 in 位置上，因此我们也就不能使用<code>set()</code>方法为 data 参数赋值了，所以这里改成了使用构造函数的方式来赋值。由于这里使用了<code>val</code>关键字，所以构造函数中的泛型 T 仍然是只读的。另外，即使我们使用了<code>var</code>关键字，但只要给它加上<code>private</code>修饰符，保证这个泛型<code>T</code>对于外部而言是不可修改的，那么就都是合法的写法。</p>
+<p>  经过了这样的修改之后，下面的代码就可以完美编译通过且没有任何安全隐患：</p>
+<pre><code class="language-java">    fun main() {
+        val student = Student(&quot;Tom&quot;, 19)
+        val data = SimpleData&lt;Student&gt;(student)
+        handleMyData(data)
+        val studentData = data.get()
+    }
+
+    fun handleMyData(data: SimpleData&lt;Person&gt;) {
+        val personData = data.get()
+    }
+</code></pre>
+<p>  由于 SimpleData 类进行了协变声明，那么<code>SimpleData&lt;Student&gt;</code>自然就是<code>SimpleData&lt;Person&gt;</code>的子类了，所以这里可以安全地向<code>handleMyData()</code>方法中传递参数。<br>
+　　然后在<code>handleMyData()</code>方法中去获取 SimpleData 封装的数据，虽然这里泛型声明的是 Person 类型，实际获得的会是一个 Student 的实例，但由于 Person 是 Student 的父类，向上转型是完全安全的。</p>
+<p>  如果某个方法接收一个<code>List&lt;Person&gt;</code>类型的参数，而传入的却是一个<code>List&lt;Student&gt;</code>的实例， 这在 Java 中是不允许的。而在 Kotlin 中是合法的，因为 Kotlin 已经默认给许多内置的 API 加上了协变声明，其中就包括了各种集合的类与接口。</p>
+<p>  Kotlin 中的<code>List</code>本身就是只读的，如果你想要给 List 添加数据，需要使用<code>MutableList</code>才行。既然 List 是只读的，也就意味着它天然就是可以协变的，下面来看一下 List 简化版的源码：</p>
+<pre><code class="language-java">    public interface List&lt;out E&gt; : Collection&lt;E&gt; {
+        override val size: Int
+        override fun isEmpty(): Boolean
+        override fun contains(element: @UnsafeVariance E): Boolean
+        override fun iterator(): Iterator&lt;E&gt;
+        public operator fun get(index: Int): E
+    }
+</code></pre>
+<p>  List 在泛型<code>E</code>的前面加上了<code>out</code>关键字，说明 List 在泛型 E 上是协变的。<br>
+　　不过这里还有一点需要说明，原则上在声明了协变之后，泛型<code>E</code>就只能出现在<code>out</code>位置上，可是我们会发现，在<code>contains()</code>方法中，泛型 E 仍然出现在了<code>in</code>位置上。<br>
+　　这么写本身是不合法的，因为在<code>in</code>位置上出现了泛型<code>E</code>就意味着会有类型转换的安全隐患。但是<br>
+<code>contains()</code>方法的目的非常明确，它只是为了判断当前集合中是否包含参数中传入的这个元素，而并不会修改当前集合中的内容，因此这种操作实质上又是安全的。<br>
+　　为了让编译器能够理解这种操作是安全的，这里在泛型<code>E</code>的前面又加上了一个<code>@UnsafeVariance</code>注解，这样编译器就会允许泛型 E 出现在<code>in</code>位置上了。</p>
+<h2 id="泛型的逆变">泛型的逆变</h2>
+<p>  泛型逆变的定义：假如定义了一个<code>MyClass&lt;T&gt;</code>的泛型类，其中 A 是 B 的子类型，同时<code>MyClass&lt;B&gt;</code>又是<code>MyClass&lt;A&gt;</code>的子类型，那么我们就可以称<code>MyClass</code>在<code>T</code>这个泛型上是逆变的。协变和逆变的区别如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661159547966.png" alt="" loading="lazy"></p>
+<blockquote>
+<p>  原本 A 是 B 的子类型，怎么<code>MyClass&lt;B&gt;</code>能反过来成为<code>MyClass&lt;A&gt;</code>的子类型了呢？</p>
+</blockquote>
+<p>  这里先定义一个<code>Transformer</code>接口，用于执行一些转换操作，代码如下所示：</p>
+<pre><code class="language-java">    interface Transformer&lt;T&gt; {
+        fun transform(t: T): String
+    }
+</code></pre>
+<p>  <code>Transformer</code>接口中声明了一个<code>transform()</code>方法，它接收一个<code>T</code>类型的参数，并且返回一个<code>String</code>类型的数据，这意味着参数 T 在经过 transform() 方法的转换之后将会变成一个字符串。至于具体的转换逻辑是什么样的，则由子类去实现。</p>
+<p>  下面尝试对<code>Transformer</code>接口进行实现，代码如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        val trans = object : Transformer&lt;Person&gt; {
+            override fun transform(t: Person): String {
+                return &quot;${t.name} ${t.age}&quot;
+            }
+        }
+        handleTransformer(trans) // 这行代码会报错
+    }
+
+    fun handleTransformer(trans: Transformer&lt;Student&gt;) {
+        val student = Student(&quot;Tom&quot;, 19)
+        val result = trans.transform(student)
+    }
+</code></pre>
+<p>  首先在 main() 方法中编写了一个<code>Transformer&lt;Person&gt;</code>的匿名类实现，并通过<code>transform()</code>方法将传入的 Person 对象转换成了一个“姓名+年龄”拼接的字符串。而<code>handleTransformer()</code>方法接收的是一个<code>Transformer&lt;Student&gt;</code>类型的参数，这里在 handleTransformer() 方法中创建了一个 Student 对象，并调用参数的 transform() 方法将 Student 对象转换成一个字符串。<br>
+　　因为<code>Student</code>是<code>Person</code>的子类，使用<code>Transformer&lt;Person&gt;</code>的匿名类实现将 Student 对象转换成一个字符串也是绝对安全的，并不存在类型转换的安全隐患。但是实际上，在调用 handleTransformer() 方法的时候却会提示语法错误，原因也很简单，<code>Transformer&lt;Person&gt;</code>并不是<code>Transformer&lt;Student&gt;</code>的子类型。<br>
+　　那么这个时候逆变就可以派上用场了，它就是专门用于处理这种情况的。修改<code>Transformer</code>接口中的代码，如下所示：</p>
+<pre><code class="language-java">    interface Transformer&lt;in T&gt; {
+        fun transform(t: T): String
+    }
+</code></pre>
+<p>  这里在泛型<code>T</code>的声明前面加上了一个<code>in</code>关键字。这就意味着现在 T 只能出现在 in 位置上，而不能出现在 out 位置上，同时也意味着<code>Transformer</code>在泛型 T 上是逆变的。</p>
+<blockquote>
+<p>  此时<code>Transformer&lt;Person&gt;</code>已经成为了<code>Transformer&lt;Student&gt;</code>的子类型。</p>
+</blockquote>
+<p>  为什么逆变的时候泛型<code>T</code>不能出现在<code>out</code>位置上？</p>
+<p>  这里假设逆变是允许让泛型<code>T</code>出现在<code>out</code>位置上的，然后看一看可能会产生什么样的安全隐患。修改<code>Transformer</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    interface Transformer&lt;in T&gt; {
+        fun transform(name: String, age: Int): @UnsafeVariance T
+    }
+</code></pre>
+<p>  这里将<code>transform()</code>方法改成了接收<code>name</code>和<code>age</code>这两个参数，并把返回值类型改成了泛型<code>T</code>。由于逆变是不允许泛型 T 出现在<code>out</code>位置上的，为了能让编译器正常编译通过，加上了<code>@UnsafeVariance</code>注解。<br>
+　　那么，这个时候可能会产生什么样的安全隐患呢？观察如下代码：</p>
+<pre><code class="language-java">    fun main() {
+        val trans = object : Transformer&lt;Person&gt; {
+            override fun transform(name: String, age: Int): Person {
+                return Teacher(name, age)
+            }
+        }
+        handleTransformer(trans)
+    }
+
+    fun handleTransformer(trans: Transformer&lt;Student&gt;) {
+        val result = trans.transform(&quot;Tom&quot;, 19)
+    }
+</code></pre>
+<p>  上述代码就是一个典型的违反逆变规则而造成类型转换异常的例子。<br>
+　　在<code>Transformer&lt;Person&gt;</code>的匿名类实现中，使用<code>transform()</code>方法中传入的 name 和 age 参数构建了一个 Teacher 对象，并把这个对象直接返回。<br>
+　　由于<code>transform()</code>方法的返回值要求是一个<code>Person</code>对象，而<code>Teacher</code>是 Person 的子类，因此这种写法肯定是合法的。<br>
+　　但在<code>handleTransformer()</code>方法当中，我们调用了<code>Transformer&lt;Student&gt;</code>的<code>transform()</code>方法，并传入了 name 和 age 这两个参数，期望得到的是一个<code>Student</code>对象的返回，然而实际上 transform() 方法返回的却是一个<code>Teacher</code>对象，因此这里必然会造成类型转换异常。</p>
+<p>  Kotlin 在提供协变和逆变功能时，就已经把各种潜在的类型转换安全隐患全部考虑进去了。只要我们严格按照其语法规则，让泛型在协变时只出现在<code>out</code>位置上，逆变时只出现在<code>in</code>位置上，就不会存在类型转换异常的情况。虽然<code>@UnsafeVariance</code>注解可以打破这一语法规则，但同时也会带来额外的风险。</p>
+<p>  最后介绍一下逆变功能在 Kotlin 内置 API 中的应用，比较典型的例子就是<code>Comparable</code>的使用。Comparable 是一个用于比较两个对象大小的接口，其源码定义如下：</p>
+<pre><code class="language-java">    interface Comparable&lt;in T&gt; {
+        operator fun compareTo(other: T): Int
+    }
+</code></pre>
+<p>  可以看到，<code>Comparable</code>在<code>T</code>这个泛型上就是逆变的，<code>compareTo()</code>方法则用于实现具体的比较逻辑。</p>
+<blockquote>
+<p>  那么这里为什么要让 Comparable 接口是逆变的呢？想象以下场景：</p>
+</blockquote>
+<p>  如果使用<code>Comparable&lt;Person&gt;</code>实现了让两个 Person 对象比较大小的逻辑，那么用这段逻辑去比较两个 Student 对象的大小也一定是成立的，因此让<code>Comparable&lt;Person&gt;</code>成为<code>Comparable&lt;Student&gt;</code>的子类合情合理，这也是逆变非常典型的应用。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kotlin：泛型和委托]]></title>
+        <id>https://Petrichoroo.github.io/post/kotlinfan-xing-he-wei-tuo/</id>
+        <link href="https://Petrichoroo.github.io/post/kotlinfan-xing-he-wei-tuo/">
+        </link>
+        <updated>2022-08-21T09:31:15.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">泛型的基本用法</a></li>
+<li><a href="#%E7%B1%BB%E5%A7%94%E6%89%98">类委托</a></li>
+<li><a href="#%E5%A7%94%E6%89%98%E5%B1%9E%E6%80%A7">委托属性</a></li>
+<li><a href="#%E6%87%92%E5%8A%A0%E8%BD%BD%E6%8A%80%E6%9C%AFby-lazy">懒加载技术（by lazy）</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="泛型的基本用法">泛型的基本用法</h2>
+<p>  在一般的编程模式下，我们需要给任何一个变量指定一个具体的类型，而泛型允许我们在不指定具体类型的情况下进行编程，这样编写出来的代码将会拥有更好的扩展性。<br>
+　　泛型主要有两种定义方式：一种是定义泛型类，另一种是定义泛型方法，通常使用的语法结构是<code>&lt;T&gt;</code>。<br>
+　　定义一个泛型类，就可以这么写：</p>
+<pre><code class="language-java">    class MyClass&lt;T&gt; {
+        fun method(param: T): T {
+            return param
+        }
+    }
+</code></pre>
+<p>  此时的<code>MyClass</code>就是一个泛型类，MyClass 中的方法允许使用<code>T</code>类型的参数和返回值。我们在调用 MyClass 类和<code>method()</code>方法的时候，就可以将泛型指定成具体的类型，如下所示：</p>
+<pre><code class="language-java">    val myClass = MyClass&lt;Int&gt;()
+    val result = myClass.method(123)
+</code></pre>
+<p>  而如果我们不想定义一个泛型类，只是想定义一个泛型方法，只需要将定义泛型的语法结构写在方法上面即可，如下所示：</p>
+<pre><code class="language-java">    class MyClass {
+        fun &lt;T&gt; method(param: T): T {
+            return param
+        }
+    }
+</code></pre>
+<p>  此时的调用方式也需要进行相应的调整：</p>
+<pre><code class="language-java">    val myClass = MyClass()
+    val result = myClass.method&lt;Int&gt;(123)
+</code></pre>
+<p>  由于 Kotlin 出色的类型推导机制，这里可以直接省略泛型的指定：</p>
+<pre><code class="language-java">    val myClass = MyClass()
+    val result = myClass.method(123)
+</code></pre>
+<p>  Kotlin 允许我们对泛型的类型进行限制，可以通过指定上界的方式来对泛型的类型进行约束，比如这里将<code>method()</code>方法的泛型上界设置为<code>Number</code>类型，如下所示：</p>
+<pre><code class="language-java">    class MyClass {
+        fun &lt;T : Number&gt; method(param: T): T {
+            return param
+        }
+    }
+</code></pre>
+<p>  现在只能将<code>method()</code>方法的泛型指定成数字类型，比如<code>Int</code>、<code>Float</code>、<code>Double</code>等。但是如果指定成字符串类型，就肯定会报错。</p>
+<p>  另外，在默认情况下，所有的泛型都是可以指定成可空类型的，这是因为在不手动指定上界的时候，泛型的上界默认是<code>Any?</code>。而如果想要让泛型的类型不可为空，只需要将泛型的上界手动指定成<code>Any</code>即可。</p>
+<h2 id="类委托">类委托</h2>
+<blockquote>
+<p>  委托是一种设计模式，它的基本理念是：操作对象自己不会去处理某段逻辑，而是会把工作委托给另外一个辅助对象去处理。<br>
+　　Kotlin 中将委托功能分为了两种：类委托和委托属性。</p>
+</blockquote>
+<p>  类委托的核心思想在于将一个类的具体实现委托给另一个类去完成。借助于委托模式，我们可以轻松实现一个自己的实现类。比如这里定义一个<code>MySet</code>，并让它实现<code>Set</code>接口，代码如下所示：</p>
+<pre><code class="language-java">    class MySet&lt;T&gt;(val helperSet: HashSet&lt;T&gt;) : Set&lt;T&gt; {
+        override val size: Int
+            get() = helperSet.size
+
+        override fun contains(element: T) = helperSet.contains(element)
+        override fun containsAll(elements: Collection&lt;T&gt;) = helperSet.containsAll(elements)
+        override fun isEmpty() = helperSet.isEmpty()
+        override fun iterator() = helperSet.iterator()
+}
+</code></pre>
+<p>  可以看到，<code>MySet</code>的构造函数中接收了一个<code>HashSet</code>参数，这就相当于一个辅助对象。然后在<code>Set</code>接口所有的方法实现中，我们都没有进行自己的实现，而是调用了辅助对象中相应的方法实现，这其实就是一种委托模式。</p>
+<blockquote>
+<p>  这种写法的好处是什么呢？既然都是调用辅助对象的方法实现，那还不如直接使用辅助对象。</p>
+</blockquote>
+<p>  如果我们只是让大部分的方法实现调用辅助对象中的方法，少部分的方法实现由自己来重写，甚至加入一些自己独有的方法，那么<code>MySet</code>就会成为一个全新的数据结构类，这就是委托模式的意义所在。</p>
+<p>  但是这种写法也有一定的弊端，如果接口中的待实现方法比较少还好，要是有几十甚至上百个方法的话，每个都去这样调用辅助对象中的相应方法实现是很复杂的，不过在 Kotlin 中可以通过类委托的功能来解决这个问题。<br>
+　　Kotlin 中委托使用的关键字是<code>by</code>，我们只需要在接口声明的后面使用 by 关键字，再接上受委托的辅助对象，就可以免去之前所写的一大堆模板式的代码了，如下所示：</p>
+<pre><code class="language-java">    class MySet&lt;T&gt;(val helperSet: HashSet&lt;T&gt;) : Set&lt;T&gt; by helperSet {
+    }
+</code></pre>
+<p>  另外，如果我们要对某个方法进行重新实现，只需要单独重写那一个方法即可，其他的方法仍然可以享受类委托所带来的便利，如下所示：</p>
+<pre><code class="language-java">    class MySet&lt;T&gt;(val helperSet: HashSet&lt;T&gt;) : Set&lt;T&gt; by helperSet {
+        fun helloWorld() = println(&quot;Hello World&quot;)
+        override fun isEmpty() = false
+    }
+</code></pre>
+<p>  这里新增了一个<code>helloWorld()</code>方法，并且重写了<code>isEmpty()</code>方法，让它永远返回<code>false</code>。这当然是一种错误的做法，这里仅仅是为了演示一下而已。<br>
+　　现在<code>MySet</code>就成为了一个全新的数据结构类，它不仅永远不会为空，而且还能打印 &quot;Hello World&quot;，至于其他<code>Set</code>接口中的功能，则和<code>HashSet</code>保持一致。这就是 Kotlin 的类委托所能实现的功能。</p>
+<h2 id="委托属性">委托属性</h2>
+<p>  类委托的核心思想是将一个类的具体实现委托给另一个类去完成，而委托属性的核心思想是将一个属性（字段）的具体实现委托给另一个类去完成。<br>
+　　委托属性的语法结构，如下所示：</p>
+<pre><code class="language-java">    class MyClass {
+        var p by Delegate()
+    }
+</code></pre>
+<p>  这里使用<code>by</code>关键字连接了左边的<code>p</code>属性和右边的<code>Delegate</code>实例。<br>
+　　这种写法就代表着将<code>p</code>属性的具体实现委托给了<code>Delegate</code>类去完成。当调用 p 属性的时候会自动调用 Delegate 类的<code>getValue()</code>方法，当给 p 属性赋值的时候会自动调用 Delegate 类的<code>setValue()</code>方法。<br>
+　　因此，我们还得对<code>Delegate</code>类进行具体的实现才行，代码如下所示：</p>
+<pre><code class="language-java">    class Delegate {
+        var propValue: Any? = null
+        operator fun getValue(myClass: MyClass, prop: KProperty&lt;*&gt;): Any? {
+            return propValue
+        }
+
+        operator fun setValue(myClass: MyClass, prop: KProperty&lt;*&gt;, value: Any?) {
+            propValue = value
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  这是一种标准的代码实现模板，在<code>Delegate</code> 类中我们必须实现<code>getValue()</code>和<code>setValue()</code>这两个方法，并且都要使用<code>operator</code>关键字进行声明。</p>
+</blockquote>
+<p>  <code>getValue()</code>方法要接收两个参数：</p>
+<ul>
+<li>
+<p>第一个参数用于声明该<code>Delegate</code>类的委托功能可以在什么类中使用，这里写成<code>MyClass</code>表示仅可在 MyClass 类中使用。</p>
+</li>
+<li>
+<p>第二个参数<code>KProperty&lt;*&gt;</code>是Kotlin中的一个属性操作类，可用于获取各种属性相关的值，在当前场景下用不着，但是必须在方法参数上进行声明。另外，<code>&lt;*&gt;</code>这种泛型的写法表示你不知道或者不关心泛型的具体类型，只是为了通过语法编译而已。至于返回值可以声明成任何类型，根据具体的实现逻辑即可。</p>
+</li>
+</ul>
+<p>  <code>setValue()</code>方法也是相似的，只不过它要接收 3 个参数。前两个参数和<code>getValue()</code>方法是相同的，最后一个参数表示具体要赋值给委托属性的值，这个参数的类型必须和 getValue() 方法返回值的类型保持一致。</p>
+<p>  整个委托属性的工作流程：当给<code>MyClass</code>的<code>p</code>属性赋值时，就会调用<code>Delegate</code>类的<code>setValue()</code>方法，当获取 MyClass 中 p 属性的值时，就会调用 Delegate 类的<code>getValue()</code>方法。</p>
+<p>  不过，其实还存在一种情况可以不用在<code>Delegate</code>类中实现<code>setValue()</code>方法，那就是<code>MyClass</code>中的<code>p</code>属性是使用<code>val</code>关键字声明的。因为如果 p 属性是使用 val 关键字声明的，那么就意味着 p 属性是无法在初始化之后被重新赋值的，因此也就没有必要实现 setValue() 方法。</p>
+<h2 id="懒加载技术by-lazy">懒加载技术（by lazy）</h2>
+<blockquote>
+<p>  把想要延迟执行的代码放到<code>by lazy</code>代码块中，这样代码块中的代码在一开始的时候就不会执行，只有当相关变量首次被调用的时候，代码块中的代码才会执行。</p>
+</blockquote>
+<p>  实际上，<code>by lazy</code>并不是连在一起的关键字，只有<code>by</code>才是 Kotlin 中的关键字，<code>lazy</code>在这里只是一个高阶函数而已。<br>
+　　在<code>lazy</code>函数中会创建并返回一个<code>Delegate</code>对象，当调用<code>p</code>属性时，其实调用的是 Delegate 对象的<code>getValue()</code>方法，然后 getValue() 方法中又会调用 lazy 函数传入的<code>Lambda</code>表达式，这样表达式中的代码就可以得到执行了，并且调用 p 属性后得到的值就是 Lambda 表达式中最后一行代码的返回值。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kotlin：高阶函数详解]]></title>
+        <id>https://Petrichoroo.github.io/post/kotlingao-jie-han-shu-xiang-jie/</id>
+        <link href="https://Petrichoroo.github.io/post/kotlingao-jie-han-shu-xiang-jie/">
+        </link>
+        <updated>2022-08-20T08:35:58.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E5%AE%9A%E4%B9%89%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0">定义高阶函数</a></li>
+<li><a href="#%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8">内联函数的作用</a></li>
+<li><a href="#noinline-%E4%B8%8E-crossinline">noinline 与 crossinline</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="定义高阶函数">定义高阶函数</h2>
+<blockquote>
+<p>  如果一个函数接收另一个函数作为参数，或者返回值的类型是另一个函数，那么该函数就称为高阶函数。</p>
+</blockquote>
+<p>  编程语言中有整型、布尔型等字段类型，而 Kotlin 又增加了一个函数类型的概念。如果我们将这种函数类型添加到一个函数的参数声明或者返回值声明当中，那么这就是一个高阶函数了。<br>
+　　不同于定义一个普通的字段类型，函数类型的语法规则是有点特殊的，基本规则如下：</p>
+<pre><code class="language-java">    (String, Int) -&gt; Unit
+</code></pre>
+<p>  既然是定义一个函数类型，那么最关键的就是要声明该函数接收什么参数，以及它的返回值是什么。<br>
+　　因此，<code>-&gt;</code>左边的部分就是用来声明该函数接收什么参数的，多个参数之间使用逗号隔开，如果不接收任何参数，写一对空括号即可。而<code>-&gt;</code>右边的部分用于声明该函数的返回值是什么类型，如果没有返回值就使用<code>Unit</code>，它大致相当于 Java 中的<code>void</code>。</p>
+<p>  现在将上述函数类型添加到某个函数的参数声明或者返回值声明上，那么这个函数就是一个高阶函数了，如下所示：</p>
+<pre><code class="language-java">    fun example(func: (String, Int) -&gt; Unit) {
+        func(&quot;hello&quot;, 123)
+    }
+</code></pre>
+<p>  这里的<code>example()</code>函数接收了一个函数类型的参数，因此 example() 函数就是一个高阶函数。而调用一个函数类型的参数，它的语法类似于调用一个普通的函数，只需要在参数名的后面加上一对括号，并在括号中传入必要的参数即可。</p>
+<p>  高阶函数允许让函数类型的参数来决定函数的执行逻辑。即使是同一个高阶函数，只要传入不同的函数类型参数，那么它的执行逻辑和最终的返回结果就可能是完全不同的。<br>
+　　下面来举一个具体的例子：定义一个叫作<code>num1AndNum2()</code>的高阶函数，并让它接收两个整型和一个函数类型的参数。<br>
+　　我们在<code>num1AndNum2()</code>函数中对传入的两个整型参数进行某种运算，并返回最终的运算结果，但是具体进行什么运算是由传入的函数类型参数决定的。<br>
+　　新建一个<code>HigherOrderFunction.kt</code>文件，然后在这个文件中编写如下代码：</p>
+<pre><code class="language-java">    fun num1AndNum2(num1: Int, num2: Int, operation: (Int, Int) -&gt; Int): Int {
+        val result = operation(num1, num2)
+        return result
+    }
+</code></pre>
+<p>  <code>num1AndNum2()</code>函数的前两个参数没有什么需要解释的，第三个参数是一个接收两个整型参数并且返回值也是整型的函数类型参数。在 num1AndNum2() 函数中，我们没有进行任何具体的运算操作，而是将<code>num1</code>和<code>num2</code>参数传给了第三个函数类型参数，并获取它的返回值，最终将得到的返回值返回。</p>
+<blockquote>
+<p>  现在高阶函数已经定义好了，那么我们该如何调用它呢？</p>
+</blockquote>
+<p>  由于<code>num1AndNum2()</code>函数接收一个函数类型的参数，因此我们还得先定义与其函数类型相匹配的函数才行。在<code>HigherOrderFunction.kt</code>文件中添加如下代码：</p>
+<pre><code class="language-java">    fun plus(num1: Int, num2: Int): Int {
+        return num1 + num2
+    }
+
+    fun minus(num1: Int, num2: Int): Int {
+        return num1 - num2
+    }
+</code></pre>
+<p>  这里定义了两个函数，并且这两个函数的参数声明和返回值声明都和<code>num1AndNum2()</code>函数中的函数类型参数是完全匹配的。<br>
+　　有了上述函数之后，我们就可以调用<code>num1AndNum2()</code>函数了，在<code>main()</code>函数中编写如下代码：</p>
+<pre><code class="language-java">    fun main() {
+        val num1 = 100
+        val num2 = 80
+        val result1 = num1AndNum2(num1, num2, ::plus)
+        val result2 = num1AndNum2(num1, num2, ::minus)
+        println(&quot;result1 is $result1&quot;)
+        println(&quot;result2 is $result2&quot;)
+    }
+</code></pre>
+<p>  注意这里调用<code>num1AndNum2()</code>函数的方式，第三个参数使用了<code>::plus</code>和<code>::minus</code>这种写法。这是一种函数引用方式的写法，表示将<code>plus()</code>和<code>minus()</code>函数作为参数传递给 num1AndNum2() 函数。<br>
+　　而由于<code>num1AndNum2()</code>函数中使用了传入的函数类型参数来决定具体的运算逻辑，因此这里实际上就是分别使用了<code>plus()</code>和<code>minus()</code>函数来对两个数字进行运算。<br>
+　　现在运行一下程序，结果如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660986189494.png" alt="" loading="lazy"></p>
+<p>  使用这种函数引用的写法虽然能够正常工作，但是如果每次调用任何高阶函数的时候都还得先定义一个与其函数类型参数相匹配的函数，这种做法是比较复杂的。<br>
+　　因此 Kotlin 还支持其他多种方式来调用高阶函数，比如<code>Lambda</code>表达式、匿名函数、成员引用等。其中，Lambda 表达式是最常见也是最普遍的高阶函数调用方式。<br>
+　　上述代码如果使用<code>Lambda</code>表达式的写法来实现的话，代码如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        val num1 = 100
+        val num2 = 80
+        val result1 = num1AndNum2(num1, num2) { n1, n2 -&gt;
+            n1 + n2
+        }
+        val result2 = num1AndNum2(num1, num2) { n1, n2 -&gt;
+            n1 - n2
+        }
+        println(&quot;result1 is $result1&quot;)
+        println(&quot;result2 is $result2&quot;)
+    }
+</code></pre>
+<blockquote>
+<p>  <code>Lambda</code>表达式同样可以完整地表达一个函数的参数声明和返回值声明（Lambda 表达式中的最后一行代码会自动作为返回值），但是写法却更加精简。</p>
+</blockquote>
+<p>  现在可以将刚才定义的<code>plus(</code>)和<code>minus()</code>函数删掉了，重新运行一下代码，会发现结果是一模一样的。</p>
+<p>  之前使用的<code>apply</code>函数，它可以用于给<code>Lambda</code>表达式提供一个指定的上下文，当需要连续调用同一个对象的多个方法时，apply 函数可以让代码变得更加精简，比如<code>StringBuilder</code>就是一个典型的例子。<br>
+　　接下来我们就使用高阶函数模仿实现一个类似的功能。修改<code>HigherOrderFunction.kt</code>文件，在其中加入如下代码：</p>
+<pre><code class="language-java">    fun StringBuilder.build(block: StringBuilder.() -&gt; Unit): StringBuilder {
+        block()
+        return this
+    }
+</code></pre>
+<p>  这里给<code>StringBuilder</code>类定义了一个<code>build</code>扩展函数，这个扩展函数接收一个函数类型参数，并且返回值类型也是 StringBuilder。</p>
+<blockquote>
+<p>  注意，这个函数类型参数的声明方式和我们前面学习的语法有所不同：它在函数类型的前面加上了一个<code>StringBuilder. </code>的语法结构。其实这才是定义高阶函数完整的语法规则，在函数类型的前面加上<code>ClassName. </code>就表示这个函数类型是定义在哪个类当中的。</p>
+</blockquote>
+<p>  那么这里将函数类型定义到<code>StringBuilder</code>类当中有什么好处呢？好处就是当我们调用<code>build</code>函数时传入的<code>Lambda</code>表达式将会自动拥有 StringBuilder 的上下文，同时这也是<code>apply</code>函数的实现方式。<br>
+　　现在我们就可以使用自己创建的<code>build</code>函数来简化<code>StringBuilder</code>构建字符串的方式了。这里仍然用吃水果这个功能来举例：</p>
+<pre><code class="language-java">    fun main() {
+        val list = listOf(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Orange&quot;, &quot;Pear&quot;, &quot;Grape&quot;)
+        val result = StringBuilder().build {
+            append(&quot;Start eating fruits.\n&quot;)
+            for (fruit in list) {
+                append(fruit).append(&quot;\n&quot;)
+            }
+            append(&quot;Ate all fruits.&quot;)
+        }
+        println(result.toString())
+    }
+</code></pre>
+<p>  可以看到，<code>build</code>函数的用法和<code>apply</code>函数基本上是一模一样的，只不过我们编写的 build 函数目前只能作用在<code>StringBuilder</code>类上面，而 apply 函数是可以作用在所有类上面的。</p>
+<blockquote>
+<p>  如果想实现 apply 函数的这个功能，需要借助于 Kotlin 的泛型。</p>
+</blockquote>
+<h2 id="内联函数的作用">内联函数的作用</h2>
+<blockquote>
+<p>  高阶函数确实非常神奇，用途也十分广泛，可是它背后的实现原理是怎样的呢？</p>
+</blockquote>
+<p>  这里仍然使用刚才编写的<code>num1AndNum2()</code>函数来举例，代码如下所示：</p>
+<pre><code class="language-java">    fun num1AndNum2(num1: Int, num2: Int, operation: (Int, Int) -&gt; Int): Int {
+        val result = operation(num1, num2)
+        return result
+    }
+
+    fun main() {
+        val num1 = 100
+        val num2 = 80
+        val result = num1AndNum2(num1, num2) { n1, n2 -&gt;
+            n1 + n2
+        }
+    }
+</code></pre>
+<p>  可以看到，上述代码中调用了<code>num1AndNum2()</code>函数，并通过<code>Lambda</code>表达式指定对传入的两个整型参数进行求和。<br>
+　　但我们知道，Kotlin 的代码最终还是要编译成 Java 字节码的，但 Java 中并没有高阶函数的概念。</p>
+<blockquote>
+<p>  那么 Kotlin 究竟是如何让 Java 支持这种高阶函数的语法呢？</p>
+</blockquote>
+<p>  Kotlin 的编译器会将这些高阶函数的语法转换成 Java 支持的语法结构，上述的 Kotlin 代码大致会被转换成如下 Java 代码：</p>
+<pre><code class="language-java">    public static int num1AndNum2(int num1, int num2, Function operation) {
+        int result =(int) operation . invoke (num1, num2);
+        return result;
+    }
+    public static void main() {
+        int num1 = 100;
+        int num2 = 80;
+        int result = num1AndNum2 (num1, num2, new Function() {
+            @Override
+            public Integer invoke(Integer n1, Integer n2) {
+                return n1 + n2;
+            }
+        });
+    }
+</code></pre>
+<p>  这里对这段代码进行了些许调整，并不是严格对应了 Kotlin 转换成的 Java 代码。<br>
+　　可以看到，在这里<code>num1AndNum2()</code>函数的第三个参数变成了一个<code>Function</code>接口，这是一种 Kotlin 内置的接口，里面有一个待实现的<code>invoke()</code>函数。而 num1AndNum2() 函数其实就是调用了 Function 接口的 invoke() 函数，并把<code>num1</code>和<code>num2</code>参数传了进去。<br>
+　　在调用<code>num1AndNum2()</code>函数的时候，之前的 Lambda 表达式在这里变成了<code>Function</code>接口的匿名类实现，然后在<code>invoke()</code>函数中实现了<code>n1 + n2</code>的逻辑，并将结果返回。<br>
+　　这就是 Kotlin 高阶函数背后的实现原理。会发现原来我们一直使用的 Lambda 表达式在底层被转换成了匿名类的实现方式。这就表明，我们每调用一次 Lambda 表达式，都会创建一个新的匿名类实例，当然也会造成额外的内存和性能开销。<br>
+　　为了解决这个问题，Kotlin 提供了内联函数的功能，它可以将使用 Lambda 表达式带来的运行时开销完全消除。<br>
+　　<br>
+  内联函数的用法非常简单，只需要在定义高阶函数时加上<code>inline</code>关键字的声明即可，如下所示：</p>
+<pre><code class="language-java">    inline fun num1AndNum2(num1: Int, num2: Int, operation: (Int, Int) -&gt; Int): Int {
+        val result = operation(num1, num2)
+        return result
+    }
+</code></pre>
+<p>  那么内联函数的工作原理又是什么呢？其实并不复杂，就是 Kotlin 编译器会将内联函数中的代码在编译的时候自动替换到调用它的地方，这样也就不存在运行时的开销。<br>
+　　<br>
+  下面我们通过图例的方式来详细说明内联函数的代码替换过程。<br>
+　　首先，Kotlin 编译器会将 Lambda 表达式中的代码替换到函数类型参数调用的地方，如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660987764054.png" alt="" loading="lazy"><br>
+  接下来，再将内联函数中的全部代码替换到函数调用的地方，如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660987825486.png" alt="" loading="lazy"><br>
+  最终的代码就被替换成了下图所示的样子：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660987914184.png" alt="" loading="lazy"></p>
+<p>  也正是如此，内联函数才能完全消除 Lambda 表达式所带来的运行时开销。</p>
+<h2 id="noinline-与-crossinline">noinline 与 crossinline</h2>
+<p>  接下来讨论一些更加特殊的情况。比如，一个高阶函数中如果接收了两个或者更多函数类型的参数，这时我们给函数加上了<code>inline</code>关键字，那么 Kotlin 编译器会自动将所有引用的 Lambda 表达式全部进行内联。<br>
+　　但是，如果我们只想内联其中的一个 Lambda 表达式该怎么办呢？这时就可以使用<code>noinline</code>关键字，如下所示：</p>
+<pre><code class="language-java">    inline fun inlineTest(block1: () -&gt; Unit, noinline block2: () -&gt; Unit) {
+    }
+</code></pre>
+<p>  这里在<code>block2</code>参数的前面加上了一个<code>noinline</code>关键字，那么现在就只会对<code>block1</code>参数所引用的 Lambda 表达式进行内联。</p>
+<blockquote>
+<p>  为什么 Kotlin 还要提供一个<code>noinline</code>关键字来排除内联功能呢？</p>
+</blockquote>
+<p>  因为内联的函数类型参数在编译的时候会被进行代码替换，因此它没有真正的参数属性。非内联的函数类型参数可以自由地传递给其他任何函数，因为它就是一个真实的参数，而内联的函数类型参数只允许传递给另外一个内联函数，这也是它最大的局限性。<br>
+　　另外，内联函数和非内联函数还有一个重要的区别，那就是内联函数所引用的 Lambda 表达式中是可以使用<code>return</code>关键字来进行函数返回的，而非内联函数只能进行局部返回。<br>
+　　为了说明这个问题，我们来看下面的例子：</p>
+<pre><code class="language-java">    fun printString(str: String, block: (String) -&gt; Unit) {
+        println(&quot;printString begin&quot;)
+        block(str)
+        println(&quot;printString end&quot;)
+    }
+
+    fun main() {
+        println(&quot;main start&quot;)
+        val str = &quot;&quot;
+        printString(str) { s -&gt;
+            println(&quot;lambda start&quot;)
+            if (s.isEmpty()) return@printString
+            println(s)
+            println(&quot;lambda end&quot;)
+        }
+        println(&quot;main end&quot;)
+    }
+</code></pre>
+<p>  这里定义了一个叫作<code>printString()</code>的高阶函数，用于在 Lambda 表达式中打印传入的字符串参数。但是如果字符串参数为空，那么就不进行打印。注意，Lambda 表达式中是不允许直接使用<code>return</code>关键字的，这里使用了<code>return@printString</code>的写法，表示进行局部返回，并且不再执行 Lambda 表达式的剩余部分代码。<br>
+　　现在我们就刚好传入一个空的字符串参数，运行程序，打印结果如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660996793096.png" alt="" loading="lazy"></p>
+<p>  可以看到，除了 Lambda 表达式中<code>return@printString</code>语句之后的代码没有打印，其他的日志是正常打印的，说明 return@printString 确实只能进行局部返回。<br>
+　　但是如果我们将<code>printString()</code>函数声明成一个内联函数，那么情况就不一样了，如下所示：</p>
+<pre><code class="language-java">    inline fun printString(str: String, block: (String) -&gt; Unit) {
+        println(&quot;printString begin&quot;)
+        block(str)
+        println(&quot;printString end&quot;)
+    }
+
+    fun main() {
+        println(&quot;main start&quot;)
+        val str = &quot;&quot;
+        printString(str) { s -&gt;
+            println(&quot;lambda start&quot;)
+            if (s.isEmpty()) return
+            println(s)
+            println(&quot;lambda end&quot;)
+        }
+        println(&quot;main end&quot;)
+    }
+</code></pre>
+<p>  现在<code>printString()</code>函数变成了内联函数，我们就可以在 Lambda 表达式中使用<code>return</code>关键字了。此时的 return 代表的是返回外层的调用函数，也就是<code>main()</code>函数。<br>
+　　现在重新运行一下程序，打印结果如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660997162005.png" alt="" loading="lazy"></p>
+<p>  可以看到，不管是<code>main()</code>函数还是<code>printString()</code>函数，确实都在<code>return</code>关键字之后停止执行了，和我们所预期的结果一致。</p>
+<p>  将高阶函数声明成内联函数是一种良好的编程习惯，事实上，绝大多数高阶函数是可以直接声明成内联函数的，但是也有少部分例外的情况。观察下面的代码示例：</p>
+<pre><code class="language-java">    inline fun runRunnable(block: () -&gt; Unit) {
+        val runnable = Runnable {
+            block()
+        }
+        runnable.run()
+    }
+</code></pre>
+<p>  这段代码在没有加上<code>inline</code>关键字声明的时候绝对是可以正常工作的，但是在加上 inline 关键字之后就会提示如图所示的错误：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660997947655.png" alt="" loading="lazy"></p>
+<p>  这个错误出现的原因解释起来可能会稍微有点复杂。<br>
+　　首先，在<code>runRunnable()</code>函数中，我们创建了一个<code>Runnable</code>对象，并在 Runnable 的 Lambda 表达式中调用了传入的函数类型参数。而 Lambda 表达式在编译的时候会被转换成匿名类的实现方式，也就是说，上述代码实际上是在匿名类中调用了传入的函数类型参数。<br>
+　　而内联函数所引用的<code>Lambda</code>表达式允许使用<code>return</code>关键字进行函数返回，但是由于我们是在<br>
+匿名类中调用的函数类型参数，此时是不可能进行外层调用函数返回的，最多只能对匿名类中的函数调用进行返回，因此这里就提示了上述错误。<br>
+　　也就是说，如果我们在高阶函数中创建了另外的 Lambda 或者匿名类的实现，并且在这些实现中调用函数类型参数，此时再将高阶函数声明成内联函数，就一定会提示错误。<br>
+　　那么是不是在这种情况下就真的无法使用内联函数了呢？也不是，比如借助<code>crossinline</code>关键字就可以很好地解决这个问题：</p>
+<pre><code class="language-java">    inline fun runRunnable(crossinline block: () -&gt; Unit) {
+        val runnable = Runnable {
+            block()
+        }
+        runnable.run()
+    }
+</code></pre>
+<p>  前面已经分析过错误的原因，就是因为内联函数的<code>Lambda</code>表达式中允许使用<code>return</code>关键字，和高阶函数的匿名类实现中不允许使用 return 关键字之间造成了冲突。而<code>crossinline</code>关键字就像一个契约，它用于保证在内联函数的 Lambda 表达式中一定不会使用 return 关键字，这样冲突就不存在了，问题也就巧妙地解决了。<br>
+　　声明<code>crossinline</code>之后，就无法在调用<code>runRunnable</code>函数时的 Lambda 表达式中使<code>return</code>关键字进行函数返回了，但是仍然可以使用<code>return@runRunnable</code>的写法进行局部返回。<br>
+　　总体来说，除了在 return关 键字的使用上有所区别之外，<code>crossinline</code>保留了内联函数的其他所有特性。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[实现强制下线功能（Kotlin)]]></title>
+        <id>https://Petrichoroo.github.io/post/shi-xian-qiang-zhi-xia-xian-gong-neng-kotlin/</id>
+        <link href="https://Petrichoroo.github.io/post/shi-xian-qiang-zhi-xia-xian-gong-neng-kotlin/">
+        </link>
+        <updated>2022-08-20T07:18:20.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#%E5%BC%BA%E5%88%B6%E4%B8%8B%E7%BA%BF">强制下线</a>
+<ul>
+<li><a href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0">具体实现</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="强制下线">强制下线</h1>
+<hr>
+<h2 id="具体实现">具体实现</h2>
+<blockquote>
+<p>  实现强制下线功能的思路比较简单，只需要在界面上弹出一个对话框，让用户无法进行任何其他操作，必须点击对话框中的“确定”按钮，然后回到登录界面即可。</p>
+</blockquote>
+<p>  新建一个<code>BroadcastBestPractice</code>项目，由于强制下线功能需要先关闭所有的<code>Activity</code>，然后回到登录界面，因此先创建一个<code>ActivityCollector</code>类用于管理所有的Activity，代码如下所示：</p>
+<pre><code class="language-java">    object ActivityCollector {  //单例类 全局最多只能拥有一个实例
+        private val activities = ArrayList&lt;Activity&gt;()
+
+        fun addActivity(activity: Activity) {
+            activities.add(activity)
+        }
+
+        fun removeActivity(activity: Activity) {
+            activities.remove(activity)
+        }
+
+        fun finishAll() {
+            for (activity in activities) {
+                if (!activity.isFinishing) {
+                    activity.finish()
+                }
+            }
+            activities.clear()
+        }
+    }
+</code></pre>
+<p>  然后创建<code>BaseActivity</code>类作为所有 Activity 的父类，代码如下所示：</p>
+<pre><code class="language-java">    open class BaseActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            ActivityCollector.addActivity(this)
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            ActivityCollector.removeActivity(this)
+        }
+    }
+</code></pre>
+<p>  然后创建一个<code>LoginActivity</code>来作为登录界面，然后编辑布局文件<code>activity_login.xml</code>，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;60dp&quot;
+            android:layout_marginTop=&quot;180dp&quot;&gt;
+
+            &lt;TextView
+                android:layout_width=&quot;90dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:text=&quot;Account:&quot;
+                android:textSize=&quot;18sp&quot; /&gt;
+
+            &lt;EditText
+                android:id=&quot;@+id/accountEdit&quot;
+                android:layout_width=&quot;0dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:layout_weight=&quot;1&quot; /&gt;
+        &lt;/LinearLayout&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;60dp&quot;&gt;
+
+            &lt;TextView
+                android:layout_width=&quot;90dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:text=&quot;Account:&quot;
+                android:textSize=&quot;18sp&quot; /&gt;
+
+            &lt;EditText
+                android:id=&quot;@+id/passwordEdit&quot;
+                android:layout_width=&quot;0dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_gravity=&quot;center_vertical&quot;
+                android:layout_weight=&quot;1&quot;
+                android:inputType=&quot;textPassword&quot; /&gt;
+        &lt;/LinearLayout&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/login&quot;
+            android:layout_width=&quot;200dp&quot;
+            android:layout_height=&quot;60dp&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;
+            android:text=&quot;Login&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  布局最外层是一个纵向的<code>LinearLayout</code>，里面包含了 3 行直接子元素。<br>
+　　第一行是一个横向的 LinearLayout，用于输入账号信息；第二行也是一个横向的 LinearLayout，用于输入密码信息；第三行是一个登录按钮。<br>
+　　接下来修改<code>LoginActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class LoginActivity : BaseActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_login)
+            val button: Button = findViewById(R.id.login)
+            val accountEdit: EditText = findViewById(R.id.accountEdit)
+            val passwordEdit: EditText = findViewById(R.id.passwordEdit)
+            button.setOnClickListener {
+                val account = accountEdit.text.toString()
+                val password = passwordEdit.text.toString()
+                if (account == &quot;admin&quot; &amp;&amp; password == &quot;123456&quot;) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, &quot;account or password is invalid&quot;, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+</code></pre>
+<p>  这里模拟了一个简单的登录功能。首先将<code>LoginActivity</code>的继承结构改成继承自<code>BaseActivity</code>，然后在登录按钮的点击事件里对输入的账号和密码进行判断。<br>
+　　因此，可以将<code>MainActivity</code>理解成是登录成功后进入的程序主界面，这里我们并不需要在主界面提供什么花哨的功能，只需要加入强制下线功能就可以了。修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:orientation=&quot;vertical&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot; &gt;
+        &lt;Button
+            android:id=&quot;@+id/forceOffline&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;Send force offline broadcast&quot; 
+            android:textAllCaps=&quot;false&quot;/&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  这里只有一个按钮用于触发强制下线功能。然后修改<code>MainActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : BaseActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            val forceOffline: Button = findViewById(R.id.forceOffline)
+            forceOffline.setOnClickListener {
+                val intent = Intent(&quot;com.example.broadcastbestpractice.FORCE_OFFLINE&quot;)
+                sendBroadcast(intent)
+            }
+        }
+    }
+</code></pre>
+<p>  这里在按钮的点击事件里发送了一条通知程序强制用户下线的广播，也就是说，强制用户下线的逻辑并不是写在<code>MainActivity</code>里的，而是应该写在接收这条广播的<code>BroadcastReceiver</code>里。<br>
+　　这样强制下线的功能就不会依附于任何界面了，不管是在程序的任何地方，只要发出这样一条广播，就可以完成强制下线的操作。<br>
+　　由于<code>BroadcastReceiver</code>中需要弹出一个对话框来阻塞用户的正常操作，但如果创建的是一个静态注册的 BroadcastReceiver，是没有办法在<code>onReceive()</code>方法里弹出对话框这样的 UI 控件的，而我们显然也不可能在每个 Activity 中都注册一个动态的 BroadcastReceiver。<br>
+　　好的解决办法是在<code>BaseActivity</code>中动态注册一个 BroadcastReceiver 就可以了，因为所有的 Activity 都继承自 BaseActivity。<br>
+　　修改<code>BaseActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    open class BaseActivity : AppCompatActivity() {
+        lateinit var receiver: ForceOfflineReceiver
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            ActivityCollector.addActivity(this)
+        }
+
+        /**
+        * 始终需要保证只有处于栈顶的Activity才能接收到这条强制下线广播
+        * 非栈顶的Activity不应该也没必要接收这条广播
+        * 所以写在onResume()和onPause()方法里就可以很好地解决这个问题
+        * 当一个Activity失去栈顶位置时就会自动取消BroadcastReceiver的注册。*/
+        override fun onResume() {
+            super.onResume()
+            val intentFilter = IntentFilter()
+            intentFilter.addAction(&quot;com.example.broadcastbestpractice.FORCE_OFFLINE&quot;)
+            receiver = ForceOfflineReceiver()
+            registerReceiver(receiver, intentFilter)
+        }
+
+        override fun onPause() {
+            super.onPause()
+            unregisterReceiver(receiver)
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            ActivityCollector.removeActivity(this)
+        }
+
+        inner class ForceOfflineReceiver : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                AlertDialog.Builder(context).apply {
+                    setTitle(&quot;Warning&quot;)
+                    setMessage(&quot;You are forced to be offline. Please try to login again.&quot;)
+                    setCancelable(false)    //将对话框设为不可取消
+                    setPositiveButton(&quot;OK&quot;) { _, _ -&gt;
+                        ActivityCollector.finishAll()   //销毁所有Activity
+                        val intent = Intent(context, LoginActivity::class.java)
+                        context.startActivity(intent)   //重新启动LoginActivity
+                    }
+                    show()
+                }
+            }
+        }
+    }
+</code></pre>
+<p>  这样的话，所有强制下线的逻辑就已经完成了，接下来我们还需要对<code>AndroidManifest.xml</code>文<br>
+件进行修改，代码如下所示：</p>
+<pre><code class="language-java">    &lt;application
+        ...
+        &lt;activity android:name=&quot;.LoginActivity&quot;&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name=&quot;android.intent.action.MAIN&quot;/&gt;
+                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot;/&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+        
+        &lt;activity android:name=&quot;.MainActivity&quot;&gt;
+        &lt;/activity&gt;
+    &lt;/application&gt;
+</code></pre>
+<p>  就是将主 Activity 设置为<code>LoginActivity</code>，而不再是<code>MainActivity</code>，因为我们肯定不希望用户在没登录的情况下就能直接进入程序主界面。</p>
+<p>  现在来尝试运行一下程序。首先会进入登录界面，并可以在这里输入账号和密码，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984254228.png" alt="" loading="lazy"><br>
+  如果输入的账号密码正确，点击登录按钮就会进入程序的主界面，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984324934.png" alt="" loading="lazy"><br>
+  这时点击一下发送广播的按钮，就会发出一条强制下线的广播，<code>ForceOfflineReceiver</code>收到这条广播后会弹出一个对话框，提示用户已被强制下线，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984387773.png" alt="" loading="lazy"><br>
+  这时用户将无法再对界面的任何元素进行操作，只能点击“OK”按钮，然后重新回到登录界面，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660984424487.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kotlin：扩展函数和运算符重载]]></title>
+        <id>https://Petrichoroo.github.io/post/kotlinkuo-zhan-han-shu-he-yun-suan-fu-chong-zai/</id>
+        <link href="https://Petrichoroo.github.io/post/kotlinkuo-zhan-han-shu-he-yun-suan-fu-chong-zai/">
+        </link>
+        <updated>2022-08-18T17:12:29.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E6%89%A9%E5%B1%95%E5%87%BD%E6%95%B0">扩展函数</a></li>
+<li><a href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD">运算符重载</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="扩展函数">扩展函数</h2>
+<blockquote>
+<p>  扩展函数表示即使在不修改某个类的源码的情况下，仍然可以打开这个类，向该类添加新的函数。</p>
+</blockquote>
+<p>  比如一段字符串中可能包含字母、数字和特殊符号等字符，现在我们希望统计字符串中字母的数量，你要怎么实现这个功能呢？<br>
+　　如果按照一般的编程思维，可能大多数人会很自然地写出如下函数：</p>
+<pre><code class="language-java">    object StringUtil {
+        fun lettersCount(str: String): Int {
+            var count = 0
+            for (char in str) {
+                if (char.isLetter()) {
+                    count++
+                }
+            }
+            return count
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  这里先定义了一个<code>StringUtil</code>单例类，然后在这个单例类中定义了一个<code>lettersCount()</code>函数，该函数接收一个字符串参数。</p>
+</blockquote>
+<p>  现在，当我们需要统计某个字符串中的字母数量时，只需要编写如下代码即可：</p>
+<pre><code class="language-java">    val str = &quot;ABC123xyz!@#&quot;
+    val count = StringUtil.lettersCount(str)
+</code></pre>
+<p>  这是 Java 编程中最标准的实现思维。但是有了扩展函数之后就不一样了，我们可以使用一种更加面向对象的思维来实现这个功能，比如说将<code>lettersCount()</code>函数添加到<code>String</code>类当中。<br>
+　　定义扩展函数的语法结构如下所示：</p>
+<pre><code class="language-java">    fun ClassName.methodName(param1: Int, param2: Int): Int {
+        return 0
+    }
+</code></pre>
+<p>  相比于定义一个普通的函数，定义扩展函数只需要在函数名的前面加上一个<code>ClassName.</code>的语法结构，就表示将该函数添加到指定类当中了。<br>
+　　接下来我们就尝试使用扩展函数的方式来优化刚才的统计功能。<br>
+　　由于我们希望向<code>String</code>类中添加一个扩展函数，因此需要先创建一个<code>String.kt</code>文件。</p>
+<blockquote>
+<p>  建议向哪个类中添加扩展函数，就定义一个同名的<code>Kotlin</code>文件，这样便于以后查找。</p>
+</blockquote>
+<p>  当然，扩展函数也是可以定义在任何一个现有类当中的，并不一定非要创建新文件。不过通常来说，最好将它定义成顶层方法，这样可以让扩展函数拥有全局的访问域。现在在 String.kt 文件中编写如下代码：</p>
+<pre><code class="language-java">    fun String.lettersCount(): Int {
+        var count = 0
+        for (char in this) {
+            if (char.isLetter()) {
+                count++
+            }
+        }
+        return count
+    }
+</code></pre>
+<p>  现在我们将<code>lettersCount()</code>方法定义成了<code>String</code>类的扩展函数，那么函数中就自动拥有了 String 实例的上下文。因此 lettersCount() 函数就不再需要接收一个字符串参数了，而是直接遍历<code>this</code>即可，因为现在 this 就代表着字符串本身。<br>
+　　定义好了扩展函数之后，统计某个字符串中的字母数量只需要这样写即可：</p>
+<pre><code class="language-java">    val count = &quot;ABC123xyz!@#&quot;.lettersCount()
+</code></pre>
+<blockquote>
+<p>  扩展函数在很多情况下可以让 API 变得更加简洁、丰富，更加面向对象。</p>
+</blockquote>
+<p>  除了 String 类之外，我们还可以向任何类中添加扩展函数，Kotlin 对此基本没有限制。如果能利用好扩展函数这个功能，将会大幅度地提升代码质量和开发效率。</p>
+<h2 id="运算符重载">运算符重载</h2>
+<blockquote>
+<p>  Kotlin 允许我们将所有的运算符甚至其他的关键字进行重载，从而拓展这些运算符和关键字的用法。比如允许我们让任意两个对象进行相加，或者是进行更多其他的运算操作。</p>
+</blockquote>
+<p>  运算符重载使用的是<code>operator</code>关键字，只要在指定函数的前面加上 operator 关键字，就可以实现运算符重载的功能。<br>
+　　但问题在于这个指定函数是什么？这是运算符重载里面比较复杂的一个问题，因为不同的运算符对应的重载函数也是不同的。比如说加号运算符对应的是<code>plus()</code>函数，减号运算符对应的是<code>minus()</code>函数。<br>
+　　这里以加号运算符为例，如果想要实现让两个对象相加的功能，那么它的语法结构如下：</p>
+<pre><code class="language-java">    class Obj {
+        operator fun plus(obj: Obj): Obj {
+        // 处理相加的逻辑
+        }
+    }
+</code></pre>
+<p>  在上述语法结构中，关键字<code>operator</code>和函数名<code>plus</code>都是固定不变的，而接收的参数和函数返回值可以根据你的逻辑自行设定。<br>
+　　那么上述代码就表示一个 Obj 对象可以与另一个 Obj 对象相加，最终返回一个新的 Obj 对象。对应的调用方式如下：</p>
+<pre><code class="language-java">    val obj1 = Obj()
+    val obj2 = Obj()
+    val obj3 = obj1 + obj2
+</code></pre>
+<blockquote>
+<p>  这种<code>obj1 + obj2</code>的语法看上去好像很神奇，但其实这就是 Kotlin 给我们提供的一种语法糖，它会在编译的时候被转换成<code>obj1.plus(obj2)</code>的调用方式。</p>
+</blockquote>
+<p>  下面开始实现一个更加有意义功能：让两个<code>Money</code>对象相加。<br>
+　　首先定义 Money 类的结构，这里让 Money 的主构造函数接收一个<code>value</code>参数，用于表示钱的金额。创建<code>Money.kt</code>文件，代码如下所示：</p>
+<pre><code class="language-java">    class Money(val value: Int) {
+        operator fun plus(money: Money): Money {
+            val sum = value + money.value
+            return Money(sum)
+        }
+    }
+</code></pre>
+<p>  这里使用了<code>operator</code>关键字来修饰<code>plus()</code>函数，这是必不可少的。在 plus() 函数中，我们将当前 Money 对象的<code>value</code>和参数传入的 Money 对象的 value 相加，然后将得到的和传给一个新的 Money 对象并将该对象返回。<br>
+　　现在我们可以使用如下代码来对刚刚编写的功能进行测试：</p>
+<pre><code class="language-java">    val money1 = Money(5)
+    val money2 = Money(10)
+    val money3 = money1 + money2
+    println(money3.value)
+</code></pre>
+<blockquote>
+<p>  上述代码执行结果一定是 15</p>
+</blockquote>
+<p>   Money 对象只能允许和另一个 Money 对象相加是不够方便的，因此下面实现 Money 对象直接和数字相加的功能，因为 Kotlin 允许我们对同一个运算符进行多重重载，如下所示：</p>
+<pre><code class="language-java">    class Money(val value: Int) {
+        operator fun plus(money: Money): Money {
+            val sum = value + money.value
+            return Money(sum)
+        }
+        operator fun plus(newValue: Int): Money {
+            val sum = value + newValue
+            return Money(sum)
+        }
+    }
+</code></pre>
+<p>  这里我们又重载了一个<code>plus()</code>函数，不过这次接收的参数是一个整型数字。那么现在，<code>Money</code>对象就拥有了和数字相加的能力，如下：</p>
+<pre><code class="language-java">    val money1 = Money(5)
+    val money2 = Money(10)
+    val money3 = money1 + money2
+    val money4 = money3 + 20
+    println(money4.value)
+</code></pre>
+<blockquote>
+<p>  这里让 money3 对象再加上 20 的金额，最终打印的结果就变成了 35。</p>
+</blockquote>
+<p>  当然，我们还可以对这个例子进一步扩展，比如加上汇率转换的功能。让 1 人民币的 Money 对象和 1 美元的 Money 对象相加，然后根据实时汇率进行转换，从而返回一个新的 Money 对象。</p>
+<p>  实际上 Kotlin 允许我们重载的运算符和关键字多达十几个。下表列出了所有常用的可重载运算符和关键字对应的语法糖表达式，以及它们会被转换成的实际调用函数。如果我们想重载其中某一种运算符或关键字，只要参考刚才加号运算符重载的写法去实现即可。<br>
+<img src="https://Petrichoroo.github.io/post-images/1660934169029.png" alt="" loading="lazy"></p>
+<p>  之前多次使用了一个随机生成字符串长度的函数，代码如下所示：</p>
+<pre><code class="language-java">    fun getRandomLengthString(str: String): String {
+        val n = (1..20).random()
+        val builder = StringBuilder()
+        repeat(n) {
+            builder.append(str)
+        }
+        return builder.toString()
+    }
+</code></pre>
+<p>  这个函数的核心思想就是将传入的字符串重复 n 次，下面实现使用<code>str * n</code>这种写法来表示让 str 字符串重复 n 次。<br>
+　　要让一个字符串可以乘以一个数字，那么肯定要在<code>String</code>类中重载乘号运算符才行，但是 String 类是系统提供的类，我们无法修改这个类的代码。这个时候就可以借助扩展函数功能向 String 类中添加新函数了。<br>
+　　新建<code>String.kt</code>文件，然后加入如下代码：</p>
+<pre><code class="language-java">    operator fun String.times(n: Int): String {
+        val builder = StringBuilder()
+        repeat(n) {
+            builder.append(this)
+        }
+        return builder.toString()
+    }
+</code></pre>
+<p>  首先，<code>operator</code>关键字肯定是必不可少的，然后既然是要重载乘号运算符，参看上表可知，函数名必须是<code>times</code>，最后，由于是定义扩展函数，因此还要在函数名前面加上<code>String.</code>的语法结构。<br>
+　　现在，字符串就拥有了和一个数字相乘的能力，比如执行如下代码：</p>
+<pre><code class="language-java">    val str = &quot;abc&quot; * 3
+    println(str)
+</code></pre>
+<p>  最后，其实 Kotlin 的<code>String</code>类中已经提供了一个用于将字符串重复 n 遍的<code>repeat()</code>函数，因此<code>times()</code>函数还可以进一步精简成如下形式：</p>
+<pre><code class="language-java">    operator fun String.times(n: Int) = repeat(n)
+</code></pre>
+<p>  现在可以<code>getRandomLengthString()</code>函数中使用上述写法，如下：</p>
+<pre><code class="language-java">    fun getRandomLengthString(str: String) = str * (1..20).random()
+</code></pre>
+]]></content>
+    </entry>
+</feed>

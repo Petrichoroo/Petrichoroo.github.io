@@ -1,0 +1,437 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Kotlin：使用协程编写高效的并发程序 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Kotlin：使用协程编写高效的并发程序
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-23 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/f0WJ2wxNg/" class="post-tags">
+                            # Kotlin
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E5%8D%8F%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">协程的基本用法</a></li>
+<li><a href="#%E6%9B%B4%E5%A4%9A%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%9E%84%E9%80%A0%E5%99%A8">更多的作用域构造器</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E5%8D%8F%E7%A8%8B%E7%AE%80%E5%8C%96%E5%9B%9E%E8%B0%83%E7%9A%84%E5%86%99%E6%B3%95">使用协程简化回调的写法</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="协程的基本用法">协程的基本用法</h2>
+<p>  线程需要依靠操作系统的调度才能实现不同线程之间的切换，而使用协程可以仅在编程语言的层面就能实现不同协程之间的切换，从而提升了并发编程的运行效率。<br>
+　　Kotlin 没有将协程纳入标准库的 API 当中，而是以依赖库的形式提供，可到<a href="https://github.com/Kotlin/kotlinx.coroutines">Github</a>查看最新版本，然后在app/build.gradle文件当中添加如下依赖库：</p>
+<pre><code class="language-java">    dependencies {
+        ...
+        implementation &quot;org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4&quot;
+        implementation &quot;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4&quot; //Android项目中使用
+    }
+</code></pre>
+<p>  如何开启一个协程？最简单的方式就是使用<code>Global.launch</code>函数，如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        GlobalScope.launch {
+            println(&quot;codes run in coroutine scope&quot;)
+        }
+    }
+</code></pre>
+<p>  <code>GlobalScope.launch</code>函数创建一个协程的作用域，这样传递给<code>launch</code>函数的代码块（Lambda表达式）就是在协程中运行的了。<br>
+　　运行<code>main()</code>函数，我们会发现是没有日志输出的。由于<code>Global.launch</code>函数每次创建的都是一个顶层协程，这种协程当应用程序运行结束时也会跟着一起结束，因此代码块中的代码还没来得及运行时，应用程序就结束了。</p>
+<p>  <code>runBlocking</code>函数可以应用程序在协程中所有代码都运行完了之后再结束，如下：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            println(&quot;codes run in coroutine scope&quot;)
+            delay(1500)
+            println(&quot;codes run in coroutine scope finished&quot;)
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  <code>delay()</code>函数让当前协程延迟指定时间后再运行，但它和<code>Thread.sleep()</code>方法不同。<br>
+　　delay() 函数是一个非阻塞式的挂起函数，它只会挂起当前协程，并不会影响其他协程的运行。而Thread.sleep() 方法会阻塞当前的线程，这样运行在该线程下的所有协程都会被阻塞。<br>
+　　注意，delay() 函数只能在协程的作用域或其他挂起函数中调用。</p>
+</blockquote>
+<p>  <code>runBlocking</code>函数会创建一个协程的作用域，它可以保证在协程作用域内的所有代码和子协程没有全部执行完之前一直阻塞当前线程。</p>
+<blockquote>
+<p>  需要注意的是，<code>runBlocking</code>函数通常只应该在测试环境下使用，在正式环境中使用容易产生一些性能上的问题。</p>
+</blockquote>
+<p>  <code>launch</code>函数可以创建多个协程，如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            launch {
+                println(&quot;launch1&quot;)
+                delay(1000)
+                println(&quot;launch1 finished&quot;)
+            }
+            launch {
+                println(&quot;launch2&quot;)
+                delay(1000)
+                println(&quot;launch2 finished&quot;)
+            }
+        }
+    }
+</code></pre>
+<p>  注意这里的<code>launch</code>函数和刚才所使用的<code>GlobalScope.launch</code>函数不同。首先它必须在协程的作用域中才能调用，其次它会在当前协程的作用域下创建子协程。子协程的特点是如果外层作用域的协程结束了，该作用域下的所有子协程也会一同结束。</p>
+<p>  不过，随着<code>launch</code>函数中的逻辑越来越复杂，可能需要将部分代码提取到一个单独的函数中。这个时候就产生了一个问题：在 launch 函数中编写的代码是拥有协程作用域的，但是提取到一个单独的函数中就没有协程作用域了，那么该如何调用像<code>delay()</code>这样的挂起函数呢？<br>
+　　为此 Kotlin 提供了一个<code>suspend</code>关键字，使用它可以将任意函数声明成挂起函数，而挂起函数之间都是可以互相调用的，如下所示：</p>
+<pre><code class="language-java">    suspend fun printDot() {
+        println(&quot;.&quot;)
+        delay(1000)
+    }
+</code></pre>
+<p>  <code>suspend</code>关键字只能将一个函数声明成挂起函数，是无法给它提供协程作用域的。<br>
+　　比如尝试在<code>printDot()</code>函数中调用 launch 函数，一定是无法调用成功的，因为 launch 函数要求必须在协程作用域当中才能调用。<br>
+　　这个问题可以借助<code>coroutineScope</code>函数来解决。coroutineScope 函数也是一个挂起函数，因此可以在任何其他挂起函数中调用。它的特点是会继承外部的协程的作用域并创建一个子协程，借助这个特性，我们就可以给任意挂起函数提供协程作用域。示例写法如下：</p>
+<pre><code class="language-java">    suspend fun printDot() = coroutineScope {
+        launch {
+            println(&quot;.&quot;)
+            delay(1000)
+        }
+    }
+</code></pre>
+<p>  另外，<code>coroutineScope</code>函数和<code>runBlocking</code>函数还有点类似，它可以保证其作用域内的所有代码和子协程在全部执行完之前，外部的协程会一直被挂起。示例代码如下：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            coroutineScope {
+                launch {
+                    for (i in 1..10) {
+                        println(i)
+                        delay(1000)
+                    }
+                }
+            }
+            println(&quot;coroutineScope finished&quot;)
+        }
+        println(&quot;runBlocking finished&quot;)
+    }
+</code></pre>
+<p>  这里先使用<code>runBlocking</code>函数创建了一个协程作用域，然后调用<code>coroutineScope</code>函数创建了一个子协程。在 coroutineScope 的作用域中，又调用 launch 函数创建了一个子协程。<br>
+　　运行<code>main()</code>函数，控制台会以 1 秒钟的间隔依次输出数字 1 到 10，然后才会打印<code>coroutineScope</code>函数结尾的日志，最后打印<code>runBlocking</code>函数结尾的日志。<br>
+　　由此可见，coroutineScope 函数确实是将外部协程挂起了，只有当它作用域内的所有代码和子协程都执行完毕之后，coroutineScope 函数之后的代码才能得到运行。</p>
+<blockquote>
+<p>  <code>coroutineScope</code>函数只会阻塞当前协程，既不影响其它协程，也不影响任何线程，因此是不会造成性能上的问题。而<code>runBlocking</code>函数由于会挂起外部线程，若在主线程中当中调用它的话，那么就有可能会导致界面卡死的情况，所以不太推荐在实际项目中使用。</p>
+</blockquote>
+<h2 id="更多的作用域构造器">更多的作用域构造器</h2>
+<p>  <code>GlobalScope.launch</code>、<code>runBlocking</code>、<code>launch</code>、<code>coroutineScope</code>这几种作用域构建器，它们都可以用于创建一个新的协程作用域。不过 GlobalScope.launch 和 runBlocking 函数是可以在任意地方调用的，coroutineScope 函数可以在协程作用域或挂起函数中调用，而 launch 函数只能在协程作用域中调用。</p>
+<p>  如何取消协程呢？其实不管是<code>GlobalScope.launch</code>函数还是<code>launch</code>函数，它们都会返回一个<code>Job</code>对象，只需要调用 Job 对象的<code>cancel()</code>方法就可以取消协程了，实际项目中比较常用的写法如下所示：</p>
+<pre><code class="language-java">    val job = Job()
+    val scope = CoroutineScope(job)
+    scope.launch {
+        // 处理具体的逻辑
+    }
+    job.cancel()
+</code></pre>
+<p>  这里先创建了一个<code>Job</code>对象，然后把它传入<code>CoroutineScope()</code>函数当中，这个函数会返回一个 CoroutineScope 对象，有了这个对象之后，就可以随时调用它的<code>launch</code>函数来创建一个协程。<br>
+　　现在所有调用<code>CoroutineScope</code>的<code>launch</code>函数所创建的协程，都会被关联在<code>Job</code>对象的作用域下面。这样只需要调用一次<code>cancel()</code>方法，就可以将同一作用域内的所有协程全部取消，从而大大降低了协程管理的成本。</p>
+<p>  调用<code>launch</code>函数可以创建一个新的协程，但是 launch 函数只能用于执行一段逻辑，却不能获取执行的结果，因为它的返回值永远是一个<code>Job</code>对象。</p>
+<blockquote>
+<p>  那么有没有什么办法能够创建一个协程并获取它的执行结果呢？使用<code>async</code>函数就可以实现。</p>
+</blockquote>
+<p>  <code>async</code>函数必须在协程作用域当中才能调用，它会创建一个新的子协程并返回一个<code>Deferred</code>对象，如果想要获取 async 函数代码块的执行结果，只需要调用 Deferred 对象的<code>await()</code>方法即可，代码如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            val result = async {
+                5 + 5
+            }.await()
+            println(result) //日志输出10
+        }
+    }
+</code></pre>
+<p>  注意，在调用了<code>async</code>函数之后，代码块中的代码就会立刻开始执行。当调用<code>await()</code>方法时，如果代码块中的代码还没执行完，那么 await() 方法会将当前协程阻塞住，直到可以获得 async 函数的执行结果。</p>
+<blockquote>
+<p>  注意，可以不用在每次调用<code>async</code>函数之后就立刻使用<code>await()</code>方法获取结果，而是仅在需要用到 async 函数的执行结果时才调用 await() 方法进行获取，这样两个 async 函数就变成一种并行关系，即两个<code>async</code>函数完全可以同时执行任务从而提高运行效率。</p>
+</blockquote>
+<p>  <code>withContext()</code>函数是一个挂起函数，示例写法如下：</p>
+<pre><code class="language-java">    fun main() {
+        runBlocking {
+            val result = withContext(Dispatchers.Default) {
+                5 + 5
+            }
+            println(result) //日志输出10
+        }
+    }
+</code></pre>
+<p>  调用<code>withContext()</code>函数之后，会立即执行代码块中的代码，同时将外部协程挂起。当代码块中的代码全部执行完之后，会将最后一行的执行结果作为 withContext() 函数的返回值返回。</p>
+<blockquote>
+<p>  注意，<code>withContext()</code>函数强制要求我们指定一个线程参数。</p>
+</blockquote>
+<p>  线程参数主要有以下 3 种值可选：</p>
+<ul>
+<li>
+<p><code>Dispatchers.Default</code>：表示会使用一种默认低并发的线程策略，当要执行的代码属于计算密集型任务时，开启过高的并发反而可能会影响任务的运行效率。</p>
+</li>
+<li>
+<p><code>Dispatchers.IO</code>：表示会使用一种较高并发的线程策略，当要执行的代码大多数时间是在阻塞和等待中，比如说执行网络请求时，为了能够支持更高的并发数量。</p>
+</li>
+<li>
+<p><code>Dispatchers.Main</code>：表示不会开启子线程，而是在 Android 主线程中执行代码，但是这个值只能在 Android 项目中使用，纯 Kotlin 程序使用这种类型的线程参数会出现错误。</p>
+</li>
+</ul>
+<h2 id="使用协程简化回调的写法">使用协程简化回调的写法</h2>
+<p>  回调机制基本上是依靠匿名类来实现的，但是匿名类的写法通常比较烦琐。比如如下代码：</p>
+<pre><code class="language-java">    HttpUtil.sendHttpRequest(address, object : HttpCallbackListener {
+        override fun onFinish(response: String) {
+            // 得到服务器返回的具体内容
+        }
+        override fun onError(e: Exception) {
+            // 在这里对异常情况进行处理
+        }
+    })
+</code></pre>
+<p>  在多少个地方发起网络请求，就需要编写多少次这样的匿名类实现。而借助<code>suspendCoroutine</code>函数就能将传统回调机制的写法大幅简化。</p>
+<p>  <code>suspendCoroutine</code>函数必须在协程作用域或挂起函数中才能调用，它接收一个 Lambda 表达式参数，主要作用是将当前协程立即挂起，然后在一个普通的线程中执行 Lambda 表达式中的代码。<br>
+　　Lambda 表达式的参数列表上会传入一个<code>Continuation</code>参数，调用它的<code>resume(</code>)方法或<code>resumeWithException()</code>可以让协程恢复执行。<br>
+　　首先定义一个<code>request()</code>函数，代码如下所示：</p>
+<pre><code class="language-java">    suspend fun request(address: String): String {
+        return suspendCoroutine { continuation -&gt;
+            HttpUtil.sendHttpRequest(address, object : HttpCallbackListener {
+                override fun onFinish(response: String) {
+                    continuation.resume(response)
+                }
+
+                override fun onError(e: Exception) {
+                    continuation.resumeWithException(e)
+                }
+            })
+        }
+    }
+</code></pre>
+<p>  可以看到，<code>request()</code>函数是一个挂起函数，并且接收一个<code>address</code>参数。在 request() 函数的内部，调用了<code>suspendCoroutine</code>函数，这样当前协程就会被立刻挂起，而 Lambda 表达式中的代码则会在普通线程中执行。<br>
+　　接着我们在 Lambda 表达式中调用<code>HttpUtil.sendHttpRequest()</code>方法发起网络请求，并通过传统回调的方式监听请求结果。如果请求成功就调用 Continuation 的<code>resume()</code>方法恢复被挂起的协程，并传入服务器响应的数据，该值会成为 suspendCoroutine 函数的返回值。如果请求失败，就调用 Continuation 的<code>resumeWithException()</code>恢复被挂起的协程，并传入具体的异常原因。</p>
+<p>  之后，不管要发起多少次网络请求，都不需要再重复进行回调实现。比如说获取百度首页的响应数据，可以这样写：</p>
+<pre><code class="language-java">    suspend fun getBaiduResponse() {
+        try {
+            val response = request(&quot;https://www.baidu.com/&quot;)
+            // 对服务器响应的数据进行处理
+        } catch (e: Exception) {
+            // 对异常情况进行处理
+        }
+    }
+</code></pre>
+<p>  由于<code>getBaiduResponse()</code>是一个挂起函数，因此当它调用了<code>request()</code>函数时，当前的协程就会被立刻挂起，然后一直等待网络请求成功或失败后，当前协程才能恢复运行。这样即使不使用回调的写法，我们也能够获得异步网络请求的响应数据，而如果请求失败，则会直接进入<code>catch</code>语句当中。</p>
+<blockquote>
+<p>  注意，<code>getBaiduResponse()</code>函数被声明成了挂起函数，这样它也只能在协程作用域或其他挂起函数中调用了。但是可以通过合理的项目架构设计，轻松地将各种协程的代码应用到一个普通的项目当中。</p>
+</blockquote>
+<p>  事实上，<code>suspendCoroutine</code>函数几乎可以用于简化任何回调的写法，比如之前使用<code>Retrofit</code>来发起网络请求需要这样写：</p>
+<pre><code class="language-java">    val appService = ServiceCreator.create&lt;AppService&gt;()
+    appService.getAppData().enqueue(object : Callback&lt;List&lt;App&gt;&gt; {
+        override fun onResponse(call: Call&lt;List&lt;App&gt;&gt;, response: Response&lt;List&lt;App&gt;&gt;) {
+            // 得到服务器返回的数据
+        }
+
+        override fun onFailure(call: Call&lt;List&lt;App&gt;&gt;, t: Throwable) {
+            // 在这里对异常情况进行处理
+        }
+    })
+</code></pre>
+<p>  使用<code>suspendCoroutine</code>函数，可以对上述写法进行大幅度的简化。<br>
+　　由于不同的<code>Service</code>接口返回的数据类型也不同，所以这次不能像刚才那样针对具体的类型进行编程了，而是要使用泛型的方式。定义一个<code>await()</code>函数，代码如下所示：</p>
+<pre><code class="language-java">    suspend fun &lt;T&gt; Call&lt;T&gt;.await(): T {
+        return suspendCoroutine { continuation -&gt;
+            enqueue(object : Callback&lt;T&gt; {
+                override fun onResponse(call: Call&lt;T&gt;, response: Response&lt;T&gt;) {
+                    val body = response.body()
+                    if (body != null) continuation.resume(body)
+                    else continuation.resumeWithException(
+                        RuntimeException(&quot;response body is null&quot;)
+                    )
+                }
+
+                override fun onFailure(call: Call&lt;T&gt;, t: Throwable) {
+                    continuation.resumeWithException(t)
+                }
+            })
+        }
+    }
+</code></pre>
+<p>  这里<code>await()</code>函数仍然是一个挂起函数，然后给它声明了一个泛型<code>T</code>，并将 await() 函数定义成了<code>Call&lt;T&gt;</code>的扩展函数，这样所有返回值是<code>Call</code>类型的<code>Retrofit</code>网络请求接口就都可以直接调用 await() 函数了。<br>
+　　接着，<code>await()</code>函数中使用了<code>suspendCoroutine</code>函数来挂起当前协程，并且由于扩展函数的原因，我们现在拥有了<code>Call</code>对象的上下文，那么这里就可以直接调用<code>enqueue()</code>方法让 Retrofit 发起网络请求。接下来，使用同样的方式对 Retrofit 响应的数据或者网络请求失败的情况进行处理即可。<br>
+　　另外还有一点需要注意，在<code>onResponse()</code>回调当中，我们调用<code>body()</code>方法解析出来的对象是可能为空的。如果为空的话，这里的做法是手动抛出一个异常，我们也可以根据自己的逻辑进行更加合适的处理。<br>
+　　有了<code>await()</code>函数之后，调用所有<code>Retrofit</code>的<code>Service</code>接口都会变得极其简单，比如刚才同样的功能就可以使用如下写法进行实现：</p>
+<pre><code class="language-java">    suspend fun getAppData() {
+        try {
+            val appList = ServiceCreator.create&lt;AppService&gt;().getAppData().await()
+            // 对服务器响应的数据进行处理
+        } catch (e: Exception) {
+            // 对异常情况进行处理
+        }
+    }
+</code></pre>
+<p>  没有了冗长的匿名类实现，只需要简单调用一下<code>await()</code>函数就可以让<code>Retrofit</code>发起网络请求，并直接获得服务器响应的数据。</p>
+<blockquote>
+<p>  每次发起网络请求都要进行一次<code>try catch</code>处理也比较麻烦，其实这里也可以选择不处理。在不处理的情况下，如果发生了异常就会一层层向上抛出，一直到被某一层的函数处理了为止。因此，我们也可以在某个统一的入口函数中只进行一次<code>try catch</code>，从而让代码变得更加精简。</p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/retrofit-wang-luo-ku/" class="post-title gt-a-link">
+                    Retrofit 网络库
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

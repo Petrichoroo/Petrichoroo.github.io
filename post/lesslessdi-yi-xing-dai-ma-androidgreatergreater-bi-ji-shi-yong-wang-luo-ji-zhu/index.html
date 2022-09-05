@@ -1,0 +1,837 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — 使用网络技术 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — 使用网络技术
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-14 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#android-%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF">Android 中常用的网络技术</a>
+<ul>
+<li><a href="#webview-%E7%9A%84%E7%94%A8%E6%B3%95">WebView 的用法</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-http-%E8%AE%BF%E9%97%AE%E7%BD%91%E7%BB%9C">使用 Http 访问网络</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8-httpurlconnection">使用 HttpURLConnection</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-okhttp">使用 OkHttp</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A7%A3%E6%9E%90-xml-%E6%A0%BC%E5%BC%8F%E6%95%B0%E6%8D%AE">解析 XML 格式数据</a>
+<ul>
+<li><a href="#pull-%E8%A7%A3%E6%9E%90%E6%96%B9%E5%BC%8F">Pull 解析方式</a></li>
+<li><a href="#sax-%E8%A7%A3%E6%9E%90%E6%96%B9%E5%BC%8F">SAX 解析方式</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A7%A3%E6%9E%90-json-%E6%A0%BC%E5%BC%8F%E6%95%B0%E6%8D%AE">解析 JSON 格式数据</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8-jsonobject">使用 JSONObject</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-gson">使用 GSON</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%9B%9E%E8%B0%83%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F">网络请求回调的实现方式</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="android-中常用的网络技术">Android 中常用的网络技术</h1>
+<hr>
+<h2 id="webview-的用法">WebView 的用法</h2>
+<p>  Android 提供了一个<code>WebView</code>控件，借助它我们就可以在自己的应用程序里嵌入一个浏览器，从而非常轻松地展示各种各样的网页。<br>
+　　首先需要在布局文件中放置一个 WebView 控件，这个控件就是用来显示网页的，给其设置一个 id，并让它充满整个屏幕，如下所示：</p>
+<pre><code class="language-java">    &lt;WebView
+        android:id=&quot;@+id/web_view&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;/&gt;
+</code></pre>
+<p>  然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    public class MainActivity extends AppCompatActivity {
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            WebView webView = findViewById(R.id.web_view);
+            //getSettings()设置属性 调用setJavaScriptEnabled()方法来让WebView支持Javascript脚本
+            webView.getSettings().setJavaScriptEnabled(true);
+            //网页跳转时 希望目标仍然在当前WebView中显示 而不是打开浏览器显示
+            webView.setWebViewClient(new WebViewClient());
+            webView.loadUrl(&quot;https://www.baidu.com&quot;);
+        }
+    }
+</code></pre>
+<p>  另外还需要注意，由于本程序使用到了网络功能，而访问网络是需要声明权限的，因此我们还得修改 AndroidManifest.xml 文件，并加入权限声明，如下所示：</p>
+<pre><code class="language-java">    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+</code></pre>
+<p>  这里只是简单地使用了 WebView，而 WebView 还有很多更加高级的使用技巧。</p>
+<h2 id="使用-http-访问网络">使用 Http 访问网络</h2>
+<blockquote>
+<p>  Http 的工作原理比较简单，就是客户端向服务器发出一条 HTTP 请求，服务器收到请求之后会返回一些数据给客户端，然后客户端再对这些数据进行解析和处理即可。<br>
+　　上面使用到的 WebView 控件，其实就是我们向百度的服务器发起了一条 HTTP 请求，接着服务器分析出我们想要访问的是百度的首页，于是把该网页的 HTML 代码进行返回，然后 WebView 再调用手机浏览器的内核对返回的 HTML 代码进行解析，最终将页面展示出来。<br>
+　　简单来说，WebView 已经在后台帮我们处理好了发送 HTTP 请求、接收服务器响应、解析返回数据，以及最终的页面展示这几步工作。下面我们通过手动发送 HTTP 请求的方式更加深入地理解这个过程。</p>
+</blockquote>
+<h3 id="使用-httpurlconnection">使用 HttpURLConnection</h3>
+<p>  首先需要获取<code>HttpURLConnection</code>的实例，一般只需创建一个<code>URL</code>对象，并传入目标的网络地址，然后调用一下<code>openConnection()</code>方法即可，如下所示：</p>
+<pre><code class="language-java">    URL url = new URL(&quot;https://baidu.com&quot;);
+    HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+</code></pre>
+<p>  在得到了<code>HttpURLConnection</code>的实例之后，我们可以设置一下 HTTP 请求所使用的方法。常用的方法主要有两个：<code>GET</code>和<code>POST</code>。GET 表示希望从服务器那里获取数据，而 POST 则表示希望提交数据给服务器。写法如下：</p>
+<pre><code class="language-java">    connection.setRequestMethod(&quot;GET&quot;);
+</code></pre>
+<p>  接下来，就可以进行一些自由的定制了，比如设置连接超时、读取超时的毫秒数等。这部分内容根据自己的实际情况进行编写，示例写法如下：</p>
+<pre><code class="language-java">    connection.setConnectTimeout(8000);
+    connection.setReadTimeout(8000);
+</code></pre>
+<p>  之后再调用<code>getInputStream()</code>方法就可以获取到服务器返回的输入流了，剩下的任务就是对输入流进行读取，如下所示：</p>
+<pre><code class="language-java">    InputStream in = connection.getInputStream();
+</code></pre>
+<p>  最后，可以调用<code>disconnect()</code>方法将这个 HTTP 连接关闭掉，如下所示：</p>
+<pre><code class="language-java">    connection.disconnect();
+</code></pre>
+<p>  通过一个具体的例子来体验一下 HttpURLConnection 的用法，首先修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;Button
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:id=&quot;@+id/send_request&quot;
+        android:text=&quot;Send Request&quot;/&gt;
+    &lt;ScrollView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+        &lt;TextView
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:id=&quot;@+id/response_text&quot;/&gt;
+    &lt;/ScrollView&gt;
+</code></pre>
+<p>  由于手机屏幕的空间一般都比较小，有些时候过多的内容一屏是显示不下的，ScrollView 控件可以以滚动的形式查看屏幕外的那部分内容。<br>
+　　Button 用于发送 HTTP 请求，TextView 用于将服务器返回的数据显示出来。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    private void sendRequestWithHttpURLConnection() {
+        //开启子线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpURLConnection connection = null;
+                BufferedReader reader = null;
+                try {
+                    URL url = new URL(&quot;https://www.baidu.com&quot;);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod(&quot;GET&quot;); 
+                    connection.setConnectTimeout(8000); //建立连接所用的时间 适用于网络状况正常的情况下
+                    connection.setReadTimeout(8000);    //建立连接后从服务器读取到可用资源所用的时间
+                    InputStream in = connection.getInputStream(); 
+                    //对获取到的输入流进行读取
+                    reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    showResponse(response.toString());  //显示服务器返回的数据
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (connection != null) {
+                        connection.disconnect();    //将HTTP连接关闭掉
+                    }
+                }
+            }
+        }).start();
+    }
+
+    //Android不允许在子线程中进行UI操作 需要通过runOnUiThread()方法将线程切换到主线程
+    private void showResponse(final String response) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //在这里进行UI操作 将结果显示到界面上
+                responseText.setText(response);
+            }
+        });
+    }
+</code></pre>
+<p>  注意声明网络权限。修改 AndroidManifest.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot;/&gt;
+</code></pre>
+<p>  若是想要提交数据给服务器，只需要将 HTTP 请求的方法改成 POST，并在获取输入流之前把要提交的数据写出即可。注意每条数据都要以键值对的形式存在，数据与数据之间用“&amp;”符号隔开，比如说我们想要向服务器提交用户名和密码，就可以这样写：</p>
+<pre><code class="language-java">    connection.setRequestMethod(&quot;POST&quot;);
+    DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream()) ;
+    outputStream.writeBytes(&quot;username=admin&amp;&amp;password=123456&quot;);
+</code></pre>
+<h3 id="使用-okhttp">使用 OkHttp</h3>
+<blockquote>
+<p>  OkHttp 不仅在接口封装上做得简单易用，在底层实现上也是自成一派，现在已经成了广大 Android 开发者首选的网络通信库。</p>
+</blockquote>
+<p>  在使用 OkHttp 之前，我们需要先在项目中添加 OkHttp 库的依赖。编辑<code>app/build.gradle</code>文件，在 dependencies 闭包中添加如下内容：</p>
+<pre><code class="language-java">    dependencies {
+        implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+        ...
+    }
+</code></pre>
+<p>  可以通过访问 OkHttp 的项目主页查看当前最新的版本是多少。<a href="https://github.com/square/okhttp">OkHttp</a><br>
+　　首先需要创建一个 OkHttpClient 的实例，如下所示：</p>
+<pre><code class="language-java">    OkHttpClient client = new OkHttpClient();
+</code></pre>
+<p>  接下来，如果想要发起一条 HTTP 请求，就需要创建一个<code>Request</code>对象，并且可以在最终的<code>build()</code>方法之前连缀很多其他方法来丰富这个 Request 对象。比如可以通过<code>url()</code>方法来设置目标的网络地址，如下所示：</p>
+<pre><code class="language-java">    Request request = new Request.Builder()
+        .url(&quot;https://www.baidu.com&quot;)
+        .build();
+</code></pre>
+<p>  之后，调用 OkHttpClient 的<code>newCall()</code>方法来创建一个<code>Cal</code>l对象，并调用它的<code>execute()</code>方法来发送请求并获取服务器返回的数据，写法如下：</p>
+<pre><code class="language-java">    Response response = client.newCall(request).execute();
+</code></pre>
+<p>  其中，<code>Response</code>对象就是服务器返回的数据了，我们可以使用如下写法来得到返回的具体内容：</p>
+<pre><code class="language-java">    String responseData = response.body().string();
+</code></pre>
+<p>  如果是发起一条<code>POST</code>请求会比 GET 请求稍微复杂一点，我们需要先构建出一个<code>RequestBody</code>对象来存放待提交的参数，如下所示：</p>
+<pre><code class="language-java">    RequestBody requestBody = new FormBody.Builder()
+        .add(&quot;username&quot;,&quot;admin&quot;)
+        .add(&quot;password&quot;,&quot;123456&quot;)
+        .build();
+</code></pre>
+<p>  然后，在<code>Request.Builder</code>中调用一下<code>post()</code>方法，并将<code>RequestBody</code>对象传入：</p>
+<pre><code class="language-java">    Request request = new Request.Builder()
+        .url(&quot;https://www.baidu.com&quot;)
+        .post(requestBody)
+        .build();
+</code></pre>
+<p>  接下来的操作就和<code>GET</code>请求一样了，调用<code>execute()</code>方法来发送请求并获取服务器返回的数据即可。<br>
+　　将我们上面使用 HttpURLConnection 请求网络的项目改用 OkHttp 的方式实现：</p>
+<pre><code class="language-java">    private void sendRequestWithOkHttp() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        OkHttpClient client = new OkHttpClient();
+                        Request request = new Request.Builder()
+                                .url(&quot;https://www.baidu.com&quot;)
+                                .build();
+                        Response response = client.newCall(request).execute();
+                        String responseData = response.body().string();
+                        showResponse(responseData);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+    }
+</code></pre>
+<h2 id="解析-xml-格式数据">解析 XML 格式数据</h2>
+<blockquote>
+<p>  一般我们会在网络上传输一些格式化后的数据，这种数据会有一定的结构规则和语义，当另一方收到数据消息之后，就可以按照相同的结构规则进行解析，从而取出想要的那部分内容。<br>
+　　在网络上传输数据时最常用的格式有两种：<code>XML</code>和<code>JSON</code>。</p>
+</blockquote>
+<p>  搭建一个最简单的 Web 服务器，在这个服务器上提供一段 XML 文本，然后我们在程序里去访问这个服务器，再对得到的 XML 文本进行解析。服务器类型有很多，这里使用 Apache 服务器。<br>
+　　安装好 Apache 后，在其安装目录下的 htdocs 中新建一个名为 get_data.xml 的文件，然后编辑这个文件，并加入如下 XML 格式的内容：</p>
+<pre><code class="language-xml">    &lt;apps&gt;
+        &lt;app&gt;
+            &lt;id&gt;1&lt;/id&gt;
+            &lt;name&gt;Google Maps&lt;/name&gt;
+            &lt;version&gt;1.0&lt;/version&gt;
+        &lt;/app&gt;
+        &lt;app&gt;
+            &lt;id&gt;2&lt;/id&gt;
+            &lt;name&gt;Chrome&lt;/name&gt;
+            &lt;version&gt;2.1&lt;/version&gt;
+        &lt;/app&gt;
+        &lt;app&gt;
+            &lt;id&gt;3&lt;/id&gt;
+            &lt;name&gt;Google Play&lt;/name&gt;
+            &lt;version&gt;2.3&lt;/version&gt;
+        &lt;/app&gt;
+    &lt;/apps&gt;
+</code></pre>
+<h3 id="pull-解析方式">Pull 解析方式</h3>
+<p>  XML 格式的数据已经提供好了，下面从中解析出我们想要得到的那部分内容。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    private void sendRequestWithOkHttp() {
+        //开启子线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            // 10.0.2.2 对于模拟器来说就是电脑本机的IP地址
+                            .url(&quot;http://10.0.2.2/get_data.xml&quot;)    //解析XML数据
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    parseXMLWithPull(responseData); //使用 Pull 方法解析服务器返回的数据
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void parseXMLWithPull(String xmlData) {
+        try {
+            //获取XmlPullParserFactory实例 .newInstance()
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            //借助其得到XmlPullParser对象 .newPullParser() XmlPullParser是一个接口
+            XmlPullParser xmlPullParser = factory.newPullParser();
+            //将服务器返回的XML数据设置进去 .setInput(Reader data)
+            xmlPullParser.setInput(new StringReader(xmlData));
+            //文档刚被初始化 事件为START_DOCUMENT .getEventType()得到当前的解析事件
+            int eventType = xmlPullParser.getEventType();
+            String id = &quot;&quot;;
+            String name = &quot;&quot;;
+            String version = &quot;&quot;;
+            //若当前解析事件不等于XmlPullParser.END_DOCUMENT 说明解析工作还没完成
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                //得到当前节点的名字 .getName()
+                String nodeName = xmlPullParser.getName();  //第一次进入while循环时为null 第二次即为apps...
+                //过程：null-apps-null-app-null-id-null-name-null-version-app-null-...-apps
+                switch (eventType) {    //第一次while循环 eventType为START_DOCUMENT 不匹配任何标签
+                    //开始解析某个节点 通过getName判断读到哪个标签, 然后通过nextText获取文本节点值
+                    case XmlPullParser.START_TAG: {
+                        if (&quot;id&quot;.equals(nodeName)) {
+                            id = xmlPullParser.nextText();  //获取节点内具体的内容 .nextText()
+                        } else if (&quot;name&quot;.equals(nodeName)) {
+                            name = xmlPullParser.nextText();
+                        } else if (&quot;version&quot;.equals(nodeName)) {
+                            version = xmlPullParser.nextText(); 
+                            //nodeName = version时 说明一个节点已经读取完毕 产生事件END_TAG
+                        }
+                        break;
+                    }
+                    //完成解析某个节点
+                    case XmlPullParser.END_TAG: {
+                        //每当解析完一个app节点后就将获取到的内容打印出来
+                        if (&quot;app&quot;.equals(nodeName)) {
+                            Log.d(&quot;MainActivity&quot;, &quot;id is &quot; + id);
+                            Log.d(&quot;MainActivity&quot;, &quot;name is &quot; + name);
+                            Log.d(&quot;MainActivity&quot;, &quot;version is &quot; + version);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                //调用next()会产生START_TAG 这个事件告诉应用程序一个标签已经开始
+                eventType = xmlPullParser.next();   //获取下一个解析事件
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+</code></pre>
+<p>  这里首先改变了 HTTP 请求的地址，10.0.2.2 对于模拟器来说就是计算机本机的 IP 地址。在得到了服务器返回的数据后，我们不再直接将其展示，而是调用了<code>parseXMLWithPull()</code>方法来解析服务器返回的数据。<br>
+　　不过我们还需要再进行一项额外的配置。从 Android9.0 系统开始，应用程序默认只允许使用 HTTPS 类型的网络请求，HTTP 类型的网络请求因为有安全隐患默认不再被支持，而我们搭建的 Apache 服务器现在使用的就是 HTTP。<br>
+　　为了能让程序使用 HTTP，我们还要进行如下配置才可以。右击 res 目录→New→Directory，创建一个<code>xml</code>目录，接着右击 xml 目录→New→File，创建一个<code>network_config.xml</code>文件。然后修改其中的内容，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;network-security-config&gt;
+        &lt;base-config cleartextTrafficPermitted=&quot;true&quot;&gt;
+            &lt;trust-anchors&gt;
+                &lt;certificates src=&quot;system&quot; /&gt;
+            &lt;/trust-anchors&gt;
+        &lt;/base-config&gt;
+    &lt;/network-security-config&gt;
+</code></pre>
+<p>  这段配置文件的意思就是允许我们以明文的方式在网络上传输数据，而 HTTP 使用的就是明文传输方式。接下来修改 AndroidManifest.xml 中的代码来启用我们刚才创建的配置文件：</p>
+<pre><code class="language-java">    &lt;application
+        ...
+        android:networkSecurityConfig=&quot;@xml/network_security_config&quot;&gt;
+        ...
+    &lt;/application&gt;
+</code></pre>
+<h3 id="sax-解析方式">SAX 解析方式</h3>
+<blockquote>
+<p>  SAX 解析也是一种特别常用的 XML 解析方式，虽然它的用法比 Pull 解析要复杂一些，但在语义方面会更加清楚。</p>
+</blockquote>
+<p>  要使用 SAX 解析，通常情况下我们会新建一个类继承自<code>DefaultHandler</code>，并重写父类的 5 个方法，如下所示：</p>
+<pre><code class="language-java">public class MyHandler extends DefaultHandler {
+
+    @Override
+    public void startDocument() throws SAXException {
+        super.startDocument();
+    }
+
+    @Override
+    public void startElement(String uri, String localName, String qName, 
+                        Attributes attributes) throws SAXException {
+        super.startElement(uri, localName, qName, attributes);
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) throws SAXException {
+        super.characters(ch, start, length);
+    }
+
+    @Override
+    public void endElement(String uri, String localName, String qName) throws SAXException {
+        super.endElement(uri, localName, qName);
+    }
+
+    @Override
+    public void endDocument() throws SAXException {
+        super.endDocument();
+    }
+}
+</code></pre>
+<p>  其中：</p>
+<ul>
+<li>
+<p><code>startDocument()</code>：在开始 XML 解析的时候调用；</p>
+</li>
+<li>
+<p><code>startElement()</code>：在开始解析某个节点的时候调用；</p>
+</li>
+<li>
+<p><code>characters()</code>：在获取节点中内容的时候调用；</p>
+</li>
+<li>
+<p><code>endElement()</code>：在完成解析某个节点的时候调用；</p>
+</li>
+<li>
+<p><code>endDocument()</code>：在完成整个 XML 解析的时候调用。</p>
+</li>
+</ul>
+<p>  其中，<code>startElement()</code>、<code>characters()</code>和<code>endElement()</code>这 3 个方法是有参数的，从 XML 中解析出的数据就会以参数的形式传入到这些方法中。<br>
+　　需要注意的是，在获取节点中的内容时，<code>characters()</code>方法可能会被调用多次，一些换行符也被当作内容解析出来，我们需要针对这种情况在代码中做好控制。<br>
+　　用 SAX 解析的方式实现和上面同样的功能。新建一个<code>ContentHandler</code>类继承自DefaultHandler，并重写父类的 5 个方法，如下所示：</p>
+<pre><code class="language-java">    public class ContentHandler extends DefaultHandler {
+        private String nodeName;
+        private StringBuilder id;
+        private StringBuilder name;
+        private StringBuilder version;
+
+        //在开始XML解析的时候调用
+        @Override
+        public void startDocument() throws SAXException {
+            super.startDocument();
+            id = new StringBuilder();
+            name = new StringBuilder();
+            version = new StringBuilder();
+        }
+
+        //在开始解析某个节点的时候调用
+        @Override
+        public void startElement(String uri, String localName, String qName, 
+                            Attributes attributes) throws SAXException {
+            super.startElement(uri, localName, qName, attributes);
+            //localName参数记录着当前节点的名字
+            nodeName = localName;
+        }
+
+        //在获取节点中内容的时候调用
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            super.characters(ch, start, length);
+            //根据当前节点名判断将内容添加到哪一个StringBuilder对象中
+            if (&quot;id&quot;.equals(nodeName)) {
+                id.append(ch, start, length);
+            } else if (&quot;name&quot;.equals(nodeName)) {
+                name.append(ch, start, length);
+            } else if (&quot;version&quot;.equals(nodeName)) {
+                version.append(ch, start, length);
+            }
+        }
+
+        //在完成解析某个节点的时候调用
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            super.endElement(uri, localName, qName);
+            if (&quot;app&quot;.equals(localName)) {
+                //trim()删除字符串的头尾空白符 包括：空格 制表符 换行符等
+                Log.d(&quot;ContentHandler&quot;, &quot;id is &quot; + id.toString().trim());
+                Log.d(&quot;ContentHandler&quot;, &quot;name is &quot; + name.toString().trim());
+                Log.d(&quot;ContentHandler&quot;, &quot;version is &quot; + version.toString().trim());
+                //最后要将StringBuilder清空掉(设置的新序列长度)
+                id.setLength(0);
+                name.setLength(0);
+                version.setLength(0);
+            }
+        }
+
+        //在完成整个XML解析的时候调用
+        @Override
+        public void endDocument() throws SAXException {
+            super.endDocument();
+        }
+    }
+</code></pre>
+<p>  首先给 id、name 和 version 节点分别定义了一个<code>StringBuilder</code>对象，并在<code>startDocument()</code>方法里对它们进行了初始化。<br>
+　　每当开始解析某个节点的时候，<code>startElement()</code>方法就会得到调用，其中<code>localName</code>参数记录着当前节点的名字，这里把它记录下来。<br>
+　　最后在<code>endElement()</code>方法中进行判断，若<code>app</code>节点已经解析完成，就打印出 id、name 和 version 的内容。需要注意的是，目前 id、name 和 version 中都可能是包括回车或换行符的，因此在打印之前我们还需要调用一下 trim() 方法。<br>
+　　接下来的工作就比较简单了，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    private void sendRequestWithOkHttp() {
+        //开启子线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ...
+                    parseXMLWithSAX(responseData);  //使用SAX方法解析服务器返回的数据
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void parseXMLWithSAX(String xmlData) {
+        try {
+            //获取SAXParserFactory实例 .newInstance()
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            //借助其得到xmlReader对象 .newSAXParser().getXMLReader() xmlReader是一个接口
+            XMLReader xmlReader = factory.newSAXParser().getXMLReader();
+            //获取ContentHandler实例 将其设置到XMLReader中
+            ContentHandler handler = new ContentHandler();
+            xmlReader.setContentHandler(handler);
+            //开始执行解析 parse(InputSource var1)
+            xmlReader.parse(new InputSource(new StringReader(xmlData)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+</code></pre>
+<p>  在得到了服务器返回的数据后，我们这次去调用<code>parseXMLWithSAX()</code>方法来解析 XML 数据。</p>
+<blockquote>
+<p>  除了 Pull 解析和 SAX 解析之外，其实还有一种 DOM 解析方式也比较常用。</p>
+</blockquote>
+<h2 id="解析-json-格式数据">解析 JSON 格式数据</h2>
+<blockquote>
+<p>  比起 XML，JSON 的主要优势在于它的体积更小，在网络上传输的时候可以更省流量。但缺点在于，它的语义性较差，看起来不如 XML 直观。</p>
+</blockquote>
+<p>  这次需要在 Apache 安装目录下的 htdocs 中新建一个<code>get_data.json</code>的文件，然后编辑这个文件，并加入如下 JSON 格式的内容：</p>
+<pre><code class="language-json">    [{&quot;id&quot;:&quot;5&quot;,&quot;version&quot;:&quot;5.5&quot;,&quot;name&quot;:&quot;Clash of Clans&quot;},
+    {&quot;id&quot;:&quot;6&quot;,&quot;version&quot;:&quot;7.0&quot;,&quot;name&quot;:&quot;Boom Beach&quot;},
+    {&quot;id&quot;:&quot;7&quot;,&quot;version&quot;:&quot;3.5&quot;,&quot;name&quot;:&quot;Clash Royale&quot;}]
+</code></pre>
+<p>  类似地，解析 JSON 数据也有很多种方法，可以使用官方提供的<code>JSONObject</code>，也可以使用谷歌的开源库<code>GSON</code>。另外，一些第三方的开源库如<code>Jackson</code>、<code>FastJSON</code>等也非常不错。</p>
+<h3 id="使用-jsonobject">使用 JSONObject</h3>
+<p>  修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    private void sendRequestWithOkHttp() {
+        //开启子线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ...
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    if( responseData != null ){
+                        parseJSONWithJSONObject(responseData);  //使用JSONObject解析服务器返回的数据
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void parseJSONWithJSONObject(String jsonData) {
+        try {
+            //在服务器中定义的是个JSON数组 将服务器返回的数据传入到JSONArray对象中
+            JSONArray jsonArray = new JSONArray(jsonData);
+            for (int i = 0; i &lt; jsonArray.length(); i++) {
+                //JSONArray中取出的每一个元素都是一个JSONObject对象 其中包含着id name version数据
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String id = jsonObject.getString(&quot;id&quot;);
+                String name = jsonObject.getString(&quot;name&quot;);
+                String version = jsonObject.getString(&quot;version&quot;);
+                Log.d(&quot;MainActivity&quot;, &quot;id is &quot; + id);
+                Log.d(&quot;MainActivity&quot;, &quot;name is &quot; + name);
+                Log.d(&quot;MainActivity&quot;, &quot;version is &quot; + version);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+</code></pre>
+<p>  这里通过<code>getString()</code>方法获取到数据后，只是简单地将其打印出来。</p>
+<h3 id="使用-gson">使用 GSON</h3>
+<p>  GSON 并没有被添加到 Android 官方的 API 中，因此如果想要使用这个功能的话，就必须在项目中添加 GSON 库的依赖。编辑<code>app/build.gradle</code>文件，在 dependencies 闭包中添加如下内容：</p>
+<pre><code class="language-java">    dependencies {
+        implementation 'com.google.code.gson:gson:2.9.0'
+        ...
+    }
+</code></pre>
+<p>  GSON 库的强大之处就在于可以将一段 JSON 格式的字符串自动映射成一个对象，从而不需要我们再手动编写代码进行解析了。比如说一段 JSON 格式的数据如下所示：</p>
+<pre><code class="language-json">    {&quot;name&quot;:&quot;Tom&quot;,&quot;age&quot;:20}
+</code></pre>
+<p>  那我们就可以定义一个 Person 类，并加入 name 和 age 这两个字段，然后只需简单地调用如下代码就可以将 JSON 数据自动解析成一个 Person 对象了：</p>
+<pre><code class="language-java">    Gson gson = new Gson();
+    Person person = gson.fromJson(jsonData,Person.class);
+</code></pre>
+<p>  如果需要解析的是一段 JSON 数组会稍微麻烦一点，我们需要借助<code>TypeToken</code>将期望解析成的数据类型传入到<code>fromJson()</code>方法中，如下所示：</p>
+<pre><code class="language-java">    List&lt;Person&gt; appList = gson.fromJson(gsonData,new TypeToken&lt;List&lt;Person&gt;&gt;(){}.getType());
+</code></pre>
+<p>  下面首先新增一个 App 类，并加入 id、name 和 version 这 3 个字段，如下所示：</p>
+<pre><code class="language-java">    public class App {
+        private String id;
+        private String name;
+        private String version;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+    }
+</code></pre>
+<p>  然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    private void sendRequestWithOkHttp() {
+        //开启子线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ...
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    if( responseData != null ){
+                        parseJSONWithGSON(responseData);    //使用GSON解析服务器返回的数据
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void parseJSONWithGSON(String jsonData) {
+        Gson gson = new Gson(); //GSON库可以可以将一段JSON格式的字符串自动映射成一个对象
+        List&lt;App&gt; appList = gson.fromJson(jsonData, new TypeToken&lt;List&lt;App&gt;&gt;() {}.getType());
+        for (App app : appList) {
+            Log.d(&quot;MainActivity&quot;, &quot;id is &quot; + app.getId());
+            Log.d(&quot;MainActivity&quot;, &quot;name is &quot; + app.getName());
+            Log.d(&quot;MainActivity&quot;, &quot;version is &quot; + app.getVersion());
+        }
+    }
+</code></pre>
+<h2 id="网络请求回调的实现方式">网络请求回调的实现方式</h2>
+<p>  一个应用程序很可能会在许多地方都使用到网络功能，而发送 HTTP 请求的代码基本是相同的，如果我们每次都去编写一遍发送 HTTP 请求的代码，效率是很低的。<br>
+　　通常情况下我们应该将这些通用的网络操作提取到一个公共的类里，并提供一个通用方法，当想要发起网络请求的时候，只需简单地调用一下这个方法即可。<br>
+　　使用<code>HttpURLConnection</code>的写法总体来说还是比较复杂的，这里我们只使用<code>OkHttp</code>来实现，代码如下所示：</p>
+<pre><code class="language-java">    public class HttpUtil {
+        ...
+        public static void sendOkHttpRequest(String address,okhttp3.Callback callback) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(address)
+                    .build();
+            client.newCall(request).enqueue(callback);
+        }
+    }
+</code></pre>
+<p>  可以看到，<code>sendOkHttpRequest()</code>方法中有一个<code>okhttp3.Callback</code>参数，这个是 OkHttp 库中自带的一个回调接口。</p>
+<blockquote>
+<p>  网络请求通常都是属于耗时操作，所有的耗时逻辑都是在子线程里进行的，一般的请求方法可能会在服务器还没来得及响应的时候就执行结束了（线程并发），这样也就无法返回响应的数据。因此我们需要利用回调机制将响应数据成功返回给调用方，子线程中是无法通过 return 语句返回数据的。</p>
+</blockquote>
+<p>  在<code>client. newCall()</code>调用了一个<code>enqueue()</code>方法，并把 okhttp3.Callback 参数传入。OkHttp 在 enqueue() 方法的内部已经帮我们开好子线程了，然后会在子线程中去执行 HTTP 请求，并将最终的请求结果回调到 okhttp3.Callback 当中。<br>
+　　那么我们在调用 sendOkHttpRequest() 方法的时候就可以这样写：</p>
+<pre><code class="language-java">    HttpUtil.sendOkHttpRequest(&quot;https://www.baidu.com&quot;,new okhttp3.Callback(){
+        @Override
+        public void onResponse(Call call,Response response) throws IOException {
+            //得到服务器返回的具体内容
+            String responseData = response.body().string();
+        }
+        @Override
+        public void onFailure(Call call,IOException e) {
+            //在这里对异常情况进行处理
+        }
+    });
+</code></pre>
+<p>  这里可以看出，OkHttp 的接口设计得确实非常人性化，它将一些常用的功能进行了很好的封装，使得我们只需编写少量的代码就能完成较为复杂的网络操作。<br>
+　　另外需要注意的是，不管是使用 HttpURLConnection 还是 OkHttp，最终的回调接口都还是在子线程中运行的，因此我们不可以在这里执行任何的 UI 操作，需要借助<code>runOnUiThread()</code>方法进行线程转换。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-yun-yong-shou-ji-duo-mei-ti/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — 运用手机多媒体
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

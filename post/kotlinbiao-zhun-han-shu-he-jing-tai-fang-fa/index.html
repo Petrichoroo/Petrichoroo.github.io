@@ -1,0 +1,333 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Kotlin：标准函数和静态方法 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Kotlin：标准函数和静态方法
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-16 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/f0WJ2wxNg/" class="post-tags">
+                            # Kotlin
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E6%A0%87%E5%87%86%E5%87%BD%E6%95%B0">标准函数</a>
+<ul>
+<li><a href="#with">with</a></li>
+<li><a href="#run">run</a></li>
+<li><a href="#apply">apply</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9A%E4%B9%89%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95">定义静态方法</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="标准函数">标准函数</h2>
+<blockquote>
+<p>  Kotlin 的标准函数指的是 Standard.kt 文件中定义的函数，任何 Kotlin 代码都可以自由地调用所有的标准函数。</p>
+</blockquote>
+<h3 id="with">with</h3>
+<p>  <code>with</code>函数接收两个参数：第一个参数可以是一个任意类型的对象，第二个参数是一个 Lambda 表达式。with 函数会在 Lambda 表达式中提供第一个参数对象的上下文，并使用 Lambda 表达式中的最后一行代码作为返回值返回。示例代码如下：</p>
+<pre><code class="language-java">    val result = with(obj) {
+        // 这里是obj的上下文
+        &quot;value&quot; // with函数的返回值
+    }
+</code></pre>
+<blockquote>
+<p>  可以在连续调用同一个对象的多个方法时让代码变得更加精简。</p>
+</blockquote>
+<p>  比如有一个水果列表，现在我们想吃完所有水果，并将结果打印出来，就可以这样写：</p>
+<pre><code class="language-java">    val list = listOf(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Orange&quot;, &quot;Pear&quot;, &quot;Grape&quot;)
+    val builder = StringBuilder()
+    builder.append(&quot;Start eating fruits.\n&quot;)
+    for (fruit in list) {
+        builder.append(fruit).append(&quot;\n&quot;)
+    }
+    builder.append(&quot;Ate all fruits.&quot;)
+    val result = builder.toString()
+    println(result)
+</code></pre>
+<p>  仔细观察上述代码，会发现我们连续调用了很多次 builder 对象的方法。其实这个时候就可以考虑使用<code>with</code>函数来让代码变得更加精简，如下所示：</p>
+<pre><code class="language-java">    val list = listOf(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Orange&quot;, &quot;Pear&quot;, &quot;Grape&quot;)
+    val result = with(StringBuilder()) {
+    append(&quot;Start eating fruits.\n&quot;)
+    for (fruit in list) {
+        append(fruit).append(&quot;\n&quot;)
+    }
+    append(&quot;Ate all fruits.&quot;)
+    toString()
+    }
+    println(result)
+</code></pre>
+<p>  这里给 with 函数的第一个参数传入了一个 StringBuilder 对象，那么接下来整个 Lambda 表达式的上下文就会是这个 StringBuilder 对象。<br>
+　　于是我们在 Lambda 表达式中就不用再像刚才那样调用<code>builder.append()</code>和<code>builder.toString()</code>方法了，而是可以直接调用 append() 和 toString() 方法。Lambda 表达式的最后一行代码会作为 with 函数的返回值返回。</p>
+<h3 id="run">run</h3>
+<p>  <code>run</code>函数的用法和使用场景其实和 with 函数是非常类似的，只是稍微做了一些语法改动而已。首先 run 函数通常不会直接调用，而是要在某个对象的基础上调用；其次 run 函数只接收一个 Lambda 参数，并且会在 Lambda 表达式中提供调用对象的上下文。同样地，也会使用 Lambda 表达式中的最后一行代码作为返回值返回。示例代码如下：</p>
+<pre><code class="language-java">    val result = obj.run {
+        // 这里是obj的上下文
+        &quot;value&quot; // run函数的返回值
+    }
+</code></pre>
+<p>  使用<code>run</code>函数来修改一下吃水果的这段代码，如下所示：</p>
+<pre><code class="language-java">    val list = listOf(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Orange&quot;, &quot;Pear&quot;, &quot;Grape&quot;)
+        val result = StringBuilder().run {
+            append(&quot;Start eating fruits.\n&quot;)
+            for (fruit in list) {
+                append(fruit).append(&quot;\n&quot;)
+        }
+        append(&quot;Ate all fruits.&quot;)
+        toString()
+    }
+    println(result)
+</code></pre>
+<h3 id="apply">apply</h3>
+<p>  <code>apply</code>函数和 run 函数也是极其类似的，都要在某个对象上调用，并且只接收一个 Lambda 参数，也会在 Lambda 表达式中提供调用对象的上下文，但是 apply 函数无法指定返回值，而是会自动返回调用对象本身。示例代码如下：</p>
+<pre><code class="language-java">    val result = obj.apply {
+        // 这里是obj的上下文
+    }
+    // result == obj
+</code></pre>
+<p>  使用<code>apply</code>函数来修改一下吃水果的这段代码，如下所示：</p>
+<pre><code class="language-java">    val list = listOf(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Orange&quot;, &quot;Pear&quot;, &quot;Grape&quot;)
+    val result = StringBuilder().apply {
+        append(&quot;Start eating fruits.\n&quot;)
+        for (fruit in list) {
+            append(fruit).append(&quot;\n&quot;)
+        }
+        append(&quot;Ate all fruits.&quot;)
+        //返回的给 result 实际上是一个 StringBuilder 对象
+    }
+    println(result.toString())
+</code></pre>
+<h2 id="定义静态方法">定义静态方法</h2>
+<blockquote>
+<p>  静态方法在某些编程语言里面又叫作类方法，指的就是那种不需要创建实例就能调用的方法。因而静态方法非常适合用于编写一些工具类的功能，因为工具类通常没有创建实例的必要，基本是全局通用的。</p>
+</blockquote>
+<p>  和绝大多数主流编程语言不同，Kotlin 极度弱化了静态方法这个概念。像工具类这种功能，在 Kotlin 中就非常推荐使用单例类的方式来实现。如下：</p>
+<pre><code class="language-java">    object Util {
+        fun doAction() {
+            println(&quot;do action&quot;)
+        }
+    }
+</code></pre>
+<p>  不过，使用单例类的写法会将整个类中的所有方法全部变成类似于静态方法的调用方式。<br>
+　　若只是希望让类中的某一个方法变成静态方法的调用方式，就需要用到<code>companion object</code>关键字，示例如下：</p>
+<pre><code class="language-java">    class Util {
+        fun doAction1() {
+            println(&quot;do action1&quot;)
+        }
+        companion object {
+            fun doAction2() {
+                println(&quot;do action2&quot;)
+            }
+        }
+    }
+</code></pre>
+<p>  这里首先将 Util 从单例类改成了一个普通类，并使用了<code>companion object</code>关键字。<br>
+　　因此，doAction1() 方法是一定要先创建 Util 类的实例才能调用的，而<code>doAction2()</code>方法可以直接使用<code>Util.doAction2()</code>的方式调用。</p>
+<p>  不过，<code>doAction2()</code>方法其实也并不是静态方法，<code>companion object</code>这个关键字实际上会在 Util 类的内部创建一个伴生类，而 doAction2() 方法就是定义在这个伴生类里面的实例方法。只是 Kotlin 会保证 Util 类始终只会存在一个伴生类对象，因此调用 Util.doAction2() 方法实际上就是调用了 Util 类中伴生对象的 doAction2() 方法。</p>
+<p>  可以看出，Kotlin 确实没有直接定义静态方法的关键字，但是提供了一些语法特性来支持类似于静态方法调用的写法。<br>
+　　若要真正地定义一个静态方法， Kotlin 仍然提供了两种实现方式：注解和顶层方法。<br>
+　　如果我们给单例类或 companion object 中的方法加上<code>@JvmStatic</code>注解，那么 Kotlin 编译器就会将这些方法编译成真正的静态方法，如下：</p>
+<pre><code class="language-java">    class Util {
+        fun doAction1() {
+            println(&quot;do action1&quot;)
+        }
+        companion object {
+            @JvmStatic
+            fun doAction2() {
+                println(&quot;do action2&quot;)
+            }
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  注意，@JvmStatic 注解只能加在单例类或 companion object 中的方法上。</p>
+</blockquote>
+<p>  顶层方法指的是那些没有定义在任何类中的方法。Kotlin 编译器会将所有的顶层方法全部编译成静态方法，因此只要定义了一个顶层方法，那么它就一定是静态方法。<br>
+　　想要定义一个顶层方法，首先需要创建一个 Kotlin 文件。<br>
+　　对着任意包名右击 → New → Kotlin File/Class，在弹出的对话框中输入文件名即可。注意创建类型要选择 File。<br>
+　　比如创建一个<code>Helper.kt</code>文件。现在我们在这个文件中定义的任何方法都会是顶层方法，比如这里我就定义一个<code>doSomething()</code>方法吧，如下所示：</p>
+<pre><code class="language-java">    fun doSomething() {
+        println(&quot;do something&quot;)
+    }
+</code></pre>
+<p>  若是在 Kotlin 代码中，所有的顶层方法都可以在任何位置被直接调用，不用管包名路径，也不用创建实例，直接键入 doSomething() 即可。<br>
+　　但若是在 Java 代码中，会发现是找不到 doSomething() 这个方法的，因为 Java 中没有顶层方法这个概念，所有的方法必须定义在类中。<br>
+　　刚才创建的 Kotlin 文件名叫作<code>Helper.kt</code>，于是 Kotlin 编译器会自动创建一个叫作 HelperKt 的 Java 类，doSomething() 方法就是以静态方法的形式定义在 HelperKt 类里面的，因此在 Java 中使用<code>HelperKt.doSomething()</code>的写法来调用即可。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlin-xue-xi-bi-ji/" class="post-title gt-a-link">
+                    Kotlin 基础
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

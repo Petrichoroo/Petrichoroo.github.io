@@ -1,0 +1,500 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>简易版的新闻应用（Kotlin） | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    简易版的新闻应用（Kotlin）
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-19 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#%E6%96%B0%E9%97%BB%E5%BA%94%E7%94%A8">新闻应用</a>
+<ul>
+<li><a href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0">具体实现</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="新闻应用">新闻应用</h1>
+<hr>
+<h2 id="具体实现">具体实现</h2>
+<p>  Fragment 很多时候是在平板开发当中使用的，因为它可以解决屏幕空间不能充分利用的问题，下面编写一个简单的兼容手机和平板的新闻应用程序。<br>
+　　新建新闻的实体类<code>News</code>，代码如下所示：</p>
+<pre><code class="language-java">    class News(val title: String, val content: String) {
+    }
+</code></pre>
+<p>  <code>title</code>字段表示新闻标题，<code>content</code>字段表示新闻内容。<br>
+　　接着新建布局文件<code>news_content_frag.xml</code>，作为新闻内容的布局：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;LinearLayout
+            android:id=&quot;@+id/contentLayout&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:orientation=&quot;vertical&quot;
+            android:visibility=&quot;invisible&quot;&gt;
+
+            &lt;TextView
+                android:id=&quot;@+id/newsTitle&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:gravity=&quot;center&quot;
+                android:padding=&quot;10dp&quot;
+                android:textSize=&quot;20sp&quot; /&gt;
+
+            &lt;View
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;1dp&quot;
+                android:background=&quot;#000&quot; /&gt;
+
+            &lt;TextView
+                android:id=&quot;@+id/newsContent&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;0dp&quot;
+                android:layout_weight=&quot;1&quot;
+                android:padding=&quot;15dp&quot;
+                android:textSize=&quot;18sp&quot; /&gt;
+        &lt;/LinearLayout&gt;
+
+        &lt;View
+            android:layout_width=&quot;1dp&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_alignParentLeft=&quot;true&quot;
+            android:background=&quot;#000&quot; /&gt;
+    &lt;/RelativeLayout&gt;
+</code></pre>
+<p>  头部部分显示新闻标题，正文部分显示新闻内容，中间使用一条水平方向的细线分隔开。除此之外，这里还使用了一条垂直方向的细线，它的作用是在双页模式时将左侧的新闻列表和右侧的新闻内容分隔开。</p>
+<blockquote>
+<p>  注意要将新闻内容的布局设置成不可见。因为在双页模式下，如果还没有选中新闻列表中的任何一条新闻，是不应该显示新闻内容布局的。</p>
+</blockquote>
+<p>  然后新建一个<code>NewsContentFragment</code>类，继承自 Fragment，代码如下所示：</p>
+<pre><code class="language-java">    class NewsContentFragment : Fragment() {
+        //延迟初始化
+        private lateinit var contentLayout: LinearLayout
+        private lateinit var newsTitle: TextView
+        private lateinit var newsContent: TextView
+
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+            val view: View = inflater.inflate(R.layout.news_content_frag, container, false)
+            contentLayout = view.findViewById(R.id.contentLayout)
+            newsTitle = view.findViewById(R.id.newsTitle)
+            newsContent = view.findViewById(R.id.newsContent)
+            return view
+        }
+
+        fun refresh(title: String, content: String) {
+            contentLayout.visibility = View.VISIBLE //将隐藏的新闻内容布局设置成可见
+            newsTitle.text = title   //刷新新闻的标题
+            newsContent.text = content  //刷新新闻的内容
+        }
+    }
+</code></pre>
+<p>  这样就把新闻内容的 Fragment 和布局都创建好了，但是它们都是在双页模式中使用的，若想在单页模式中使用的话，我们还需要再创建一个 Activity。<br>
+　　新建一个<code>NewsContentActivity</code>，然后修改布局代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;fragment
+            android:id=&quot;@+id/newsContentFrag&quot;
+            android:name=&quot;com.example.fragmentbestpractice.NewsContentFragment&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  这里充分发挥了代码的复用性，直接在布局中引入了<code>NewsContentFragment</code>。<br>
+　　这样相当于把<code>news_content_frag</code>布局的内容自动加了进来。然后修改 NewsContentActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class NewsContentActivity : AppCompatActivity() {
+        companion object {
+            fun actionStart(context: Context, title: String, content: String) {
+                val intent = Intent(context, NewsContentActivity::class.java).apply {
+                    putExtra(&quot;news_title&quot;, title)
+                    putExtra(&quot;news_content&quot;, content)
+                }
+                context.startActivity(intent)
+            }
+        }
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_news_content)
+            val title = intent.getStringExtra(&quot;news_title&quot;) //获取传入的新闻标题
+            val content = intent.getStringExtra(&quot;news_content&quot;) //获取传入的新闻内容
+            if (title != null &amp;&amp; content != null) {
+                //得到NewsContentFragment的实例
+                val fragment = supportFragmentManager.findFragmentById(R.id.newsContentFrag)
+                        as NewsContentFragment
+                fragment.refresh(title, content)    //刷新界面
+            }
+        }
+    }
+</code></pre>
+<p>  接下来还需要再创建一个用于显示新闻列表的布局，新建<code>news_title_frag.xml</code>，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;androidx.recyclerview.widget.RecyclerView
+            android:id=&quot;@+id/newsTitleRecyclerView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  这里只有一个用于显示新闻列表的<code>RecyclerView</code>。既然要用到 RecyclerView，那么就必定少不了子项的布局。新建<code>news_item.xml</code>作为 RecyclerView 子项的布局，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;TextView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:id=&quot;@+id/newsTitle&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:ellipsize=&quot;end&quot;
+        android:maxLines=&quot;1&quot;
+        android:paddingLeft=&quot;10dp&quot;
+        android:paddingTop=&quot;15dp&quot;
+        android:paddingRight=&quot;10dp&quot;
+        android:paddingBottom=&quot;15dp&quot;
+        android:textSize=&quot;18sp&quot;&gt;
+    &lt;/TextView&gt;
+</code></pre>
+<p>  子项的布局也非常简单，只有一个 TextView，<code>android:padding</code>表示给控件的周围加上补白，这样不至于让文本内容紧靠在边缘上。<code>android:maxLines</code>设置为 1 表示让这个 TextView只能单行显示。<code>android:ellipsize</code>用于设定当文本内容超出控件宽度时文本的缩略方式，这里指定成<code>end</code>表示在尾部进行缩略。<br>
+　　然后新建<code>NewsTitleFragment</code>作为展示新闻列表的 Fragment，代码如下所示：</p>
+<pre><code class="language-java">    class NewsTitleFragment : Fragment() {
+        private var isTwoPane = false
+
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+            return inflater.inflate(R.layout.news_title_frag,container,false)
+        }
+
+        override fun onActivityCreated(savedInstanceState: Bundle?) {
+            super.onActivityCreated(savedInstanceState)
+            isTwoPane = activity?.findViewById&lt;View&gt;(R.id.newsContentLayout) != null
+        }
+    }
+</code></pre>
+<p>  通过在 Activity 中能否找到一个 id 为<code>newsContentLayout</code>的 View，来判断当前是双页模式还是单页模式。注意，由于在 Fragment 中调用<code>getActivity()</code>方法有可能返回 null，所以在上述代码中使用了一个<code>?.</code>操作符来保证代码的安全性。<br>
+　　怎样才能实现让 id 为<code>newsContentLayout</code>的 View 只在双页模式中才会出现呢？其实并不复杂，借助限定符即可。首先修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:id=&quot;@+id/newsTitleLayout&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;fragment
+            android:id=&quot;@+id/newsTitleFrag&quot;
+            android:name=&quot;com.example.fragmentbestpractice.NewsTitleFragment&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot; /&gt;
+    &lt;/FrameLayout&gt;
+</code></pre>
+<p>  上述代码表示在单页模式下只会加载一个新闻标题的 Fragment。<br>
+　　然后新建<code>layout-sw600dp</code>文件夹，在这个文件夹下再新建一个<code>activity_main.xml</code>文件，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;&gt;
+
+        &lt;fragment
+            android:id=&quot;@+id/newsTitleFrag&quot;
+            android:name=&quot;com.example.fragmentbestpractice.NewsTitleFragment&quot;
+            android:layout_width=&quot;0dp&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_weight=&quot;1&quot; /&gt;
+
+        &lt;FrameLayout
+            android:id=&quot;@+id/newsContentLayout&quot;
+            android:layout_width=&quot;0dp&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_weight=&quot;3&quot;&gt;
+
+            &lt;fragment
+                android:id=&quot;@+id/newsContentFrag&quot;
+                android:name=&quot;com.example.fragmentbestpractice.NewsContentFragment&quot;
+                android:layout_width=&quot;match_parent&quot;
+                android:layout_height=&quot;match_parent&quot; /&gt;
+        &lt;/FrameLayout&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  在双页模式下，同时引入了两个 Fragment，并将新闻内容的 Fragment 放在了一个 FrameLayout 布局下，而这个布局的 id 正是<code>newsContentLayout</code>。因此，能够找到这个 id 的时候就是双页模式，否则就是单页模式。<br>
+　　接下来在<code>NewsTitleFragment</code>中将新闻列表展示出来。我们在其中新建一个内部类<code>NewsAdapter</code>来作为 RecyclerView 的适配器向其中填充数据，如下所示：</p>
+<pre><code class="language-java">class NewsTitleFragment : Fragment() {
+    private var isTwoPane = false
+
+    inner class NewsAdapter(private val newsList: List&lt;News&gt;) :
+        RecyclerView.Adapter&lt;NewsAdapter.ViewHolder&gt;() {
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val newsTitle: TextView = itemView.findViewById(R.id.newsTitle)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.news_item, parent, false)
+            val holder = ViewHolder(view)
+            holder.itemView.setOnClickListener {
+                val news = newsList[holder.adapterPosition]
+                if (isTwoPane) {
+                    //如果是双页模式 则刷新NewsContentFragment中的内容
+                    val fragment = newsContentFrag as NewsContentFragment
+                    fragment.refresh(news.title, news.content)
+                } else {
+                    //如果是单页模式 直接启动NewsContentActivity
+                    NewsContentActivity.actionStart(parent.context, news.title, news.content)
+                }
+            }
+            return holder
+        }
+
+        override fun onBindViewHolder(holder: NewsAdapter.ViewHolder, position: Int) {
+            val news = newsList[position]
+            holder.newsTitle.text = news.title
+        }
+
+        override fun getItemCount(): Int {
+            return newsList.size
+        }
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.news_title_frag, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val layoutManager = LinearLayoutManager(activity)
+        newsTitleRecyclerView.layoutManager = layoutManager
+        val adapter = NewsAdapter(getNews())
+        newsTitleRecyclerView.adapter = adapter
+    }
+
+    /**
+     * onActivityCreated()：确保与Fragment相关联的Activity已经创建完毕时调用
+     * 但书中的onActivityCreated()方法现已被弃用
+     * 与Fragment视图有关的代码应在onViewCreated()（在onActivityCreated()之前调用）中执行
+     * 但是在判断单双页模式即得到isTwoPane变量值时 调用了getActivity()方法
+     * 而onViewCreated()方法中没有得到与fragment绑定的Activity实例
+     * 使得isTwoPane值保持初始值不变 在单双页判断时 始终会启动一个新的Activity来展示新闻内容
+     * 因此这里将相关代码放在onStart()方法中
+     * */
+    override fun onStart() {
+        super.onStart()
+        isTwoPane = activity?.findViewById&lt;View&gt;(R.id.newsContentLayout) != null
+    }
+
+    private fun getNews(): List&lt;News&gt; {
+        val newsList = ArrayList&lt;News&gt;()
+        for (i in 1..50) {
+            val news =
+                News(&quot;This is news title $i&quot;, getRandomLengthString(&quot;This is news content $i&quot;))
+            newsList.add(news)
+        }
+        return newsList
+    }
+
+    private fun getRandomLengthString(str: String): String {
+        val n = (1..20).random()
+        val builder = StringBuilder()
+        repeat(n) {
+            builder.append(str)
+        }
+        return builder.toString()
+    }
+}
+</code></pre>
+<blockquote>
+<p>  这里调用了<code>getNews()</code>来初始化 50 条模拟新闻数据，<code>getRandomLengthString()</code>方法来随机生成新闻内容的长度，以保证每条新闻的内容差距比较大。</p>
+</blockquote>
+<p>  首先在手机模拟器上运行，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660919291383.png" alt="" loading="lazy"><br>
+  然后点击第一条新闻，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660919350398.png" alt="" loading="lazy"><br>
+  然后在平板模拟器上运行，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660919484288.png" alt="" loading="lazy"><br>
+  同样点击第一条新闻，效果如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1660927257492.png" alt="" loading="lazy"></p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/liao-tian-jie-mian-shi-xian-kotlin/" class="post-title gt-a-link">
+                    聊天界面实现（Kotlin）
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

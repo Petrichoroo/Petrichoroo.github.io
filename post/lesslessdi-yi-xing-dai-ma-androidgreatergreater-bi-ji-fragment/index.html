@@ -1,0 +1,396 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — Fragment | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — Fragment
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-10 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#fragment">Fragment</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">基本概念</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F">使用方式</a>
+<ul>
+<li><a href="#fragment-%E7%9A%84%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95">Fragment 的简单用法</a></li>
+<li><a href="#%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0-fragment">动态添加 Fragment</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E8%BF%94%E5%9B%9E%E6%A0%88">实现返回栈</a></li>
+<li><a href="#fragment-%E5%92%8C-activity-%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E4%BA%92">Fragment 和 Activity 之间的交互</a></li>
+</ul>
+</li>
+<li><a href="#fragment-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">Fragment 的生命周期</a>
+<ul>
+<li><a href="#%E7%A2%8E%E7%89%87%E7%9A%84%E7%8A%B6%E6%80%81%E5%92%8C%E5%9B%9E%E8%B0%83">碎片的状态和回调</a></li>
+<li><a href="#fragment-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%A4%BA%E6%84%8F%E5%9B%BE">fragment 生命周期示意图</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E5%B8%83%E5%B1%80%E7%9A%84%E6%8A%80%E5%B7%A7">动态加载布局的技巧</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E9%99%90%E5%AE%9A%E7%AC%A6">使用限定符</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E5%AE%BD%E5%BA%A6%E9%99%90%E5%AE%9A%E7%AC%A6">使用最小宽度限定符</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="fragment">Fragment</h1>
+<hr>
+<h2 id="基本概念">基本概念</h2>
+<p>  <code>Fragment</code>是一种可以嵌入在 Activity 中的可重用的，模块化的 UI 片段，它能让程序更加合理和充分地利用大屏幕的空间。</p>
+<h2 id="使用方式">使用方式</h2>
+<blockquote>
+<p>  <code>Fragment</code>并不能单独使用，需要嵌套在 Activity 中使用。尽管它拥有自己的生命周期，但是还是会受到宿主 Activity 的生命周期的影响。</p>
+</blockquote>
+<h3 id="fragment-的简单用法">Fragment 的简单用法</h3>
+<ol>
+<li>自定义一个布局<code>my_fragment.xml</code>，用于显示相关内容。</li>
+<li>新建一个 <code>myFragment</code>类，继承 Fragment 或者它的子类，重写<code>onCreateView()</code>方法，代码如下：</li>
+</ol>
+<pre><code class="language-java">    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.my_fragment, container, false);
+        return view;
+    }
+</code></pre>
+<p>  在<code>onCreateView()</code>方法中通过 LayoutInflater 的<code>inflate()</code>方法将刚才定义的<code>my_fragment</code>布局动态加载进来。<br>
+3. 修改<code>activity_main.xml</code>中的代码，添加 Fragment，如下所示：</p>
+<pre><code class="language-java">    &lt;fragment
+        android:id=&quot;@+id/my_frag&quot;
+        android:name=&quot;com.example.fragmenttest.myFragment&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_parent&quot; /&gt;
+</code></pre>
+<p>  这里使用了<code>&lt;fragment&gt;</code>标签在布局中添加 Fragment，需要通过<code>android:name</code>属性来显式声明要添加的 Fragment 类名，注意一定要将类的包名也加上。</p>
+<h3 id="动态添加-fragment">动态添加 Fragment</h3>
+<blockquote>
+<p>  Fragment 真正的强大之处在于，它可以在程序运行时动态地添加到 Activity 当中。根据具体情况来动态地添加 Fragment，你就可以将程序界面定制得更加多样化。</p>
+</blockquote>
+<ol>
+<li>自定义一个<code>another_fragment.xml</code>的布局，用于显示相关内容。</li>
+<li>新建<code>AnotherFragment</code>，继承 Fragment 或者它的子类，重写<code>onCreateView()</code>方法，代码如下：</li>
+</ol>
+<pre><code class="language-java">    public class AnotherFragment extends Fragment {
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.another_fragment,container,
+                    false);
+            return view;
+        }
+    }
+</code></pre>
+<p>  这里同样是通过<code>inflate()</code>方法将刚才定义的<code>another_fragment</code>布局动态加载进来。</p>
+<ol start="3">
+<li>这样我们就准备好了另一个 Fragment，接下来将它将它动态地添加到 Activity 当<br>
+中。先修改 activity_main.xml，代码如下所示：</li>
+</ol>
+<pre><code class="language-java">    &lt;FrameLayout
+        android:id=&quot;@+id/another_layout&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_parent&quot; /&gt;
+</code></pre>
+<p>  这里将另一个碎片放在一个<code>FrameLayout</code>中，这种布局的特点是所有的控件默认都会摆放在布局的左上角。由于这里仅需要在布局里放入一个碎片，不需要任何定位，因此非常适合使用 FrameLayout。</p>
+<ol start="4">
+<li>最后在代码中向<code>FrameLayout</code>里添加内容，从而实现动态添加碎片的功能。修改 MainActivity 中的代码，如下所示：</li>
+</ol>
+<pre><code class="language-java">        //获取FragmentManager
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        //开启一个事务
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        //向容器内添加或替换碎片
+        transaction.replace(R.id.another_layout,AnotherFragment);
+        transaction.commit();
+</code></pre>
+<p>  可知动态添加 Fragment 主要分为 5 步：</p>
+<p>  (1). 创建待添加 Fragment 的实例<br>
+　　(2). 获取<code>FragmentManager</code>，在 Activity 中可以直接调用<code>getSupportFragmentManager()</code>方法获取。<br>
+　　(3). 开启一个事务，通过调用<code>beginTransaction()</code>方法开启。<br>
+　　(4). 向容器内添加或替换 Fragment，一般使用<code>replace()</code>方法实现，需要传入容器的<code>id</code>和待添<br>
+加的 Fragment 实例。<br>
+　　(5). 提交事务，调用<code>commit()</code>方法来完成。</p>
+<h3 id="实现返回栈">实现返回栈</h3>
+<blockquote>
+<p>  我们成功实现了向 Activity 中动态添加 Fragment 的功能。不过我们尝试一下就会发现，通过点击按钮添加了一个 Fragment 之后，这时按下 Back 键程序就会直接退出。如果我们想实现类似于返回栈的效果，按下 Back 键可以回到上一个 Fragment，该如何实现呢？</p>
+</blockquote>
+<p>  <code>FragmentTransaction</code>中提供了一个<code>addToBackStack()</code>方法，可以用于将一<br>
+个事务添加到返回栈中。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    ...
+    transaction.addToBackStack(null);
+    transaction.commit();
+</code></pre>
+<p>  我们在事务提交之前调用了<code>addToBackStack()</code>方法，它可以接收一个名字用于描述返回栈的状态，一般传入 null 即可。然后重新运行程序，点击按钮将 AnothertFragment 添加到Activity 中，再按下 Back 键，你会发现程序并没有退出，而回到了上一个 Fragment 界面。</p>
+<h3 id="fragment-和-activity-之间的交互">Fragment 和 Activity 之间的交互</h3>
+<blockquote>
+<p>  虽然 Fragment 是嵌入在 Activity 中显示的，但它们的关系并没有那么亲密。实际上Fragment和 Activity 是各自存在于一个独立的类当中的，它们之间并没有明显的方式来直接进行交互。如果想要实现它们之间的交互，应该如何做呢？</p>
+</blockquote>
+<p>  为了方便碎片和活动之间进行通信，<code>FragmentManager</code>提供了一个类似于<code>findViewById()</code>的方法，专门用于从布局文件中获取 Fragment 的实例，代码如下所示：</p>
+<pre><code class="language-java">    myFragment fragment = (myFragment) getSupportFragmentManager().findFragmentById(R.id.my_frag);
+</code></pre>
+<p>  调用<code>FragmentManager</code>的<code>findFragmentById()</code>方法，可以在活动中得到相应碎片的实例，然后就能轻松地调用碎片里的方法了。</p>
+<blockquote>
+<p>  知道了如何在活动中调用碎片里的方法，那在碎片中又该怎样调用活动里的方法呢？</p>
+</blockquote>
+<p>  其实在每个碎片中都可以通过调用<code>getActivity()</code>方法来得到和当前碎片相关联的活动实例，代码如下所示：</p>
+<pre><code class="language-java">    MainActivity activity = (MainActivity) getActivity();
+</code></pre>
+<p>  有了活动实例之后，在碎片中调用活动里的方法就变得轻而易举了。另外当碎片中需要使用 Context 对象时，也可以使用<code>getActivity()</code>方法，因为获取到的活动本身就是一个 Context 对象。</p>
+<blockquote>
+<p>  既然 Fragment 和 Activity 之间的交互问题已经解决了，那么不同的 Fragment 之间可不可以进行交互呢？</p>
+</blockquote>
+<p>  其实基本思路非常简单：首先在一个 Fragment 中可以得到与它相关联的 Activity，然后再通过这个 Activity 去获取另外一个 Fragment 的实例，这样就实现了不同 Fragment 之间的交互。</p>
+<h2 id="fragment-的生命周期">Fragment 的生命周期</h2>
+<h3 id="碎片的状态和回调">碎片的状态和回调</h3>
+<ul>
+<li>
+<p>运行状态<br>
+  当一个 Fragment 所关联的 Activity 正处于运行状态时，该 Fragment 也处于运行状态。</p>
+</li>
+<li>
+<p>暂停状态<br>
+  当一个 Activity 进入暂停状态时（由于另一个未占满屏幕的 Activity 被添加到了栈顶），与它相关联的 Fragment 就会进入暂停状态。</p>
+</li>
+<li>
+<p>停止状态<br>
+  当一个 Activity 进入停止状态时，与它相关联的 Fragment 就会进入停止状态。<br>
+　　或通过调用<code>FragmentTransaction</code>的<code>remove()</code>、<code>replace()</code>方法将 Fragment 从 Activity 中移除，但在事务提交之前调用了<code>addToBackStack()</code>方法，这时的 Fragment 也会进入停止状态。<br>
+　　总的来说，进入停止状态的 Fragment 对用户来说是完全不可见的，有可能会被系统回收。</p>
+</li>
+<li>
+<p>销毁状态<br>
+  Fragment 总是依附于 Activity 而存在，因此当 Activity 被销毁时，与它相关联的 Fragment 就会进入销毁状态。<br>
+　　或通过调用<code>FragmentTransaction</code>的<code>remove()</code>或<code>replace()</code>方法将 Fragment 从 Activity 中移除，但在事务提交之前并没有调用<code>addToBackStack()</code>方法，这时的 Fragment 也会进入销毁状态。</p>
+</li>
+</ul>
+<p>  Fragment 类中也提供了一系列的回调方法，以覆盖碎片生命周期的每个环节。其中活动有的回调方法，碎片中几乎都有，不过碎片还提供了一些附加的回调方法，那我们就重点看一下这几个回调：</p>
+<ul>
+<li><code>onAttach</code>：当碎片和活动建立关联的时候调用。</li>
+<li><code>onCreateView</code>：为碎片创建视图（加载布局）时调用。</li>
+<li><code>onViewCreated</code>：在<code>onCreateView</code>方法之后调用，此时表明 fragment 视图层级结构已创建完毕。</li>
+<li><s>onActivityCreated</s>：确保与碎片相关联的活动一定已经创建完毕的时候调用。</li>
+<li><code>onViewStateRestored</code>：当所有保存的状态都已恢复到视图层次结构时调用。</li>
+<li><code>onSaveInstanceState</code>：只有当 Activity 在异常状态下被结束时，系统才会调用此方法，用于保存当前 Activity 的状态，以便后续在重建被异常结束的 Activity 时调用<code>onRestoreInstatnceState</code>方法来恢复现场。</li>
+<li><code>onDestroyView</code>：当与碎片关联的视图被移除的时候调用。</li>
+<li><code>onDetach</code>：当碎片和活动解除关联的时候调用。</li>
+</ul>
+<blockquote>
+<p>  <code>onActivityCreated</code>方法现已弃用。与 Fragment 视图有关的代码应在 <code>onViewCreated</code>中执行，而其他初始化代码应在<code>onCreate</code>中执行。如需专门在 Activity 的<code>onCreate完成时接收回调，应在</code>onAttach<code>中的 Activity 的</code>Lifecycle<code>上注册 </code>LifeCycleObserver`，并在收到 onCreate 回调后将其移除。</p>
+</blockquote>
+<h3 id="fragment-生命周期示意图">fragment 生命周期示意图</h3>
+<figure data-type="image" tabindex="1"><img src="https://Petrichoroo.github.io/post-images/1660152516547.png" alt="" loading="lazy"></figure>
+<h2 id="动态加载布局的技巧">动态加载布局的技巧</h2>
+<blockquote>
+<p>   虽然动态添加 Fragment 的功能很强大，可以解决很多实际开发中的问题，但是它毕竟只是在一个布局文件中进行一些添加和替换操作。如果程序能够根据设备的分辨率或屏幕大小，在运行时决定加载哪个布局，那我们可发挥的空间就更多了。</p>
+</blockquote>
+<h3 id="使用限定符">使用限定符</h3>
+<blockquote>
+<p>  很多平板应用采用的是双页模式（程序会在左侧的面板上显示一个包含子项的列表，在右侧的面板上显示内容），而手机的屏幕就只能显示一页的内容。那么怎样才能在运行时判断程序应该是使用双页模式还是单页模式呢？</p>
+</blockquote>
+<p>  修改<code>layout</code>文件夹中<code>activity_main.xml</code>的代码：</p>
+<pre><code class="language-java">    &lt;fragment
+        android:id=&quot;@+id/leftFrag&quot;
+        android:name=&quot;com.example.fragmenttest.LeftFragment&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot; /&gt;
+</code></pre>
+<p>  这里只有一个 Fragment，并让它充满整个父布局<br>
+  接着在 res 目录下新建<code>layout-large</code>文件夹，并在这个文件夹下新建一个布局，也叫作<code>activity_main.xml</code>，添加如下代码</p>
+<pre><code class="language-java">    &lt;fragment
+        android:id=&quot;@+id/leftFrag&quot;
+        android:name=&quot;com.example.fragmenttest.LeftFragment&quot;
+        android:layout_width=&quot;0dp&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:layout_weight=&quot;1&quot; /&gt;
+    &lt;fragment
+        android:id=&quot;@+id/rightFrag&quot;
+        android:name=&quot;com.example.fragmenttest.RightFragment&quot;
+        android:layout_width=&quot;0dp&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:layout_weight=&quot;3&quot; /&gt;
+</code></pre>
+<p>  可以看到，<code>layout/activity_main</code>布局只包含了一个 Fragment，即单页模式，而<code>layout-large/ activity_main</code>布局包含了两个 Fragment，即双页模式。其中，<code>large</code>就是一个限定符，那些屏幕被认为是 large 的设备就会自动加载 layout-large 文件夹下的布局，小屏幕的设备则还是会加载 layout 文件夹下的布局。</p>
+<h3 id="使用最小宽度限定符">使用最小宽度限定符</h3>
+<blockquote>
+<p>  上面我们使用 large 限定符成功解决了单页双页的判断问题，不过 large 到底是指多大呢？有时候我们希望可以更加灵活地为不同设备加载布局，不管它们是不是被系统认定为 large，这时就可以使用最小宽度限定符。<br>
+　　最小宽度限定符允许我们对屏幕的宽度指定一个最小值（以 dp 为单位），然后以这个最小值为临界点，屏幕宽度大于这个值的设备就加载一个布局，屏幕宽度小于这个值的设备就加载另一个布局。</p>
+</blockquote>
+<p>  在<code>res</code>目录下新建<code>layout-sw600dp</code>文件夹，然后在这个文件夹下新建<code>activity_main.xml</code>布局。</p>
+<p>  可知当程序运行在屏幕宽度大于等于<code>600 dp</code>的设备上时，会加载<code>layout-sw600dp/activity_main</code>布局，否则仍然加载默认的<code>layout/activity_main</code>布局</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-ui/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — UI
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

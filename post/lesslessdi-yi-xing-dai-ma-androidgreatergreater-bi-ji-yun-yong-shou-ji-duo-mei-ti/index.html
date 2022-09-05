@@ -1,0 +1,668 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — 运用手机多媒体 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — 运用手机多媒体
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-13 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#%E8%BF%90%E7%94%A8%E6%89%8B%E6%9C%BA%E5%A4%9A%E5%AA%92%E4%BD%93">运用手机多媒体</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E9%80%9A%E7%9F%A5">使用通知</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E9%80%9A%E7%9F%A5%E6%B8%A0%E9%81%93">创建通知渠道</a></li>
+<li><a href="#%E9%80%9A%E7%9F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">通知的基本用法</a></li>
+<li><a href="#%E9%80%9A%E7%9F%A5%E7%9A%84%E6%9B%B4%E5%A4%9A%E7%94%A8%E6%B3%95">通知的更多用法</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%91%84%E5%83%8F%E5%A4%B4%E5%92%8C%E7%9B%B8%E5%86%8Ckotlin">调用摄像头和相册（Kotlin）</a>
+<ul>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E7%85%A7">调用摄像头拍照</a></li>
+<li><a href="#%E4%BB%8E%E7%9B%B8%E5%86%8C%E4%B8%AD%E9%80%89%E6%8B%A9%E5%9B%BE%E7%89%87">从相册中选择图片</a></li>
+</ul>
+</li>
+<li><a href="#%E6%92%AD%E6%94%BE%E5%A4%9A%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6kotlin">播放多媒体文件（Kotlin）</a>
+<ul>
+<li><a href="#%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91">播放音频</a></li>
+<li><a href="#%E6%92%AD%E6%94%BE%E8%A7%86%E9%A2%91">播放视频</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="运用手机多媒体">运用手机多媒体</h1>
+<hr>
+<blockquote>
+<p>  之前一直是使用模拟器来运行程序的，下面涉及的一些功能必须要在真正的 Android 手机上运行才看得到效果，我们可以在程序中调用很多手机的多媒体资源，从而编写出更加丰富多彩的应用程序。</p>
+</blockquote>
+<h2 id="使用通知">使用通知</h2>
+<blockquote>
+<p>  通知是 Android 系统中比较有特色的一个功能，当某个应用程序希望向用户发出一些提示信息，而该应用程序又不在前台运行时，就可以借助通知来实现。</p>
+</blockquote>
+<h3 id="创建通知渠道">创建通知渠道</h3>
+<blockquote>
+<p>  很多应用都会想尽办法地给用户发送通知，以博取更多的展示机会，那么用户手机的状态栏就会被各式各样的通知信息堆满，虽然 Android 系统允许我们将某个应用程序的通知完全屏蔽，以防止它一直给我们发送垃圾信息，但是在这些信息中，也可能会有我们所关心的内容。<br>
+　　于是，Android 8.0 系统引入了通知渠道这个概念，就是每条通知都要属于一个对应的渠道。每个应用程序都可以自由地创建当前应用拥有哪些通知渠道，但是这些通知渠道的控制权是掌握在用户手上的。用户可以自由地选择这些通知渠道的重要程度，是否响铃、是否振动或者是否要关闭这个渠道的通知。<br>
+　　拥有了这些控制权之后，用户就再也不用害怕那些垃圾通知的打扰了，因为用户可以自主地选择关心哪些想知道的信息。对于每个应用来说，通知渠道的划分是非常考究的，因为通知渠道一旦创建之后就不能再修改了。</p>
+</blockquote>
+<p>  而我们的应用程序如果想要发出通知，也必须创建自己的通知渠道。下面我们就来学习一下创建通知渠道的详细步骤。<br>
+　　首先需要一个<code>NotificationManager</code>对通知进行管理，通过调用 Context 的<code>getSystemService()</code>方法获取，getSystemService() 方法接收一个字符串参数用于确定获取系统的哪个服务，这里我们传入<code>Context.NOTIFICATION_SERVICE</code>即可，代码如下：</p>
+<pre><code class="language-java">    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+</code></pre>
+<p>  接下来要使用<code>NotificationChannel</code>类构建一个通知渠道，并调用<code>NotificationManager</code>的<code>createNotificationChannel()</code>方法完成创建。<br>
+　　由于 NotificationChannel 类和 createNotificationChannel() 方法都是 Android 8.0 系统中新增的API，因此我们在使用的时候还需要进行版本判断才可以，写法如下：</p>
+<pre><code class="language-java">    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) {
+        String channelId = &quot;channelId&quot;;
+        String channelName = &quot;&quot;;
+        manager.createNotificationChannel(new NotificationChannel
+                            (channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT));
+    }
+</code></pre>
+<p>  创建一个通知渠道至少需要渠道 ID、渠道名称以及重要等级这 3 个参数，其中渠道 ID 可以随便定义，只要保证全局唯一性就可以。渠道名称是给用户看的，需要可以清楚地表达这个渠道的用途。<br>
+　　通知的重要等级主要有<code>IMPORTANCE_HIGH</code>、<code>IMPORTANCE_DEFAULT</code>、<code>IMPORTANCE_LOW</code>以及<code>IMPORTANCE_MIN</code>这几种，对应的重要程度依次从高到低。不同的重要等级会决定通知的不同行为。当然这里只是初始状态下的重要等级，用户可以随时手动更改某个通知渠道的重要等级，开发者是无法干预的。</p>
+<h3 id="通知的基本用法">通知的基本用法</h3>
+<p>  首先需要使用一个 Builder 构造器来创建<code>Notification</code>对象，如下所示：</p>
+<pre><code class="language-java">    NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) {
+                String channelId = &quot;channelId&quot;;
+                String channelName = &quot;&quot;;
+                manager.createNotificationChannel(new NotificationChannel
+                            (channelId, channelName, NotificationManager.IMPORTANCE_HIGH));
+    }
+    Notification notification = new NotificationCompat.Builder(MainActivity.this,&quot;channelId&quot;)
+                            .setContentTitle(&quot;This is content title&quot;)   //指定通知的标题内容 
+                            .setContentText(&quot;This is content text&quot;) //指定通知的正文内容
+                            .setSmallIcon(R.drawable.small_icon)    //设置通知的小图标
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.large_icon)) //设置通知的大图标
+                            .build();
+    manager.notify(1,notification);
+</code></pre>
+<p>  <code>NotificationCompat.Builder</code>构造函数中接收两个参数：第一个参数是 Context，第二个参数是渠道 ID。<br>
+　　我们可以在最终的<code>build()</code>方法之前连缀任意多的设置方法来创建一个丰富的Notification对象。需要注意的是，<code>setSmallIcon()</code>方法只能使用纯 alpha 图层的图片进行设置，小图标会显示在系统状态栏上。大图标在下拉系统状态栏时，就可以看到。<br>
+　　最后调用<code>notify()</code>方法就可以让通知显示出来了。notify() 方法接收两个参数：第一个参数是 id，要保证为每个通知指定的 id 都是不同的，第二个参数则是 Notification 对象。<br>
+　　现在当你下拉系统状态栏点击通知时，是没有任何效果的，我们还需要在代码中通过<code>PendingIntent</code>进行相应的设置。</p>
+<blockquote>
+<p>  Intent 倾向于立即执行某个动作，而 PendingIntent 倾向于在某个合适的时机执行<br>
+某个动作。</p>
+</blockquote>
+<p>  PendingIntent 提供了几个静态方法用于获取其实例，可以根据需求来选择是使用<code>getActivity()</code>方法、<code>getBroadcast()</code>方法，还是<code>getService()</code>方法。这些方法所接收的参数都是相同的：</p>
+<ul>
+<li>
+<p>第一个参数是 Context。</p>
+</li>
+<li>
+<p>第二个参数一般用不到，传入 0 即可。</p>
+</li>
+<li>
+<p>第三个参数是一个 Intent 对象，我们可以通过这个对象构建出 PendingInten t的“意图”。</p>
+</li>
+<li>
+<p>第四个参数用于确定 PendingIntent 的行为，有<code>FLAG_ONE_SHOT</code>、<code>FLAG_NO_CREATE</code>、<code>FLAG_CANCEL_CURRENT</code>和<code>FLAG_UPDATE_CURRENT</code>这 4 种值可选，具体含义可以查看文档，通常情况下传入 0 即可。</p>
+</li>
+</ul>
+<p>  <code>NotificationCompat.Builder</code>这个构造器还可以连缀一个<code>setContentIntent()</code>方法，接收的参数正是一个 PendingIntent 对象。代码如下所示：</p>
+<pre><code class="language-java">    ...
+    Intent intent = new Intent(this, NotificationActivity.class);
+    PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+    Notification notification = new NotificationCompat.Builder(this,&quot;channelId&quot; )
+                        .setContentIntent(pendingIntent)
+                        ...
+</code></pre>
+<p>  这里新建一个了 NotificationActivity，当我们点击通知时，界面就会跳转到这个活动中。<br>
+　　不过此时你会发现系统状态上的通知图标还并没有消失，因为我们没有在代码中对该通知进行取消，它就会一直显示在系统的状态栏上。解决的方法有两种：</p>
+<ul>
+<li>在 NotificationCompat.Builder 中再连缀一个<code>setAutoCancel()</code>方法，传入 true 即可。</li>
+<li>显式地调用 NotificationManager 的<code>cancel()</code>方法将其取消。</li>
+</ul>
+<p>  需要注意的是，第二种方法<code>manager.cancel(1)</code>中的 1 正是在创建通知的时候给每条通知指定的 id，因此，如果我们想取消哪条通知，在<code>cancel()</code>方法中传入该通知的 id 即可。</p>
+<h3 id="通知的更多用法">通知的更多用法</h3>
+<p>  实际上，<code>NotificationCompat.Builder</code>中提供了非常丰富的API，以便我们创建出更加多样的通知效果。下面是一些比较常用的 API。<br>
+　　<code>setStyle()</code>方法，这个方法允许我们构建出富文本的通知内容。也就是说，通知中不光可以有文字和图标，还可以包含更多的东西。其接收一个<code>NotificationCompat.Style</code>参数，这个参数就是用来构建具体的富文本信息的，如长文字、图片等。<br>
+　　比如在通知当中显示一段长文字，具体写法如下：</p>
+<pre><code class="language-java">    Notification notification = new NotificationCompat.Builder(this,&quot;channelId&quot; )
+                        .setStyle(NotificationCompat.BigTextStyle().bigText(&quot;长文本...&quot;))
+                        .build()
+</code></pre>
+<p>  在<code>setStyle()</code>方法中，我们创建了一个<code>NotificationCompat.BigTextStyle</code>对象，这个对象就是用于封装长文字信息的，只要调用它的<code>bigText()</code>方法并将文字内容传入即可。<br>
+　　除了显示长文字之外，通知里还可以显示一张大图片，具体用法是基本相似的：</p>
+<pre><code class="language-java">    Notification notification = new NotificationCompat.Builder(this,&quot;channelId&quot; )
+                        .setStyle(NotificationCompat.BigPictureStyle().bigPicture(
+            BitmapFactory.decodeResource(resources, R.drawable.big_image)))
+                        .build()
+</code></pre>
+<p>  通过<code>BitmapFactory</code>的<code>decodeResource()</code>方法将图片解析成<code>Bitmap</code>对象，再传入<code>bigPicture()</code>方法即可。<br>
+　　通知渠道的重要等级越高，发出的通知就越容易获得用户的注意。比如高重要等级的通知渠道发出的通知可以弹出横幅、发出声音，而低重要等级的通知渠道发出的通知不仅可能会在某些情况下被隐藏，而且可能会被改变显示的顺序，将其排在更重要的通知之后。我们可以在创建渠道的时候通过第三个参数来指定通知渠道的重要等级。</p>
+<blockquote>
+<p>  需要注意的是，开发者只能在创建通知渠道的时候为它指定初始的重要等级。</p>
+</blockquote>
+<h2 id="调用摄像头和相册kotlin">调用摄像头和相册（Kotlin）</h2>
+<h3 id="调用摄像头拍照">调用摄像头拍照</h3>
+<p>  新建一个<code>CameraAlbumTest</code>项目，然后修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/takePhotoBtn&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;Take Photo&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+
+        &lt;ImageView
+            android:id=&quot;@+id/imageView&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center_horizontal&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  <code>Button</code>用于打开摄像头进行拍照的，而<code>ImageView</code>则是用于将拍到的图片显示出来。然后开始编写调用摄像头的具体逻辑，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        private val takePhoto = 1
+        lateinit var imageUri: Uri
+        lateinit var outputImage: File
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            takePhotoBtn.setOnClickListener {
+                /**
+                * 创建File对象 用于存储摄像头拍下的照片 图片命名为output_image.jpg
+                * 存放在手机SD卡的应用关联缓存目录下(SD卡中专门用于存放当前应用缓存数据的位置)
+                * 通过调用getExternalCacheDir()方法可以得到这个目录
+                * 从Android 6.0系统开始 读写SD卡属于危险权限 若存放在SD卡的任何其他目录 都要进行运行时权限处理
+                */
+                outputImage = File(externalCacheDir, &quot;output_image.jpg&quot;)
+                if (outputImage.exists()) {
+                    outputImage.delete()
+                }
+                outputImage.createNewFile()
+                /**
+                * 系统版本高于Android7.0 调用getUriForFile()方法将File对象转换成封装过的Uri对象
+                * 因为从Android7.0开始 直接使用本地真实路径的Uri被认为是不安全的 会抛出异常
+                */
+                imageUri = if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.N) {
+                    //FileProvider是一种特殊的内容提供器 可以选择性的将封装过的Uri共享给外部 提高安全性
+                    FileProvider.getUriForFile(
+                        this, &quot;com.example.cameraalbumtest.fileprovider&quot;, outputImage
+                    )
+                } else {     //系统版本低于Android7.0 直接调用Uri的fromFile将File对象转换成Uri对象
+                    Uri.fromFile(outputImage)   //这个Uri对象标识着图片的本地真实路径
+                }
+                // 启动相机程序
+                val intent = Intent(&quot;android.media.action.IMAGE_CAPTURE&quot;)   //隐式
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)  //指定图片的输出地址
+                startActivityForResult(intent, takePhoto)
+                //使用的是隐式Intent 系统会找出能够响应这个Intent的活动去启动 这样照相机程序就会被打开
+            }
+        }
+
+        //拍照完的结果回调到此方法中
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+            when (requestCode) {
+                takePhoto -&gt; {
+                    if (resultCode == Activity.RESULT_OK) {
+                        //调用BitmapFactory的decodeStream方法(接收一个InputStream对象) 将照片解析成Bitmap对象
+                        val bitmap = BitmapFactory.decodeStream(
+                            contentResolver.openInputStream(imageUri)
+                        )
+                        //将Bitmap对象设置到ImageView中显示出来（需要处理照片可能发生旋转的问题）
+                        imageView.setImageBitmap(rotateIfRequired(bitmap))
+                    }
+                }
+            }
+        }
+        
+        private fun rotateIfRequired(bitmap: Bitmap): Bitmap {
+            val exif = ExifInterface(outputImage.path)
+            val orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
+            return when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -&gt; rotateBitmap(bitmap, 90)
+                ExifInterface.ORIENTATION_ROTATE_180 -&gt; rotateBitmap(bitmap, 180)
+                ExifInterface.ORIENTATION_ROTATE_270 -&gt; rotateBitmap(bitmap, 270)
+                else -&gt; bitmap
+            }
+        }
+
+        private fun rotateBitmap(bitmap: Bitmap, degree: Int): Bitmap {
+            val matrix = Matrix()
+            matrix.postRotate(degree.toFloat())
+            val rotatedBitmap = Bitmap.createBitmap(
+                bitmap, 0, 0, bitmap.width, bitmap.height,
+                matrix, true
+            )
+            bitmap.recycle() // 将不再需要的Bitmap对象回收
+            return rotatedBitmap
+        }
+    }
+</code></pre>
+<p>  需要注意的是，调用照相机程序去拍照有可能会在一些手机上发生照片旋转的情况。这是因为这些手机认为打开摄像头进行拍摄时手机就应该是横屏的，因此回到竖屏的情况下就会发生 90 度的旋转。为此，在<code>imageView.setImageBitmap()</code>里又加上了判断图片方向的代码，如果发现图片需要进行旋转，那么就先将图片旋转相应的角度，然后再显示到界面上。</p>
+<p>  然后要在<code>AndroidManifest.xml</code>中对<code>ContentProvider</code>进行注册才行，代码如下所示：</p>
+<pre><code class="language-java">    &lt;application
+        ...
+        &lt;provider
+            android:name=&quot;androidx.core.content.FileProvider&quot;
+            android:authorities=&quot;com.example.cameraalbumtest.fileprovider&quot;
+            android:exported=&quot;false&quot;
+            android:grantUriPermissions=&quot;true&quot;&gt;
+            &lt;meta-data
+                android:name=&quot;android.support.FILE_PROVIDER_PATHS&quot;
+                android:resource=&quot;@xml/file_paths&quot; /&gt;
+        &lt;/provider&gt;
+    &lt;/application&gt;
+</code></pre>
+<p>  <code>android:name</code>的值固定，而<code>android:authorities</code>的值必须和<code>FileProvider.getUriForFile()</code>方法中的第二个参数一致。<br>
+　　另外，这里还在<code>&lt;provider&gt;</code>标签的内部使用<code>&lt;meta-data&gt;</code>指定 Uri 的共享路径，并引用了一个<code>@xml/file_paths</code>资源。当然，这个资源现在还是不存在的，下面我们就来创建它。<br>
+　　右击 res 目录 →New→Directory，创建一个<code>xml</code>目录，接着右击 xml 目录 →New→File，创建一个<code>file_paths.xml</code>文件。然后修改 file_paths.xml 文件中的内容，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;paths xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+        &lt;external-path
+            name=&quot;my_images&quot;
+            path=&quot;/&quot; /&gt;
+    &lt;/paths&gt;
+</code></pre>
+<p>  <code>external-path</code>就是用来指定 Uri 共享路径的，<code>name</code>属性的值可以随便填，<code>path</code>属性的值表示共享的具体路径。这里使用一个单斜线表示将整个 SD 卡进行共享。</p>
+<h3 id="从相册中选择图片">从相册中选择图片</h3>
+<p>  在 CameraAlbumTest 项目的基础上进行修改，编辑<code>activity_main.xml</code>文件，在布局中添加一个按钮，用于从相册中选择图片，代码如下所示：</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:orientation=&quot;vertical&quot;&gt;
+    ...
+    &lt;Button
+        android:id=&quot;@+id/fromAlbumBtn&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:text=&quot;From Album&quot;
+        android:textAllCaps=&quot;false&quot; /&gt;
+    ...
+&lt;/LinearLayout&gt;
+</code></pre>
+<p>  然后修改 MainActivity 中的代码，加入从相册选择图片的逻辑，代码如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    ...
+    private val fromAlbum = 2
+    ...
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        //从相册中选择照片
+        fromAlbumBtn.setOnClickListener {
+            //指定的action表示打开系统的文件选择器
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)  
+            //条件过滤 只允许可打开的图片文件显示出来
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = &quot;image/*&quot;
+            startActivityForResult(intent, fromAlbum)
+        }
+    }
+
+    //拍照完的结果回调到此方法中
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            ...
+            fromAlbum -&gt; {
+                if (resultCode == Activity.RESULT_OK &amp;&amp; data != null) {
+                    data.data?.let { uri -&gt; //调用返回Intent的getData()方法来获取选中图片的Uri
+                        // 将选择的图片显示
+                        val bitmap = getBitmapFromUri(uri)  //将Uri转换成Bitmap对象
+                        imageView.setImageBitmap(bitmap)
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>  最后需要注意的是，如果某些图片的像素很高，直接加载到内存中就有可能会导致程序崩溃。更好的做法是根据项目的需求先对图片进行适当的压缩，然后再加载到内存中。</p>
+<pre><code class="language-java"></code></pre>
+<h2 id="播放多媒体文件kotlin">播放多媒体文件（Kotlin）</h2>
+<h3 id="播放音频">播放音频</h3>
+<p>  在 Android 中播放音频文件一般是使用<code>MediaPlayer</code>类实现的，它对多种格式的音频文件提供了非常全面的控制方法，下表列出了 MediaPlayer 类中一些较为常用的控制方法。<br>
+<img src="https://Petrichoroo.github.io/post-images/1661094381263.png" alt="" loading="lazy"></p>
+<p>  <code>MediaPlayer</code>的工作流程：首先需要创建一个 MediaPlayer 对象，然后调用<code>setDataSource()</code>方法设置音频文件的路径，再调用<code>prepare()</code>方法使 MediaPlayer 进入准备状态，接下来调用<code>start()</code>方法就可以开始播放音频，调用<code>pause()</code>方法就会暂停播放，调用<code>reset()</code>方法就会停止播放。<br>
+　　新建一个 PlayAudioTest 项目，然后修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/play&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;Play&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/pause&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;Pause&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/stop&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;&quot;
+            android:text=&quot;Stop&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  布局文件中放置了 3 个按钮，分别用于对音频文件进行播放、暂停和停止操作。<br>
+　　MediaPlayer 可以用于播放网络、本地以及应用程序安装包中的音频。为简单起见，下面实现播放应用程序安装包中的音频。<br>
+　　Android Studio 允许我们在项目工程中创建一个<code>assets</code>目录，并在这个目录下存放任意文件和子目录，这些文件和子目录在项目打包时会一并被打包到安装文件中，然后在程序中就可以借助<code>AssetManager</code>这个类提供的接口对 assets 目录下的文件进行读取。<br>
+　　首先需要创建<code>assets</code>目录，它必须创建在<code>app/src/main</code>这个目录下面，创建完成后，由于我们要播放音频文件，因此需要提前准备好了一份 music.mp3 资源，将它放入 assets 目录中即可。</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        private val mediaPlayer = MediaPlayer()
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            val play: Button = findViewById(R.id.play)
+            val pause: Button = findViewById(R.id.pause)
+            val stop: Button = findViewById(R.id.stop)
+            initMediaPlayer()
+            play.setOnClickListener {
+                if (!mediaPlayer.isPlaying) {   //判断当前MediaPlayer是否正在播放音频
+                    mediaPlayer.start() // 开始播放
+                }
+            }
+            pause.setOnClickListener {
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.pause() // 暂停播放
+                }
+            }
+            stop.setOnClickListener {   //停止播放
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.reset() // 将MediaPlayer对象重置到刚刚创建的状态
+                    initMediaPlayer()
+                }
+            }
+        }
+
+        private fun initMediaPlayer() {
+            val assetManager = assets
+            val fd = assetManager.openFd(&quot;music.mp3&quot;)
+            //设置要播放的音频文件的位置 setDataSource()有多个重载方法
+            mediaPlayer.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+            mediaPlayer.prepare()
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
+    }
+</code></pre>
+<p>  在<code>initMediaPlayer()</code>方法中，首先通过<code>getAssets()</code>方法得到了一个<code>AssetManager</code>的实例，AssetManager 可用于读取<code>assets</code>目录下的任何资源。接着我们调用了<code>openFd()</code>方法将音频文件句柄打开，后面又依次调用了<code>setDataSource()</code>方法和<code>prepare()</code>方法，为<code>MediaPlayer</code>做好了播放前的准备。<br>
+　　最后在<code>onDestroy()</code>方法中，需要分别调用<code>stop()</code>方法和<code>release()</code>方法，将与<code>MediaPlayer</code>相关的资源释放掉。</p>
+<h3 id="播放视频">播放视频</h3>
+<p>  播放视频文件主要是使用<code>VideoView</code>类来实现的。这个类将视频的显示和控制集于一身，它的常用方法如下表所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661094305496.png" alt="" loading="lazy"><br>
+  新建 PlayVideoTest 项目，然后修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;LinearLayout
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;&gt;
+
+            &lt;Button
+                android:id=&quot;@+id/play&quot;
+                android:layout_width=&quot;0dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_weight=&quot;1&quot;
+                android:text=&quot;Play&quot; /&gt;
+
+            &lt;Button
+                android:id=&quot;@+id/pause&quot;
+                android:layout_width=&quot;0dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_weight=&quot;1&quot;
+                android:text=&quot;Pause&quot; /&gt;
+
+            &lt;Button
+                android:id=&quot;@+id/replay&quot;
+                android:layout_width=&quot;0dp&quot;
+                android:layout_height=&quot;wrap_content&quot;
+                android:layout_weight=&quot;1&quot;
+                android:text=&quot;Replay&quot; /&gt;
+        &lt;/LinearLayout&gt;
+
+        &lt;VideoView
+            android:id=&quot;@+id/videoView&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  这个布局文件中同样放置了 3个 按钮，分别用于控制视频的播放、暂停和重新播放。另外在按钮的下面又放置了一个<code>VideoView</code>，稍后的视频就将在这里显示。<br>
+　　<code>VideoView</code>不支持直接播放<code>assets</code>目录下的视频资源，我们可以在<code>res</code>目录下再创建一个<code>raw</code>目录，像诸如音频、视频之类的资源文件也可以放在这里，并且 VideoView 可以直接播放这个目录下的视频资源。<br>
+　　右击 app/src/main/res→New→Directory，在这里完成<code>raw</code>目录的创建，并把要播放的视频资源 video.mp4 放在里面。<br>
+　　然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            val uri = Uri.parse(&quot;android.resource://$packageName/${R.raw.video}&quot;)
+            videoView.setVideoURI(uri)
+            play.setOnClickListener {
+                if (!videoView.isPlaying) {
+                    videoView.start() // 开始播放
+                }
+            }
+            pause.setOnClickListener {
+                if (videoView.isPlaying) {
+                    videoView.pause() // 暂停播放
+                }
+            }
+            replay.setOnClickListener {
+                if (videoView.isPlaying) {
+                    videoView.resume() // 重新播放
+                }
+            }
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            videoView.suspend()
+        }
+    }
+</code></pre>
+<p>  首先在<code>onCreate()</code>方法中调用了<code>Uri.parse()</code>方法，将 raw 目录下的 video.mp4 文件解析成了一个 Uri 对象，这里使用的写法是 Android 要求的固定写法。<br>
+　　然后调用<code>VideoView</code>的<code>setVideoURI()</code>方法将刚才解析出来的 Uri 对象传入，这样就完成了 VideoView 的初始化，接下来就是控制视频播放的逻辑处理。<br>
+　　最后在<code>onDestroy()</code>方法中，需要调用一下<code>suspend()</code>方法，将<code>VideoView</code>所占用的资源释放掉。</p>
+<blockquote>
+<p>  VideoView 用法和 MediaPlayer 是比较相似的，其实只是 VideoView 帮我们做了一个很好的封装而已，它的背后仍然是使用 MediaPlayer 对视频文件进行控制的。<br>
+　　另外需要注意，VideoView 并不是一个万能的视频播放工具类，它在视频格式的支持以及播放效率方面都存在着较大的不足。</p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-nei-rong-ti-gong-qi/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — 内容提供器
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

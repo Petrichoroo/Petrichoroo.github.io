@@ -1,0 +1,418 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Kotlin：泛型的高级特性 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Kotlin：泛型的高级特性
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-22 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/f0WJ2wxNg/" class="post-tags">
+                            # Kotlin
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#kotlin">Kotlin</a>
+<ul>
+<li><a href="#%E5%AF%B9%E6%B3%9B%E5%9E%8B%E8%BF%9B%E8%A1%8C%E5%AE%9E%E5%8C%96">对泛型进行实化</a></li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E5%AE%9E%E5%8C%96%E7%9A%84%E5%BA%94%E7%94%A8">泛型实化的应用</a></li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%8D%8F%E5%8F%98">泛型的协变</a></li>
+<li><a href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E9%80%86%E5%8F%98">泛型的逆变</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="kotlin">Kotlin</h1>
+<hr>
+<h2 id="对泛型进行实化">对泛型进行实化</h2>
+<p>  在 JDK 1.5 中，Java 引入了泛型。Java 的泛型功能是通过类型擦除机制来实现的。这种机制就是说泛型对于类型的约束只在编译时期存在，在进入 JVM 之前，与泛型相关的信息会被擦除掉，运行时 JVM 是识别不出来我们在代码中指定的泛型类型的。</p>
+<blockquote>
+<p>  类型擦除，是泛型能够与之前的 java 版本代码兼容共存的原因。</p>
+</blockquote>
+<p>  例如，假设我们创建了一个<code>List&lt;String&gt;</code>集合，虽然在编译时期只能向集合中添加字符串类型的元素，但是在运行时期 JVM 并不能知道它本来只打算包含哪种类型的元素，只能识别出来它是个<code>List</code>。</p>
+<p>  所有基于 JVM 的语言，它们的泛型功能都是通过类型擦除机制来实现的，其中当然也包括了 Kotlin。这种机制使得我们不可能使用<code>a is T</code>或者<code>T::class.java</code>这样的语法，因为<code>T</code>的实际类型在运行的时候已经被擦除了。<br>
+　　然而不同的是，Kotlin 提供了一个内联函数的概念。内联函数中的代码会在编译的时候自动被替换到调用它的地方，这样的话也就不存在什么泛型擦除的问题了，因为代码在编译之后会直接使用实际的类型来替代内联函数中的泛型声明，其工作原理如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661155707845.png" alt="" loading="lazy"><br>
+  最终代码会被替换成下图所示的样子：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661155757979.png" alt="" loading="lazy"></p>
+<p>  可以看到，<code>bar()</code>是一个带有泛型类型的内联函数，<code>foo()</code>函数调用了 bar() 函数，在代码编译之后，bar() 函数中的代码将可以获得泛型的实际类型。</p>
+<blockquote>
+<p>  这就意味着，Kotlin 中是可以将内联函数中的泛型进行实化的。</p>
+</blockquote>
+<p>  如何让才能将泛型实化呢？首先，该函数必须是内联函数，即用<code>inline</code>关键字来修饰该函数。其次，在声明泛型的地方必须加上<code>reified</code>关键字来表示该泛型要进行实化。示例代码如下：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; getGenericType() {
+    }
+</code></pre>
+<p>  上述函数中的泛型<code>T</code>就是一个被实化的泛型，下面实现一个获取泛型实际类型的功能，代码如下所示：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; getGenericType() = T::class.java
+</code></pre>
+<p>  <code>getGenericType()</code>函数直接返回了当前指定泛型的实际类型。<code>T.class</code>这样的语法在 Java 中是不合法的，而在 Kotlin 中，借助泛型实化功能就可以使用<code>T::class.java</code>这样的语法了。现在我们可以使用如下代码对 getGenericType() 函数进行测试：</p>
+<pre><code class="language-java">    fun main() {
+        val result1 = getGenericType&lt;String&gt;()
+        val result2 = getGenericType&lt;Int&gt;()
+        println(&quot;result1 is $result1&quot;)
+        println(&quot;result2 is $result2&quot;)
+    }
+</code></pre>
+<p>  这里给<code>getGenericType()</code>函数指定了两种不同的泛型，由于 getGenericType() 函数会将指定泛型的具体类型返回，因此这里我们将返回的结果进行打印，如下：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661156457970.png" alt="" loading="lazy"></p>
+<h2 id="泛型实化的应用">泛型实化的应用</h2>
+<p>  使用 Intent 启动一个 Activity ：</p>
+<pre><code class="language-java">    val intent = Intent(context, TestActivity::class.java)
+    context.startActivity(intent)
+</code></pre>
+<p>  <code>TestActivity::class.java</code>这样的语法是很难受的，Kotlin 的泛型实化功能使得我们拥有了更好的选择。新建一个<code>reified.kt</code>文件，然后在里面编写如下代码：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; startActivity(context: Context) {
+        val intent = Intent(context, T::class.java)
+        context.startActivity(intent)
+    }
+</code></pre>
+<p>  这里同时使用<code>inline</code>和<code>reified</code>关键字让泛型<code>T</code>成为了一个被实化的泛型，因此在 Intent 接受的第二个参数里可以直接传入<code>T::class.java</code>。<br>
+　　现在启动 TestActivity，只需要这样写即可：</p>
+<pre><code class="language-java">    startActivity&lt;TestActivity&gt;(context)
+</code></pre>
+<p>  Kotlin 将能够识别出指定泛型的实际类型，并启动相应的 Activity。</p>
+<p>  通常在启用 Activity 的时候可能会使用 Intent 附带一些参数，而经过刚才的封装之后，我们就无法进行传参了。<br>
+　　使用高阶函数可以解决这个问题，在<code>reified.kt</code>文件中添加一个新的<code>startActivity()</code>函数重载，如下所示：</p>
+<pre><code class="language-java">    inline fun &lt;reified T&gt; startActivity(context: Context, block: Intent.() -&gt; Unit) {
+        val intent = Intent(context, T::class.java)
+        intent.block()
+        context.startActivity(intent)
+    }
+</code></pre>
+<p>  这里在<code>startActivity()</code>函数中增加了一个函数类型参数，并且它的函数类型是定义在<code>Intent</code>类当中的。在创建完 Intent 的实例之后，随即调用该函数类型参数，并把 Intent 的实例传入，这样调用 startActivity() 函数的时候就可以在 Lambda 表达式中为 Intent 传递参数了，如下所示：</p>
+<pre><code class="language-java">    startActivity&lt;TestActivity&gt;(context) {
+        putExtra(&quot;param1&quot;, &quot;data&quot;)
+        putExtra(&quot;param2&quot;, 123)
+    }
+</code></pre>
+<h2 id="泛型的协变">泛型的协变</h2>
+<p>  Kotlin 的内置 API 中使用了很多协变和逆变的特性。<br>
+　　一个泛型类或者泛型接口中的方法，它的参数列表是接收数据的地方，因此可以称它为<code>in</code>位置，而它的返回值是输出数据的地方，因此可以称它为<code>out</code>位置。如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661157760612.png" alt="" loading="lazy"><br>
+　　首先定义如下 3 个类：</p>
+<pre><code class="language-java">    open class Person(val name: String, val age: Int)
+    class Student(name: String, age: Int) : Person(name, age)
+    class Teacher(name: String, age: Int) : Person(name, age)
+</code></pre>
+<p>  这里先定义了一个<code>Person</code>类，类中包含<code>name</code>和<code>age</code>两个字段。然后又定义了<code>Student</code>和<code>Teacher</code>这两个类，让它们成为 Person 类的子类。</p>
+<blockquote>
+<p>  Student 是 Person 的子类，但<code>List&lt;Student&gt;</code>不能直接成为<code>List&lt;Person&gt;</code>的子类，否则将可能存在类型转换的安全隐患。</p>
+</blockquote>
+<p>  为什么会存在类型转换的安全隐患呢？下面通过一个具体的例子进行说明。自定义一个<code>SimpleData</code>类，代码如下所示：</p>
+<pre><code class="language-java">    class SimpleData&lt;T&gt; {
+        private var data: T? = null
+        fun set(t: T?) {
+            data = t
+        }
+
+        fun get(): T? {
+            return data
+        }
+    }
+</code></pre>
+<p>  SimpleData 是一个泛型类，它的内部封装了一个泛型<code>data</code>字段，调用<code>set()</code>方法可以给 data 字段赋值，调用<code>get()</code>方法可以获取 data 字段的值。<br>
+　　假设：若编程语言允许向某个接收<code>SimpleData&lt;Person&gt;</code>参数的方法传入<code>SimpleData&lt;Student&gt;</code>的实例，那么如下代码就会是合法的：</p>
+<pre><code class="language-java">    fun main() {
+        val student = Student(&quot;Tom&quot;, 19)
+        val data = SimpleData&lt;Student&gt;()
+        data.set(student)
+        handleSimpleData(data) // 实际上这行代码会报错，这里假设它能编译通过
+        val studentData = data.get()
+    }
+
+    fun handleSimpleData(data: SimpleData&lt;Person&gt;) {
+        val teacher = Teacher(&quot;Jack&quot;, 35)
+        data.set(teacher)
+    }
+</code></pre>
+<p>  在<code>main()</code>方法中创建一个<code>Student</code>的实例，并将它封装到<code>SimpleData&lt;Student&gt;</code>中，然后将 SimpleData<Student> 作为参数传递给<code>handleSimpleData()</code>方法。但是此方法接收一个<code>SimpleData&lt;Person&gt;</code>参数（这里假设可以编译通过），那么在 handleSimpleData() 方法中，我们就可以创建一个<code>Teacher</code>的实例，并用它来替换 SimpleData<Person> 参数中的原有数据。这种操作肯定是合法的，因为 Teacher 也是 Person 的子类。<br>
+　　但是问题马上来了，回到<code>main()</code>方法当中，我们调用<code>SimpleData&lt;Student&gt;</code>的<code>get()</code>方法来获取它内部封装的<code>Student</code>数据，可现在 SimpleData<Student> 中实际包含的却是一个 Teacher 的实例，那么此时必然会产生类型转换异常。</p>
+<blockquote>
+<p>  问题发生的主要原因是我们在<code>handleSimpleData()</code>方法中向 SimpleData<Person> 里设置了一个 Teacher 的实例。如果 SimpleData 在泛型<code>T</code>上是只读的话，肯定就没有类型转换的安全隐患了。</p>
+</blockquote>
+<p>  下面给出泛型协变的定义：假如定义了一个<code>MyClass&lt;T&gt;</code>的泛型类，其中 A 是 B 的子类型，同时 <code>MyClass&lt;A&gt;</code>又是<code>MyClass&lt;B&gt;</code>的子类型，那么我们就可以称<code>MyClass</code>在<code>T</code>这个泛型上是协变的。<br>
+　　<br>
+  但是如何才能让<code>MyClass&lt;A&gt;</code>成为<code>MyClass&lt;B&gt;</code>的子类型呢？即让<code>MyClass&lt;T&gt;</code>类中的所有方法都不能接收<code>T</code>类型的参数。换句话说，<code>T</code>只能出现在<code>out</code>位置上，而不能出现在<code>in</code>位置上。<br>
+　　修改 SimpleData 类的代码，如下所示：</p>
+<pre><code class="language-java">    class SimpleData&lt;out T&gt;(val data: T?) {
+        fun get(): T? {
+            return data
+        }
+    }
+</code></pre>
+<p>  这里对 SimpleData 类进行了改造，在泛型<code>T</code>的声明前面加上了一个<code>out</code>关键字。这就意味着现在 T 只能出现在 out 位置上，而不能出现在<code>in</code>位置上，同时也意味着<code>SimpleData</code>在泛型 T 上是协变的。<br>
+　　由于泛型 T 不能出现在 in 位置上，因此我们也就不能使用<code>set()</code>方法为 data 参数赋值了，所以这里改成了使用构造函数的方式来赋值。由于这里使用了<code>val</code>关键字，所以构造函数中的泛型 T 仍然是只读的。另外，即使我们使用了<code>var</code>关键字，但只要给它加上<code>private</code>修饰符，保证这个泛型<code>T</code>对于外部而言是不可修改的，那么就都是合法的写法。</p>
+<p>  经过了这样的修改之后，下面的代码就可以完美编译通过且没有任何安全隐患：</p>
+<pre><code class="language-java">    fun main() {
+        val student = Student(&quot;Tom&quot;, 19)
+        val data = SimpleData&lt;Student&gt;(student)
+        handleMyData(data)
+        val studentData = data.get()
+    }
+
+    fun handleMyData(data: SimpleData&lt;Person&gt;) {
+        val personData = data.get()
+    }
+</code></pre>
+<p>  由于 SimpleData 类进行了协变声明，那么<code>SimpleData&lt;Student&gt;</code>自然就是<code>SimpleData&lt;Person&gt;</code>的子类了，所以这里可以安全地向<code>handleMyData()</code>方法中传递参数。<br>
+　　然后在<code>handleMyData()</code>方法中去获取 SimpleData 封装的数据，虽然这里泛型声明的是 Person 类型，实际获得的会是一个 Student 的实例，但由于 Person 是 Student 的父类，向上转型是完全安全的。</p>
+<p>  如果某个方法接收一个<code>List&lt;Person&gt;</code>类型的参数，而传入的却是一个<code>List&lt;Student&gt;</code>的实例， 这在 Java 中是不允许的。而在 Kotlin 中是合法的，因为 Kotlin 已经默认给许多内置的 API 加上了协变声明，其中就包括了各种集合的类与接口。</p>
+<p>  Kotlin 中的<code>List</code>本身就是只读的，如果你想要给 List 添加数据，需要使用<code>MutableList</code>才行。既然 List 是只读的，也就意味着它天然就是可以协变的，下面来看一下 List 简化版的源码：</p>
+<pre><code class="language-java">    public interface List&lt;out E&gt; : Collection&lt;E&gt; {
+        override val size: Int
+        override fun isEmpty(): Boolean
+        override fun contains(element: @UnsafeVariance E): Boolean
+        override fun iterator(): Iterator&lt;E&gt;
+        public operator fun get(index: Int): E
+    }
+</code></pre>
+<p>  List 在泛型<code>E</code>的前面加上了<code>out</code>关键字，说明 List 在泛型 E 上是协变的。<br>
+　　不过这里还有一点需要说明，原则上在声明了协变之后，泛型<code>E</code>就只能出现在<code>out</code>位置上，可是我们会发现，在<code>contains()</code>方法中，泛型 E 仍然出现在了<code>in</code>位置上。<br>
+　　这么写本身是不合法的，因为在<code>in</code>位置上出现了泛型<code>E</code>就意味着会有类型转换的安全隐患。但是<br>
+<code>contains()</code>方法的目的非常明确，它只是为了判断当前集合中是否包含参数中传入的这个元素，而并不会修改当前集合中的内容，因此这种操作实质上又是安全的。<br>
+　　为了让编译器能够理解这种操作是安全的，这里在泛型<code>E</code>的前面又加上了一个<code>@UnsafeVariance</code>注解，这样编译器就会允许泛型 E 出现在<code>in</code>位置上了。</p>
+<h2 id="泛型的逆变">泛型的逆变</h2>
+<p>  泛型逆变的定义：假如定义了一个<code>MyClass&lt;T&gt;</code>的泛型类，其中 A 是 B 的子类型，同时<code>MyClass&lt;B&gt;</code>又是<code>MyClass&lt;A&gt;</code>的子类型，那么我们就可以称<code>MyClass</code>在<code>T</code>这个泛型上是逆变的。协变和逆变的区别如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661159547966.png" alt="" loading="lazy"></p>
+<blockquote>
+<p>  原本 A 是 B 的子类型，怎么<code>MyClass&lt;B&gt;</code>能反过来成为<code>MyClass&lt;A&gt;</code>的子类型了呢？</p>
+</blockquote>
+<p>  这里先定义一个<code>Transformer</code>接口，用于执行一些转换操作，代码如下所示：</p>
+<pre><code class="language-java">    interface Transformer&lt;T&gt; {
+        fun transform(t: T): String
+    }
+</code></pre>
+<p>  <code>Transformer</code>接口中声明了一个<code>transform()</code>方法，它接收一个<code>T</code>类型的参数，并且返回一个<code>String</code>类型的数据，这意味着参数 T 在经过 transform() 方法的转换之后将会变成一个字符串。至于具体的转换逻辑是什么样的，则由子类去实现。</p>
+<p>  下面尝试对<code>Transformer</code>接口进行实现，代码如下所示：</p>
+<pre><code class="language-java">    fun main() {
+        val trans = object : Transformer&lt;Person&gt; {
+            override fun transform(t: Person): String {
+                return &quot;${t.name} ${t.age}&quot;
+            }
+        }
+        handleTransformer(trans) // 这行代码会报错
+    }
+
+    fun handleTransformer(trans: Transformer&lt;Student&gt;) {
+        val student = Student(&quot;Tom&quot;, 19)
+        val result = trans.transform(student)
+    }
+</code></pre>
+<p>  首先在 main() 方法中编写了一个<code>Transformer&lt;Person&gt;</code>的匿名类实现，并通过<code>transform()</code>方法将传入的 Person 对象转换成了一个“姓名+年龄”拼接的字符串。而<code>handleTransformer()</code>方法接收的是一个<code>Transformer&lt;Student&gt;</code>类型的参数，这里在 handleTransformer() 方法中创建了一个 Student 对象，并调用参数的 transform() 方法将 Student 对象转换成一个字符串。<br>
+　　因为<code>Student</code>是<code>Person</code>的子类，使用<code>Transformer&lt;Person&gt;</code>的匿名类实现将 Student 对象转换成一个字符串也是绝对安全的，并不存在类型转换的安全隐患。但是实际上，在调用 handleTransformer() 方法的时候却会提示语法错误，原因也很简单，<code>Transformer&lt;Person&gt;</code>并不是<code>Transformer&lt;Student&gt;</code>的子类型。<br>
+　　那么这个时候逆变就可以派上用场了，它就是专门用于处理这种情况的。修改<code>Transformer</code>接口中的代码，如下所示：</p>
+<pre><code class="language-java">    interface Transformer&lt;in T&gt; {
+        fun transform(t: T): String
+    }
+</code></pre>
+<p>  这里在泛型<code>T</code>的声明前面加上了一个<code>in</code>关键字。这就意味着现在 T 只能出现在 in 位置上，而不能出现在 out 位置上，同时也意味着<code>Transformer</code>在泛型 T 上是逆变的。</p>
+<blockquote>
+<p>  此时<code>Transformer&lt;Person&gt;</code>已经成为了<code>Transformer&lt;Student&gt;</code>的子类型。</p>
+</blockquote>
+<p>  为什么逆变的时候泛型<code>T</code>不能出现在<code>out</code>位置上？</p>
+<p>  这里假设逆变是允许让泛型<code>T</code>出现在<code>out</code>位置上的，然后看一看可能会产生什么样的安全隐患。修改<code>Transformer</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    interface Transformer&lt;in T&gt; {
+        fun transform(name: String, age: Int): @UnsafeVariance T
+    }
+</code></pre>
+<p>  这里将<code>transform()</code>方法改成了接收<code>name</code>和<code>age</code>这两个参数，并把返回值类型改成了泛型<code>T</code>。由于逆变是不允许泛型 T 出现在<code>out</code>位置上的，为了能让编译器正常编译通过，加上了<code>@UnsafeVariance</code>注解。<br>
+　　那么，这个时候可能会产生什么样的安全隐患呢？观察如下代码：</p>
+<pre><code class="language-java">    fun main() {
+        val trans = object : Transformer&lt;Person&gt; {
+            override fun transform(name: String, age: Int): Person {
+                return Teacher(name, age)
+            }
+        }
+        handleTransformer(trans)
+    }
+
+    fun handleTransformer(trans: Transformer&lt;Student&gt;) {
+        val result = trans.transform(&quot;Tom&quot;, 19)
+    }
+</code></pre>
+<p>  上述代码就是一个典型的违反逆变规则而造成类型转换异常的例子。<br>
+　　在<code>Transformer&lt;Person&gt;</code>的匿名类实现中，使用<code>transform()</code>方法中传入的 name 和 age 参数构建了一个 Teacher 对象，并把这个对象直接返回。<br>
+　　由于<code>transform()</code>方法的返回值要求是一个<code>Person</code>对象，而<code>Teacher</code>是 Person 的子类，因此这种写法肯定是合法的。<br>
+　　但在<code>handleTransformer()</code>方法当中，我们调用了<code>Transformer&lt;Student&gt;</code>的<code>transform()</code>方法，并传入了 name 和 age 这两个参数，期望得到的是一个<code>Student</code>对象的返回，然而实际上 transform() 方法返回的却是一个<code>Teacher</code>对象，因此这里必然会造成类型转换异常。</p>
+<p>  Kotlin 在提供协变和逆变功能时，就已经把各种潜在的类型转换安全隐患全部考虑进去了。只要我们严格按照其语法规则，让泛型在协变时只出现在<code>out</code>位置上，逆变时只出现在<code>in</code>位置上，就不会存在类型转换异常的情况。虽然<code>@UnsafeVariance</code>注解可以打破这一语法规则，但同时也会带来额外的风险。</p>
+<p>  最后介绍一下逆变功能在 Kotlin 内置 API 中的应用，比较典型的例子就是<code>Comparable</code>的使用。Comparable 是一个用于比较两个对象大小的接口，其源码定义如下：</p>
+<pre><code class="language-java">    interface Comparable&lt;in T&gt; {
+        operator fun compareTo(other: T): Int
+    }
+</code></pre>
+<p>  可以看到，<code>Comparable</code>在<code>T</code>这个泛型上就是逆变的，<code>compareTo()</code>方法则用于实现具体的比较逻辑。</p>
+<blockquote>
+<p>  那么这里为什么要让 Comparable 接口是逆变的呢？想象以下场景：</p>
+</blockquote>
+<p>  如果使用<code>Comparable&lt;Person&gt;</code>实现了让两个 Person 对象比较大小的逻辑，那么用这段逻辑去比较两个 Student 对象的大小也一定是成立的，因此让<code>Comparable&lt;Person&gt;</code>成为<code>Comparable&lt;Student&gt;</code>的子类合情合理，这也是逆变非常典型的应用。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlinfan-xing-he-wei-tuo/" class="post-title gt-a-link">
+                    Kotlin：泛型和委托
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

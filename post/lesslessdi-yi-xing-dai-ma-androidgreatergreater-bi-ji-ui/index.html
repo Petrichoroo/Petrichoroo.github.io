@@ -1,0 +1,919 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>《第一行代码 Android》笔记 — UI | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    《第一行代码 Android》笔记 — UI
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-08 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#ui">UI</a>
+<ul>
+<li><a href="#%E4%B8%80-%E5%B8%B8%E8%A7%81%E6%8E%A7%E4%BB%B6">一、常见控件</a>
+<ul>
+<li><a href="#textview">TextView</a>
+<ul>
+<li><a href="#%E9%83%A8%E5%88%86xml%E5%B1%9E%E6%80%A7">部分XML属性</a></li>
+</ul>
+</li>
+<li><a href="#button">Button</a>
+<ul>
+<li><a href="#%E5%B8%B8%E8%A7%81xml-%E5%B1%9E%E6%80%A7">常见XML 属性</a></li>
+<li><a href="#shape-%E5%B1%9E%E6%80%A7">Shape 属性</a></li>
+</ul>
+</li>
+<li><a href="#edittext">EditText</a>
+<ul>
+<li><a href="#%E5%B8%B8%E8%A7%81-xml-%E5%B1%9E%E6%80%A7">常见 XML 属性</a></li>
+</ul>
+</li>
+<li><a href="#imageview">ImageView</a>
+<ul>
+<li><a href="#src-%E5%B1%9E%E6%80%A7%E5%92%8C-background-%E5%B1%9E%E6%80%A7%E7%9A%84%E5%8C%BA%E5%88%AB">src 属性和 background 属性的区别</a></li>
+<li><a href="#%E5%8A%A8%E6%80%81%E6%9B%B4%E6%94%B9%E5%9B%BE%E7%89%87">动态更改图片</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E5%9B%BE%E7%89%87%E7%9A%84%E7%BC%A9%E6%94%BE%E7%B1%BB%E5%9E%8B">设置图片的缩放类型</a></li>
+<li><a href="#%E7%BB%98%E5%88%B6%E5%9C%86%E5%BD%A2%E7%9A%84-imageview">绘制圆形的 ImageView</a></li>
+</ul>
+</li>
+<li><a href="#progressbar">ProgressBar</a>
+<ul>
+<li><a href="#%E5%B8%B8%E8%A7%81-xml-%E5%B1%9E%E6%80%A7-2">常见 XML 属性</a></li>
+<li><a href="#android-%E6%8E%A7%E4%BB%B6%E7%9A%84%E5%8F%AF%E8%A7%81%E5%B1%9E%E6%80%A7">Android 控件的可见属性</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E6%B0%B4%E5%B9%B3%E8%BF%9B%E5%BA%A6%E6%9D%A1">设置水平进度条</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95">常见方法</a></li>
+</ul>
+</li>
+<li><a href="#alertdialog">AlertDialog</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%AD%A5%E9%AA%A4">创建步骤</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95">常用方法</a></li>
+<li><a href="#%E6%99%AE%E9%80%9A%E5%AF%B9%E8%AF%9D%E6%A1%86">普通对话框</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-%E5%B8%B8%E8%A7%81%E5%B8%83%E5%B1%80%E5%8F%8A%E5%85%B6%E5%B1%9E%E6%80%A7">二、常见布局及其属性</a>
+<ul>
+<li><a href="#linearlayout">LinearLayout</a>
+<ul>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%B1%9E%E6%80%A7">常用属性</a></li>
+</ul>
+</li>
+<li><a href="#relativelayout">RelativeLayout</a>
+<ul>
+<li><a href="#%E5%AD%90%E6%8E%A7%E4%BB%B6%E7%9B%B8%E5%AF%B9%E4%BA%8E%E7%88%B6%E5%B8%83%E5%B1%80%E5%B1%9E%E6%80%A7">子控件相对于父布局属性</a></li>
+<li><a href="#%E5%AD%90%E6%8E%A7%E4%BB%B6%E7%9B%B8%E5%AF%B9%E4%BA%8E%E5%85%B6%E5%AE%83%E4%BD%8D%E7%BD%AE%E6%8E%A7%E4%BB%B6%E5%B1%9E%E6%80%A7">子控件相对于其它位置控件属性</a></li>
+<li><a href="#%E5%AD%90%E6%8E%A7%E4%BB%B6%E7%9B%B8%E5%AF%B9%E4%BA%8E%E5%85%B6%E5%AE%83%E6%8E%A7%E4%BB%B6%E5%AF%B9%E9%BD%90%E6%96%B9%E5%BC%8F">子控件相对于其它控件对齐方式</a></li>
+<li><a href="#%E5%81%8F%E7%A7%BBmargin">偏移（margin）</a></li>
+<li><a href="#%E5%A1%AB%E5%85%85padding">填充（padding）</a></li>
+</ul>
+</li>
+<li><a href="#framelayout">FrameLayout</a>
+<ul>
+<li><a href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9">注意事项</a></li>
+</ul>
+</li>
+<li><a href="#constrainlayout">ConstrainLayout</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6">三、自定义控件</a>
+<ul>
+<li><a href="#%E6%8E%A7%E4%BB%B6%E5%92%8C%E5%B8%83%E5%B1%80%E7%9A%84%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84">控件和布局的继承结构</a></li>
+<li><a href="#%E5%BC%95%E5%85%A5%E5%B8%83%E5%B1%80%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%87%E9%A2%98%E6%A0%8F">引入布局（自定义标题栏）</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E4%BB%B6">创建自定义控件</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-listview">四、ListVIew</a>
+<ul>
+<li><a href="#listview-%E7%9A%84%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95">ListView 的简单用法</a></li>
+<li><a href="#%E5%AE%9A%E5%88%B6-listview-%E7%9A%84%E7%95%8C%E9%9D%A2">定制 ListView 的界面</a></li>
+<li><a href="#%E6%8F%90%E5%8D%87-listview-%E7%9A%84%E8%BF%90%E8%A1%8C%E6%95%88%E7%8E%87">提升 ListView 的运行效率</a></li>
+<li><a href="#listview-%E7%9A%84%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6">ListView 的点击事件</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-recyclerview">五、RecyclerView</a>
+<ul>
+<li><a href="#recyclerview-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">RecyclerView 的基本用法</a></li>
+<li><a href="#%E5%B8%83%E5%B1%80%E6%8E%92%E5%88%97">布局排列</a>
+<ul>
+<li><a href="#%E7%BA%BF%E6%80%A7%E5%B8%83%E5%B1%80">线性布局</a></li>
+<li><a href="#%E7%80%91%E5%B8%83%E6%B5%81%E5%B8%83%E5%B1%80">瀑布流布局</a></li>
+<li><a href="#%E7%BD%91%E6%A0%BC%E5%BC%8F%E5%B8%83%E5%B1%80">网格式布局</a></li>
+</ul>
+</li>
+<li><a href="#recyclerview-%E7%9A%84%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6">RecyclerView 的点击事件</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="ui">UI</h1>
+<hr>
+<h2 id="一-常见控件">一、常见控件</h2>
+<h3 id="textview">TextView</h3>
+<blockquote>
+<p>  用来显示字符串的组件，在手机上就是显示一块文本的区域。</p>
+</blockquote>
+<h4 id="部分xml属性">部分XML属性</h4>
+<ul>
+<li><code>android:inputType</code>：设置文本的数据类型，如果包含非该类型的文本则不显示。</li>
+<li><code>android:gravity</code>：设置控件中内容的对齐方向。注意与<code>layout_gravity</code>区分。</li>
+<li><code>android:hint</code>：当文本为空时提示文本显示。可通过<code>textColorHint</code>设置提示信息的颜色。</li>
+<li><code>android:lines</code>：设置文本的行数。</li>
+<li><code>android:autoLink</code>：设置是否当文本为 URL 链接 /email/ 电话号码 /map 时，文本显示为可点击的链接。</li>
+<li><code>android:autoText</code>：如果设置，将自动执行输入值的拼写纠正。</li>
+<li><code>android:ellipsize</code>：当字符内容太长显示不下时可以省略号代替未显示的字符。可设置如下值：
+<ul>
+<li><code>start&quot;</code>：省略号在开头</li>
+<li><code>middle</code>：省略号在中间</li>
+<li><code>end</code> ：省略号在结尾</li>
+<li><code>marquee</code>：跑马灯显示</li>
+</ul>
+</li>
+<li><code>android:scrollHorizontally</code>：设置文本超出<code>TextView</code>的宽度的情况下，是否出现横拉条。</li>
+<li><code>android:shadowColor</code>：指定文本阴影的颜色。</li>
+<li><code>android:shadowDx</code>：设置所有文本 x 轴即水平偏移，右为正，左为负。</li>
+<li><code>android:shadowDy</code>：设置所有文本 y 轴即垂直偏移，下为正，上为负。</li>
+<li><code>android:shadowRadius</code>：设置阴影的半径。</li>
+</ul>
+<h3 id="button">Button</h3>
+<blockquote>
+<p>  允许用户通过单击来执行操作。由于 Button 是继承于 TextView 的，因此，TextView 中的常用属性，Button 一般也能使用。</p>
+</blockquote>
+<h4 id="常见xml-属性">常见XML 属性</h4>
+<ul>
+<li><code>android:text</code>：设置显示的文本。</li>
+<li><code>android:textStyle</code>：设置文本样式。</li>
+<li><code>android:textColorHighlight</code>：设置文本被选中时，高亮显示的颜色。</li>
+<li><code>android:textAllCaps</code>：设置系统是否保留你指定的原始文字内容（比如英文大小写）。</li>
+</ul>
+<h4 id="shape-属性">Shape 属性</h4>
+<blockquote>
+<p>   Selector 是背景选择器，主要控制按钮背景的一些变化，比如按下抬起选中状态。Shape 是设置按钮背景的，如圆形，矩形，渐变，圆角等。它们可以单独的用于 Button，也可以在 Selector 中内嵌 Shape，实现更多的按钮效果。</p>
+</blockquote>
+<p>  在<code>res-&gt;drawable</code>下创建个<code>Drawable Resource File </code>，文件命名后设置<code>Root element</code>为<code>shape</code>。<br>
+<img src="https://Petrichoroo.github.io/post-images/1660033874327.png" alt="" loading="lazy"><br>
+  <code>shape</code>内部标签属性：</p>
+<ul>
+<li><code>corners</code>：定义四边圆角。</li>
+<li><code>gradient</code>：是用来定义渐变颜色的，和<code>solid</code>不同时出现。</li>
+<li><code>solid</code>：是用来绘制实心内部填充色的，和<code>gradient</code>不同时出现。</li>
+<li><code>stroke</code>：描边效果，定义描边的宽度，颜色，虚实线等。</li>
+<li><code>size</code>和<code>padding</code>：设置图形的大小及内边距，不常用。</li>
+</ul>
+<p>  Shape 自已是可以定义当前Shape的形状的，比如矩形、椭圆形、线形和环形；通过Shape标签的<code>shape</code>属性来定义的，如：<code>android:shape</code>= <code>rectangle</code> | <code>oval</code> | <code>line</code> | <code>ring</code><br>
+　　在 XML 中，即通过<code>android:background=&quot;@drawable/btn_shape&quot;</code>引用。</p>
+<h3 id="edittext">EditText</h3>
+<blockquote>
+<p>  程序用于和用户进行交互的另一个重要控件，它允许用户在控件里输入和编辑内容，并可以在程序中对这些内容进行处理。</p>
+</blockquote>
+<h4 id="常见-xml-属性">常见 XML 属性</h4>
+<ul>
+<li><code>android:hint</code>：当文本为空时提示文本显示。</li>
+<li><code>android:selectAllOnFocus</code>：获得焦点后全选组件内所有文本内容。</li>
+<li><code>android:inputType</code>：限制输入内容的类型。</li>
+<li><code>android:maxLines</code>：指定<code>EditText</code>的最大行数，这样当输入的内容超过限制时，文本就会向上滚动，<code>EditText</code>则不会再继续拉伸。</li>
+</ul>
+<h3 id="imageview">ImageView</h3>
+<blockquote>
+<p>  用于在界面上展示图片，可以让我们的程序界面变得更加丰富多彩。</p>
+</blockquote>
+<h4 id="src-属性和-background-属性的区别">src 属性和 background 属性的区别</h4>
+<p>  <code>ImageView</code>有两个可以设置图片的属性，分别是：<code>src</code>和<code>background</code></p>
+<ul>
+<li><code>background</code>通常指的都是背景,而<code>src</code>指的是内容。</li>
+<li>当使用<code>src</code>属性填入图片时，是按照图片大小直接填充，并不会进行拉伸，而使用<code>background</code>属性填入图片，则是会根据<code>ImageView</code>给定的宽度来进行拉伸。</li>
+</ul>
+<h4 id="动态更改图片">动态更改图片</h4>
+<p>  在程序中通过调用<code>ImageView</code>的<code>setImageResource()</code>方法可以动态改变 ImageView 中所显示的图片。</p>
+<h4 id="设置图片的缩放类型">设置图片的缩放类型</h4>
+<p>  <code>android:scaleType</code>用于设置显示的图片如何缩放或者移动以适应<code>ImageView</code>的大小 。</p>
+<h4 id="绘制圆形的-imageview">绘制圆形的 ImageView</h4>
+<p>  使用GitHub上的开源框架：<code>RoundedImageView</code>或<code>CircleImageView</code>。</p>
+<h3 id="progressbar">ProgressBar</h3>
+<blockquote>
+<p>  用于在界面上显示一个进度条，表示我们的程序正在加载一些数据。<code>ProgressBar</code>的应用场景很多，比如用户登录时，后台在发送请求，以及等待服务器返回信息，这个时候会用到进度条告知用户当前的进度。</p>
+</blockquote>
+<h4 id="常见-xml-属性-2">常见 XML 属性</h4>
+<ul>
+<li><code>android:max</code>：进度条的最大值。</li>
+<li><code>android:progress</code>：进度条已完成进度值。</li>
+<li><code>android:indeterminate</code>：如果设置成true，则进度条不精确显示进度。</li>
+<li><code>android:indeterminateDuration</code>：设置不精确显示进度的持续时间。</li>
+<li><code>android:secondaryProgress</code>：二级进度条，类似于视频播放的一条是当前播放进度，一条是缓冲进度，前者通过 progress 属性进行设置。</li>
+<li><code>android:progressDrawable</code>：设置轨道对应的<code>Drawable</code>对象。</li>
+<li><code>android:indeterminateDrawable</code>：设置不显示进度的进度条的<code>Drawable</code>对象。</li>
+</ul>
+<h4 id="android-控件的可见属性">Android 控件的可见属性</h4>
+<blockquote>
+<p>  旋转的进度条表明我们的程序正在加载数据，那数据总会有加载完的时候，如何才能让进度条在数据加载完成时消失呢？</p>
+</blockquote>
+<p>  所有的 Android 控件都具有可见属性，通过<code>android:visibility</code>进行指定，可选值有 3 种：<code>visible</code>、<code>invisible</code>和<code>gone</code>。</p>
+<ul>
+<li><code>visible</code>表示控件是可见的，这个值是默认值，不指定<code>android:visibility</code>时，控件都是可见的。</li>
+<li><code>invisible</code>表示控件不可见，但是它仍然占据着原来的位置和大小，可以理解成控件变成透明状态了。</li>
+<li><code>gone</code>则表示控件不仅不可见，而且不再占用任何屏幕空间。</li>
+</ul>
+<p>  通过代码来设置控件的可见性，使用的是<code>setVisibility()</code>方法，允许传入<code>View.VISIBLE</code>、<code>View.INVISIBLE</code>和<code>View.GONE</code>这 3 种值。</p>
+<pre><code class="language-java">        if (progressBar.getVisibility() == View.VISIBLE) {
+            progressBar.setVisibility(View.GONE);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+</code></pre>
+<p>  通过<code>getVisibility()</code>方法来判断<code>ProgressBar</code>是否可见，若可见就将其隐藏，否则就将其显示出来。</p>
+<h4 id="设置水平进度条">设置水平进度条</h4>
+<p>  <code>ProgressBar</code>默认是圆形进度条，但我们可以为其指定不同的样式，通过<code>style</code>属性可以将它指定成水平进度条。</p>
+<pre><code class="language-java">        style=&quot;?android:attr/progressBarStyleHorizontal&quot;
+</code></pre>
+<h4 id="常见方法">常见方法</h4>
+<ul>
+<li><code>getMax()</code>：返回这个进度条的范围的上限</li>
+<li><code>getProgress()</code>：返回进度</li>
+<li><code>getSecondaryProgress()</code>：返回次要进度</li>
+<li><code>incrementProgressBy(int diff)</code>：指定增加的进度</li>
+<li><code>isIndeterminate()</code>：指示进度条是否在不确定模式下</li>
+<li><code>setIndeterminate(boolean indeterminate)</code>：设置不确定模式下</li>
+</ul>
+<h3 id="alertdialog">AlertDialog</h3>
+<blockquote>
+<p>  在当前界面弹出一个对话框，这个对话框是置顶于所有界面元素之上的，能够屏蔽其他控件的交互能力，因此<code>AlertDialog</code>一般用于提示一些非常重要的内容或者警告信息。比如为了防止用户误删重要内容，在删除前弹出一个确认对话框。</p>
+</blockquote>
+<h4 id="创建步骤">创建步骤</h4>
+<p>  对话框是在某个时机才会被触发（比如用户点击了某个按钮）。所以<code>AlertDialog</code>并不需要到布局文件中创建，而是在代码中通过构造器<code>AlertDialog.Builder</code>来构造标题、图标和按钮等内容。</p>
+<ol>
+<li>创建构造器<code>AlertDialog.Builder</code>的对象。</li>
+<li>通过构造器对象调用相关方法构造对话框的标题、信息和图标等内容。</li>
+<li>根据需要调用相关方法设置正面按钮、负面按钮和中立按钮。</li>
+<li>显示对话框（两种方法）。
+<ul>
+<li><code>AlertDialog.Builder</code>调用<code>show()</code>方法，显示对话框。</li>
+<li>调用构造器对象的<code>create</code>方法创建<code>AlertDialog</code>对象，再调用其<code>show</code>方法，也能让对话框显示到界面上。</li>
+</ul>
+</li>
+</ol>
+<h4 id="常用方法">常用方法</h4>
+<ul>
+<li><code>setTitle</code>：为对话框设置标题</li>
+<li><code>setIcon</code>：为对话框设置图标</li>
+<li><code>setMessage</code>：为对话框设置内容</li>
+<li><code>setView</code>：给对话框设置自定义样式</li>
+<li><code>setNeutralButton</code>：普通按钮</li>
+<li><code>setPositiveButton</code>：设置正面按钮，即“积极”、“确认”的意思，第一个参数为按钮上显示的文字。</li>
+<li><code>setNegativeButton</code>：设置反面按钮，即“消极”、“取消”的意思，第一个参数为按钮上显示的文字。</li>
+<li><code>setItems</code>：设置对话框要显示的一个List，一般用于显示几个选项时</li>
+<li><code>setMultiChoiceItems</code>：用来设置对话框显示一系列的复选框</li>
+<li><code>setSingleChoiceItems</code>：用来设置对话框显示一系列的单选框</li>
+<li><code>create</code> ：创建对话框</li>
+<li><code>show</code> ：显示对话框</li>
+</ul>
+<h4 id="普通对话框">普通对话框</h4>
+<pre><code class="language-java">        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+        dialog.setTitle(&quot;This is a Dialog&quot;);    //标题
+        dialog.setMessage(&quot;Something important&quot;);   //内容
+        dialog.setCancelable(false);    //可否取消 false 即无法通过 Back 键取消掉
+        //确定按钮的点击事件
+        dialog.setPositiveButton(&quot;OK&quot;, new DialogInterface.OnClickListener() {
+                    @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        //取消按钮的点击事件
+        dialog.setNegativeButton(&quot;Cancel&quot;, new DialogInterface.OnClickListener() {
+                    @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        dialog.show();
+</code></pre>
+<h2 id="二-常见布局及其属性">二、常见布局及其属性</h2>
+<h3 id="linearlayout">LinearLayout</h3>
+<blockquote>
+<p>  线性布局，将其所包含的控件在线性方向上依次排列。</p>
+</blockquote>
+<h4 id="常用属性">常用属性</h4>
+<ul>
+<li><code>android:orientation</code>：指定控件排列的方向，水平（<code>horizontal</code>）或者垂直（<code>vertical</code>）。默认的排列方向是 horizontal。需要注意的是，若排列方向是 horizontal，内部的控件就绝对不能将宽度指定为<code>match_parent</code>，否则单独的一个控件就会将整个水平方向占满，其他的控件就没有可放置的位置了。vertical 同理，不能将高度指定为<code>match_parent</code>。</li>
+<li><code>android:layout_gravity</code>：用于指定控件在布局中的对齐方式。需要注意，当布局排列方向是 horizontal 时，只有垂直方向上的对齐方式才会生效。因为此时水平方向上的长度是不固定的，每添加一个控件，水平方向上的长度都会改变，因而无法指定该方向上的对齐方式。</li>
+<li><code>android:layout_weight</code>：允许我们使用比例的方式来指定控件的大小，它在手机屏幕的适配性方面可以起到非常重要的作用。<pre><code class="language-java">      &lt;EditText
+          android:id=&quot;@+id/input_message&quot;
+          android:layout_width=&quot;0dp&quot;
+          android:layout_height=&quot;wrap_content&quot;
+          android:layout_weight=&quot;1&quot;
+          android:hint=&quot;Type something&quot; /&gt;
+      &lt;Button
+          android:id=&quot;@+id/send&quot;
+          android:layout_width=&quot;wrap_content&quot;
+          android:layout_height=&quot;wrap_content&quot;
+          android:text=&quot;Send&quot; /&gt;
+</code></pre>
+  指定<code>EditText</code>的<code>android:layout_weight</code>属性为 1，其宽度属性为 0，而<code>Button</code>的长宽度自适应，这样<code>Button</code>的宽度按照<code>wrap_content</code>来计算，而<code>EditText</code>则会占满屏幕所有的剩余空间。使用这种方式编写的界面可以适配各种屏幕。</li>
+</ul>
+<h3 id="relativelayout">RelativeLayout</h3>
+<blockquote>
+<p>  相对布局，通过相对定位的方式让控件出现在布局的任何位置。</p>
+</blockquote>
+<h4 id="子控件相对于父布局属性">子控件相对于父布局属性</h4>
+<p>  属性值是<code>Boolean</code>类型。</p>
+<ul>
+<li><code>android: layout_alignParentLeft</code>：靠左边显示。</li>
+<li><code>android: layout_alignParentTop</code>：靠顶部显示。</li>
+<li><code>android: layout_alignParentRight</code>：靠右边显示。</li>
+<li><code>android: layout_alignParentBottom</code>：靠底部显示。</li>
+<li><code>android: layout_centerInParent</code>：居中显示。</li>
+<li><code>android: layout_centerHorizontal</code>：水平居中显示。</li>
+<li><code>android: layout_centerVertical</code>：垂直居中显示。</li>
+<li><code>android: layout_alignWithParentIfMissing</code>：如果对应的兄弟元素找不到的话就以父元素做参照物。</li>
+<li><code>android: layout_alignParentStart</code>：和<code>layout_alignParentLeft</code>的功能类似，Android 4.1 引入，为了更好支持 right-to-left 布局方式（适配从右到左的语言，如阿拉伯语）。</li>
+<li><code>android: layout_alignParentEnd</code>：和<code>layout_alignParentRight</code>的功能类似，Android 4.1 引入，为了更好支持 right-to-left 布局方式。</li>
+</ul>
+<h4 id="子控件相对于其它位置控件属性">子控件相对于其它位置控件属性</h4>
+<p>  属性值是其他兄弟控件的 id。</p>
+<blockquote>
+<p>  注意，当一个控件去引用另一个控件的 id 时，该控件一定要定义在引用控件的后面，不然会出现找不到 id 的情况。</p>
+</blockquote>
+<ul>
+<li><code>android: layout_toLeftOf</code>：在另外一个 View 的左边</li>
+<li><code>android: layout_toRightOf</code>：在另外一个 View 的右边</li>
+<li><code>android: layout_above</code>：在另外一个 View 的上方</li>
+<li><code>android: layout_below</code>：在另外一个 View 的下方</li>
+<li><code>android: layout_toStartOf</code>：和<code>layout_toLeftOf</code>用法类似，支持 right-to-left 布局</li>
+<li><code>android: layout_toEndOf</code>：和<code>layout_toRightOf</code>用法类似，支持 right-to-left 布局</li>
+</ul>
+<h4 id="子控件相对于其它控件对齐方式">子控件相对于其它控件对齐方式</h4>
+<p>  属性值是其他兄弟控件的 id。</p>
+<ul>
+<li><code>android: layout_alignBaseline</code>：该 View 的 baseline 和另外一个 View 的 <code>baseline</code> 对齐。</li>
+<li><code>android: layout_alignLeft</code>：将该 View 的左边边缘与另外一个 View 的左边边缘对齐。</li>
+<li><code>android: layout_alignTop</code>：将该 View 的顶部边缘与另外一个 View 的顶部边缘对齐。</li>
+<li><code>android: layout_alignRight</code>：将该 View 的右边边缘与另外一个 View 的右边边缘对齐。</li>
+<li><code>android: layout_alignBottom</code>：将该 View 的底部边缘与另外一个 View 的底部边缘对齐。</li>
+<li><code>android: layout_alignStart</code>：和<code>layout_alignLeft</code>类似，支持 right-to-left 布局。</li>
+<li><code>android: layout_alignEnd</code>：和<code>layout_alignRight</code>类似，支持 right-to-left 布局。</li>
+</ul>
+<h4 id="偏移margin">偏移（margin）</h4>
+<blockquote>
+<p>  设置组件与父容器的边距。即自身边框到另一个容器边框之间的距离。</p>
+</blockquote>
+<ul>
+<li><code>android:margin</code>：设置组件上下左右的偏移量</li>
+<li><code>android:layout_marginLeft</code>：设置组件离容器左边的偏移量</li>
+<li><code>android:layout_marginRight</code>：设置组件离容器右边的偏移量</li>
+<li><code>android:layout_marginTop</code>：设置组件离容器上面的偏移量</li>
+<li><code>android:layout_marginBottom</code>：设置组件离容器下面的偏移</li>
+</ul>
+<p>  一般设置<code>margin</code>的时候都习惯用正数， 其实也可以用负数，比如很常见的弹出广告页面的，右上角的<code>cancle</code>按钮的<code>margin</code>就是负数。</p>
+<h4 id="填充padding">填充（padding）</h4>
+<blockquote>
+<p>  设置组件内部元素间的边距。即自身边框到自身内部另一个元素边框之间的距离。</p>
+</blockquote>
+<ul>
+<li><code>android:padding</code>：往内部元素的上下左右填充一定边距</li>
+<li><code>android:paddingLeft</code>：往内部元素的左边填充一定边距</li>
+<li><code>android:paddingRight</code>：往内部元素的右边填充一定边距</li>
+<li><code>android:paddingTop</code>：往内部元素的上方填充一定边距</li>
+<li><code>android:paddingBottom</code>：往内部元素的下方填充一定边距</li>
+</ul>
+<blockquote>
+<p>  padding 是站在父 view 的角度描述问题，它规定它里面的内容与这个父 view 边界的距离。而 margin 则是站在自己的角度描述问题，规定自己和其他（上下左右）的 view 之间的距离。</p>
+</blockquote>
+<h3 id="framelayout">FrameLayout</h3>
+<blockquote>
+<p>  帧布局没有丰富的定位方式，所有的控件都会默认摆放在布局的左上角。</p>
+</blockquote>
+<h4 id="注意事项">注意事项</h4>
+<p>  帧布局的大小由控件中最大的子控件决定，如果控件的大小一样大的话，那么同一时刻就只能看到最上面的那个组件，后续添加的控件会覆盖前一个。虽然默认会将控件放置在左上角，但是我们也可以通过<code>layout_gravity</code>属性将控件指定到其他的位置。</p>
+<h3 id="constrainlayout">ConstrainLayout</h3>
+<p>  <a href="https://juejin.cn/post/6949186887609221133">ConstraintLayout 完全解析</a></p>
+<h2 id="三-自定义控件">三、自定义控件</h2>
+<h3 id="控件和布局的继承结构">控件和布局的继承结构</h3>
+<figure data-type="image" tabindex="1"><img src="https://Petrichoroo.github.io/post-images/1660062124090.png" alt="" loading="lazy"></figure>
+<p>   可以看到，我们所用的所有控件都是直接或间接继承自<code>View</code>的，所用的所有布局都是直接或间接继承自<code>ViewGroup</code>的。<br>
+　　<code>View</code>是 Android 中最基本的一种 UI 组件，它可以在屏幕上绘制一块矩形区域，并能响应这块区域的各种事件，因此，我们使用的各种控件其实就是在<code>View</code>的基础上又添加了各自特有的功能。<code>ViewGroup</code>则是一种特殊的<code>View</code>，它可以包含很多子<code>View</code>和子<code>ViewGroup</code>，是一个用于放置控件和布局的容器。</p>
+<h3 id="引入布局自定义标题栏">引入布局（自定义标题栏）</h3>
+<blockquote>
+<p>  很多 Android 程序会在界面的顶部放置一个标题栏。虽然 Android 系统已经给每个 Activity 提供了标题栏功能，但这里我们决定先不使用它，而是创建一个自定义的标题栏。<br>
+　　但是一般我们的程序中可能有很多个 Activity 需要这样的标题栏，如果在每个 Activity 的布局中都编写一遍同样的标题栏代码，明显就会导致代码的大量重复。这时我们就可以使用引入布局的方式来解决这个问题</p>
+</blockquote>
+<p>  在<code>layout</code>目录下新建一个<code>title.xml</code>布局。关键代码如下：</p>
+<pre><code class="language-java">        &lt;Button
+            android:id=&quot;@+id/title_back&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center&quot;
+            android:layout_margin=&quot;5dp&quot;
+            android:text=&quot;Back&quot;/&gt;
+
+        &lt;TextView
+            android:id=&quot;@+id/title_text&quot;
+            android:layout_width=&quot;0dp&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_weight=&quot;1&quot;
+            android:gravity=&quot;center&quot;
+            android:layout_gravity=&quot;center&quot;
+            android:text=&quot;Title text&quot;
+            android:textSize=&quot;24sp&quot; /&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/title_edit&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center&quot;
+            android:layout_margin=&quot;5dp&quot;
+            android:text=&quot;Edit&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p><img src="https://Petrichoroo.github.io/post-images/1660067006465.png" alt="" loading="lazy"><br>
+  在<code>LinearLayout</code>中分别加入了两个<code>Button</code>和一个<code>TextView</code>，左边的 Button 可用于返回，右边的 Button 可用于编辑，中间的 TextView 则可以显示一段标题文本。<br>
+　　现在标题栏布局已经编写完成了，剩下的就是如何在程序中使用这个标题栏了，修改<code>activity_main.xml</code>文件，关键代码如下：</p>
+<pre><code class="language-java">        &lt;include layout=&quot;@layout/title&quot; /&gt;
+</code></pre>
+<p>  可知只需要通过一行 <code>include</code>语句就可以引入标题栏布局。<br>
+　　记得在<code>MainActivity</code>中将系统自带的标题栏隐藏掉，关键代码如下：</p>
+<pre><code class="language-java">        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
+</code></pre>
+<p>  这里调用了<code>getSupportActionBar()</code>方法来获得<code>ActionBar</code>的实例，然后再调用它的<code>hide()</code>方法将标题栏隐藏起来。</p>
+<h3 id="创建自定义控件">创建自定义控件</h3>
+<blockquote>
+<p>  当系统自带的控件并不能满足我们的需求时，可以利用上面的继承结构来创建自定义控件。<br>
+　　引入布局的技巧解决了重复编写布局代码的问题，但是如果布局中有一些控件要求能够响应事件，我们仍需要在每个<code>Activity</code>中为这些控件单独编写一次事件注册的代码。<br>
+　　比如标题栏中的返回按钮，其实不管是在哪一个 Activity 中，这个按钮的功能都是相同的，即销毁当前 Activity。而如果在每一个Activity 中都需要重新注册一遍返回按钮的点击事件，无疑会增加很多重复代码，这种情况最好是使用自定义控件的方式来解决。</p>
+</blockquote>
+<p>  新建<code>TitleLayout</code>继承自<code>LinearLayout</code>，让它成为我们自定义的标题栏控件。关键代码如下：</p>
+<pre><code class="language-java">    public class TitleLayout extends LinearLayout{
+
+        public TitleLayout(Context context, @Nullable AttributeSet attrs) {
+            super(context, attrs);
+            LayoutInflater.from(context).inflate(R.layout.title,this);
+        }
+    }
+</code></pre>
+<p>  这里重写了<code>LinearLayout</code>中带有两个参数的构造函数，然后在构造函数中借助<code>LayoutInflater</code>对标题栏布局进行动态加载。通过它的<code>from()</code>方法可以构建出一个LayoutInflater 对象，然后调用其<code>inflate()</code>方法就可以动态加载一个布局文件，inflate() 方法接收两个参数，第一个参数是要加载的布局文件的 id，这里我们传入<code>R.layout.title</code>，第二个参数是给加载好的布局再添加一个父布局，这里我们想要指定为<code>TitleLayout</code>，于是直接传入<code>this</code>。</p>
+<blockquote>
+<p>  加深对 LayoutInflater 的理解，可以去看郭霖老师的博客：<a href="https://guolin.blog.csdn.net/article/details/121889703">再看LayoutInflater，这次你可能又会有新的认识</a>。</p>
+</blockquote>
+<p>  自定义控件已经创建好了，我们需要在布局文件中添加这个自定义控件，修改<code>activity_main.xml</code>，关键代码如下：</p>
+<pre><code class="language-java">    &lt;com.example.uicustomviews.TitleLayout
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;/&gt;
+</code></pre>
+<p>  添加自定义控件和添加普通控件的方式基本是一样的，只不过在添加自定义控件的时候，我们需要指明控件的完整类名，包名在这里是不可以省略的。<br>
+　　然后在<code>TitleLayout</code>中通过调用<code>setOnClickListener()</code>方法为标题栏的按钮注册点击事件。这样每当我们在一个布局中引入 TitleLayout 时，返回按钮和编辑按钮的点击事件就已经自动实现好了，这就省去了很多编写重复代码的工作。</p>
+<h2 id="四-listview">四、ListVIew</h2>
+<blockquote>
+<p>  由于手机屏幕空间比较有限，能够一次性在屏幕上显示的内容并不多，当我们的程序中有大量的数据需要展示的时候，就可以借助<code>ListView</code>来实现。ListView 允许用户通过手指上下滑动的方式将屏幕外的数据滚动到屏幕内，同时屏幕上原有的数据会滚动出屏幕。</p>
+</blockquote>
+<h3 id="listview-的简单用法">ListView 的简单用法</h3>
+<p>  修改<code>activity_main.xml</code>，在其中添加一个<code>ListVIew</code>控件，代码如下所示：</p>
+<pre><code class="language-java">    &lt;ListView
+        android:id=&quot;@+id/list_view&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;/&gt;
+</code></pre>
+<p>  这里为<code>ListView</code>指定一个<code>id</code>，然后将宽度和高度都设置为<code>match_parent</code>，这样 ListView 就占满了整个布局的空间。<br>
+　　　然后修改<code>MainActivity</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    private String[] data = {&quot;Apple&quot;,&quot;Banana&quot;,&quot;Orange&quot;,&quot;...&quot;};
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            ArrayAdapter&lt;String&gt; adapter = new ArrayAdapter&lt;String&gt;(
+                    MainActivity.this,android.R.layout.simple_list_item_1,data);
+            ListView listView = (ListView)findViewById(R.id.list_view);
+            listView.setAdapter(adapter);
+        }
+</code></pre>
+<p>  这里使用了一个<code>data</code>数组提供大量的数据，里面包含了很多水果的名称。不过，数组中的数据是无法直接传递给<code>ListView</code>的，我们还需要借助适配器来完成。<br>
+　　Android 中提供了很多适配器的实现类，这里使用的是<code>ArrayAdapter</code>。它可以通过泛型来指定要适配的数据类型，然后在构造函数中把要适配的数据传入。ArrayAdapter 有多个构造函数的重载，应该根据实际情况选择最合适的一种。由于提供的数据都是字符串，因此将 ArrayAdapter 的泛型指定为<code>String</code>，然后在 ArrayAdapter 的构造函数中依次传入当前上下文、<code>ListView</code>子项布局的<code>id</code>以及要适配的数据。<br>
+　　注意，这里使用了<code>android.R.layout.simple_list_item_1</code>作为<code>ListView</code>子项布局的<code>id</code>，这是一个 Android 内置的布局文件，里面只有一个<code>TextView</code>，可用于简单地显示一段文本。这样适配器对象就构建好了。<br>
+　　最后，调用<code>ListView</code>的<code>setAdapter()</code>方法，将构建好的适配器对象传递进去，这样 ListView 和数据之间的关联就建立完成了。</p>
+<h3 id="定制-listview-的界面">定制 ListView 的界面</h3>
+<blockquote>
+<p>  你会发现上面只能显示一段文本的<code>ListView</code>实在是太单调了，现在就来对 ListView 的界面进行定制，让它可以显示更加丰富的内容。</p>
+</blockquote>
+<p>  定义一个实体类，作为<code>ListView</code>适配器的适配类型。新建类<code>Fruit</code>，代码如下所示：</p>
+<pre><code class="language-java">    public class Fruit {
+        private String name;    //水果名
+        private int imageId;    //水果对应图片的资源id
+        public Fruit(String name,int imageId){
+            this.name = name;
+            this.imageId = imageId;
+        }
+        public String getName(){
+            return name;
+        }
+        public int getImageId(){
+            return imageId;
+        }
+    }
+</code></pre>
+<p>  然后为<code>ListView</code>的子项指定一个我们自定义的布局，在<code>layout</code>目录下新建<code>fruit_item.xml</code>，代码如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;&gt;
+        &lt;ImageView
+            android:id=&quot;@+id/fruit_image&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;/&gt;
+        &lt;TextView
+            android:id=&quot;@+id/fruit_name&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center_vertical&quot;
+            android:layout_marginLeft=&quot;10dp&quot;/&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  这里创建了一个高度自适应的线性布局，其中定义了一个<code>ImageView</code>用于显示水果的图片，又定义了一个<code>TextView</code>用于显示水果的名称，并让 TextView 在垂直方向上居中显示。<br>
+　　然后我们需要创建一个自定义的适配器，新建类<code>FruitAdapter</code>，继承自<code>ArrayAdapter</code>，并将泛型指定为<code>Fruit</code>，代码如下：</p>
+<pre><code class="language-java">    public class FruitAdapter extends ArrayAdapter&lt;Fruit&gt; {
+        private int resourceId;
+        public FruitAdapter(Context context, int textViewResourceId, List&lt;Fruit&gt; objects) {
+            super(context,textViewResourceId,objects);
+            resourceId = textViewResourceId;
+        }
+        @Override
+        public View getView(int position,View convertView,ViewGroup parent) {
+            Fruit fruit = getItem(position);//获取当前项的Fruit实例
+            View view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
+            ImageView fruitImage = (ImageView) view.findViewById(R.id.fruit_image);
+            TextView fruitName = (TextView) view.findViewById(R.id.fruit_name);
+            fruitImage.setImageResource(fruit.getImageId());
+            fruitName.setText(fruit.getName());
+            return view;
+        }
+    }
+
+</code></pre>
+<p>  <code>FruitAdapter</code>重写了父类的一组构造函数，用于将上下文、<code>ListView</code>子项布局的<code>id</code>和数据都传递进来。<br>
+　　 重写了<code>getView()</code>方法，这个方法在每个子项被滚动到屏幕内的时候会被调用。在这个方法中首先通过<code>getItem()</code>方法得到当前项的<code>Fruit</code>实例，然后使用<code>LayoutInflater</code>来为这个子项加载我们传入的布局。<br>
+　　<code>LayoutInflater</code>的<code>inflate()</code>方法第三个参数为<code>false</code>，表示只让在父布局中声明的<code>layout</code>属性生效，但不会为这个<code>View</code>添加父布局，因为一旦 View 有了父布局之后，它就不能再添加到<code>ListView</code>中了。详见：<a href="https://guolin.blog.csdn.net/article/details/121889703">再看LayoutInflater，这次你可能又会有新的认识</a>。<br>
+　　 接着获取到<code>ImageView</code>和<code>TextView</code>的实例，并分别调用它们的<code>setImageResource()</code>和<code>setText()</code>方法来设置显示的图片和文字，最后将布局返回，这样我们自定义的适配器就完成了。<br>
+　　 最后修改 MainActivity 中的代码，关键如下：</p>
+<pre><code class="language-java">    private List&lt;Fruit&gt; fruitList = new ArrayList&lt;Fruit&gt;();
+    initFruits();   //初始化水果数据
+    //创建适配器对象 当前上下文、ListView子项布局的id以及要适配的数据
+    FruitAdapter fruitAdapter = new FruitAdapter(MainActivity.this,
+            R.layout.fruit_item, fruitList);
+    ListView listView = (ListView) findViewById(R.id.list_view);
+    listView.setAdapter(fruitAdapter);
+</code></pre>
+<h3 id="提升-listview-的运行效率">提升 ListView 的运行效率</h3>
+<blockquote>
+<p>  目前我们编写的<code>ListView</code>很多细节可以优化，其中运行效率就是很重要的一点。目前我们 ListView 的运行效率是很低的，当 ListView 快速滚动的时候，这就会成为性能的瓶颈。</p>
+</blockquote>
+<p>可优化的地方：</p>
+<ol>
+<li>在<code>FruitAdapter</code>的<code>getView()</code>方法中，每次都将布局重新加载了一遍。</li>
+<li>在<code>FruitAdapter</code>的<code>getView()</code>方法中，每次都会调用<code>View</code>的<code>findViewById()</code>方法来获取一次控件的实例。</li>
+</ol>
+<p>  我们发现<code>getView()</code>方法中还有一个<code>convertView</code>参数，这个参数用于将之前加好的布局进行缓存，以便之后进行重用，我们可以借助这个参数来进行性能优化。同时我们可以借助一个<code>ViewHolder</code>来对每次都要获取一次控件实例的问题进行优化。修改<code>FruitAdapter</code>中的代码，如下所示：</p>
+<pre><code class="language-java">//重写getView()方法 在每个子项被滚动到屏幕内的时候会被调用
+    @Override
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        Fruit fruit = (Fruit) getItem(position);    //获取当前项的Fruit实例
+        View view;
+        ViewHolder viewHolder;
+        //convertView参数用于将之前加载好的布局进行缓存
+        if (convertView == null) {    //若为null 则使用LayoutInflater来为子项去加载布局
+            view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
+            viewHolder = new ViewHolder();
+            //取出控件实例并存放在viewHolder中
+            viewHolder.fruitImage = view.findViewById(R.id.fruit_image);
+            viewHolder.fruitName = view.findViewById(R.id.fruit_name);
+            view.setTag(viewHolder);    //将viewHolder存储在view中
+        } else { //否则重用convertView
+            view = convertView;
+            viewHolder = (ViewHolder) view.getTag();    //重新获取viewHolder
+        }
+        //设置显示的图片和文字
+        viewHolder.fruitImage.setImageResource(fruit.getImageId());
+        viewHolder.fruitName.setText(fruit.getName());
+        return view;
+    }
+
+    //创建内部类ViewHolder 用于对控件的实例进行缓存
+    class ViewHolder {
+        ImageView fruitImage;
+        TextView fruitName;
+    }
+</code></pre>
+<h3 id="listview-的点击事件">ListView 的点击事件</h3>
+<p>  <code>ListView</code>的滚动毕竟只是满足了视觉上的效果。这里我们为 ListView 中的子项添加响应用户点击事件的逻辑。修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView&lt;?&gt; adapterView, View view, int position, long id) {
+            //通过position参数判断出用户点击的是哪一个子项 并获取
+            Fruit fruit = fruitList.get(position);  //返回动态数组中指定索引处的元素
+            Toast.makeText(MainActivity.this, fruit.getName(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    });
+</code></pre>
+<p>  这里使用<code>setOnItemClickListener()</code>方法为<code>ListView</code>注册一个监听器，当用户点击了<code>ListView</code>中的任何一个子项时，就会回调<code>onItemClick()</code>方法。在这个方法中通过<code>position</code>参数判断出用户点击的是哪一个子项，然后获取到相应的水果实例，并将水果名显示出来。</p>
+<h2 id="五-recyclerview">五、RecyclerView</h2>
+<blockquote>
+<p>  <code>ListView</code>并不是完美无缺的，比如如果不使用一些技巧来提升它的运行效率，那么它的性能就会非常差。还有它的扩展性也不够好，只能实现数据纵向滚动的效果。为此，Android 提供了一个更强大的滚动控件——<code>RecyclerView</code>。它可以说是一个增强版的 ListView，不仅可以轻松实现和  ListView 同样的效果，还优化了 ListView 存在的各种不足之处。</p>
+</blockquote>
+<h3 id="recyclerview-的基本用法">RecyclerView 的基本用法</h3>
+<p>  修改<code>activity_main.xml</code>中的代码，加入一个<code>RecyclerView</code>控件，并让其占满整个布局空间。如下所示：</p>
+<pre><code class="language-java">    &lt;androidx.recyclerview.widget.RecyclerView
+        android:id=&quot;@+id/recycler_view&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot; /&gt;
+</code></pre>
+<p>  为<code>RecyclerView</code>准备一个适配器，新建<code>FruitAdapter</code>类，让其继承自<code>RecyclerView.Adapter</code>，并将泛型指定为<code>FruitAdapter.ViewHolder</code>。<code>ViewHolder</code>是我们在 FruitAdapter 中定义的一个内部类，代码如下所示：</p>
+<pre><code class="language-java">public class FruitAdapter extends RecyclerView.Adapter&lt;FruitAdapter.ViewHolder&gt; {
+    private List&lt;Fruit&gt; mFruitList;
+
+    //定义内部类 ViewHolder 继承自 RecyclerView.ViewHolder
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView fruitImage;
+        TextView fruitName;
+
+        public ViewHolder(View view) {
+            super(view);    //view参数通常是RecyclerView子项的最外层布局
+            fruitView = view;
+            fruitImage = (ImageView) view.findViewById(R.id.fruit_image);
+            fruitName = (TextView) view.findViewById(R.id.fruit_name);
+        }
+    }
+
+    //用于把要展示的数据源传进来 并赋值给一个全局变量mFruitList
+    public FruitAdapter(List&lt;Fruit&gt; fruitList) {
+        mFruitList = fruitList; //后续操作均在此数据源的基础上进行
+    }
+
+    //用于创建ViewHolder实例
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fruit_item,
+                parent, false);
+        //创建ViewHolder实例 并把加载出来的布局传入到构造函数中
+        final ViewHolder holder = new ViewHolder(view); //JVM会缓存final修饰的变量 提高性能
+        return holder;
+    }
+
+    //用于对RecyclerView子项的数据进行赋值 在每个子项被滚动到屏幕内时执行
+    @Override
+    public void onBindViewHolder(@NonNull FruitAdapter.ViewHolder holder, int position) {
+        //通过position参数得到当前项的Fruit实例
+        Fruit fruit = mFruitList.get(position);
+        //将数据设置到ViewHolder的ImageView和TextView中
+        holder.fruitImage.setImageResource(fruit.getImageId());
+        holder.fruitName.setText(fruit.getName());
+    }
+
+    //用于告诉RecyclerView一共有多少子项
+    @Override
+    public int getItemCount() {
+        return mFruitList.size();   //直接返回数据源长度
+    }
+}
+</code></pre>
+<p>  由于 FruitAdapter 是继承自 RecyclerView.Adapter 的，因此必须重写<code>onCreateViewHolder()</code>、<code>onBindViewHolder()</code>和<code>getItemCount()</code>这 3 个方法。</p>
+<ul>
+<li><code>onCreateViewHolder()</code>：用于创建<code>ViewHolder</code>实例。在这个方法中将上下文，子项布局加载进来，得到一个 View 实例，并将其传入到构造函数中得到 ViewHolder 的实例，最后将其返回。</li>
+<li><code>onBindViewHolder()</code>：用于对<code>RecyclerView</code>子项的数据进行赋值，会在每个子项被滚动到屏幕内的时候执行。</li>
+<li><code>getItemCount()</code>方法就非常简单了，它用于告诉 RecyclerView 一共有多少子项，直接返回数据源的长度就可以了。</li>
+</ul>
+<p>  适配器准备好了之后，我们就可以开始使用<code>RecyclerView</code>了，在 MainActivity 中添加关键代码，如下所示：</p>
+<pre><code class="language-java">    RecyclerView recyclerView = findViewById(R.id.recycler_view);
+    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+    recyclerView.setLayoutManager(layoutManager);
+    FruitAdapter adapter = new FruitAdapter(fruitList);
+    recyclerView.setAdapter(adapter);
+</code></pre>
+<p>  <code>LayoutManager</code>用于指定 RecyclerView 的布局方式，这里使用的 LinearLayoutManager 是线性布局的意思，可以实现和 ListView 类似的效果。</p>
+<h3 id="布局排列">布局排列</h3>
+<blockquote>
+<p>  ListView 的布局排列是由自身去管理，而<code>RecyclerView</code>则将这个工作交给<code>LayoutManager</code>，LayoutManager 中制定了一套可扩展的布局排列接口，子类只要按照接口的规范来实现，就能定制出各种不同排列方式的布局了。</p>
+</blockquote>
+<h4 id="线性布局">线性布局</h4>
+<p>  这种布局方式上面已经使用过，这里我们实现横向排列，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+</code></pre>
+<p>  这里只添加了一行代码，通过<code>setOrientation()</code>方法来设置布局的排列方向。默认是纵向排列的，传入 LinearLayoutManager.HORIZONTAL 表示让布局横行排列。注意记得去修改<code>fruit_item.xml</code>，因为我们要实现横向滚动的话，应该把子项布局里的元素改成垂直排列才比较合理。</p>
+<h4 id="瀑布流布局">瀑布流布局</h4>
+<pre><code class="language-java">    StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+    recyclerView.setLayoutManager(layoutManager);
+</code></pre>
+<p>  <code>StaggeredGridLayoutManager</code>的构造函数接收两个参数， 第一个参数用于指定布局列数， 第二个参数用于指定布局的排列方向。注意瀑布流布局的宽度应该是布局的列数来自动适配的，而不是一个固定值。</p>
+<h4 id="网格式布局">网格式布局</h4>
+<pre><code class="language-java">    GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+    recyclerView.setLayoutManager(layoutManager);
+</code></pre>
+<p>  <code>GridLayoutManager</code>的构造函数接收两个参数， 第一个是 Context， 第二个是列数，这里我们希望每行中有两列数据。</p>
+<h3 id="recyclerview-的点击事件">RecyclerView 的点击事件</h3>
+<blockquote>
+<p>  RecyclerView 并没有提供类似于<code>setOnItemClickListener()</code>这样的注册监听器，而是需要我们自己给子项具体的 View 去注册点击事件。</p>
+</blockquote>
+<p>  修改 FruitAdapter 中的代码，如下所示：</p>
+<pre><code class="language-java">    static class ViewHolder extends RecyclerView.ViewHolder {
+        View fruitView; //保存子项最外层布局的实例
+        ...
+    }
+</code></pre>
+<p>  这里在<code>ViewHolder</code>中添加了<code>fruitView</code>变量来保存子项最外层布局的实例，然后在<code>onCreateViewHolder()</code>方法中注册点击事件，代码如下：</p>
+<pre><code class="language-java">    //为最外层布局注册点击事件
+    holder.fruitView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int position = holder.getAdapterPosition(); //获取用户点击的position
+            Fruit fruit = mFruitList.get(position); //通过position拿到相应的Fruit实例
+            Toast.makeText(view.getContext(), &quot;you clicked view &quot; + fruit.getName(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    });
+    //为ImageView注册点击事件
+    holder.fruitImage.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int position = holder.getAdapterPosition();
+            Fruit fruit = mFruitList.get(position);
+            Toast.makeText(view.getContext(), &quot;you clicked image &quot; + fruit.getName(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    });
+</code></pre>
+<p>  这里为最外层布局的和 ImageView 都注册了点击事件，RecyclerView 的强大之处也在这里，它可以轻松实现子项中任意控件或布局的点击事件。由于 TextView 并没有注册点击事件，因此点击文字这个事件会被子项的最外层布局捕获到。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/lesslessdi-yi-xing-dai-ma-androidgreatergreater-bi-ji-activity/" class="post-title gt-a-link">
+                    《第一行代码 Android》笔记 — Activity
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

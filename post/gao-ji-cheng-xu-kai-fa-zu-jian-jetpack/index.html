@@ -1,0 +1,982 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>高级程序开发组件 Jetpack | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    高级程序开发组件 Jetpack
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-26 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#jetpack">Jetpack</a>
+<ul>
+<li><a href="#jetpack-%E7%AE%80%E4%BB%8B">Jetpack 简介</a></li>
+<li><a href="#viewmodel">ViewModel</a>
+<ul>
+<li><a href="#viewmodel-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">ViewModel 的基本用法</a></li>
+<li><a href="#%E5%90%91-viewmodel-%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0">向 ViewModel 传递参数</a></li>
+</ul>
+</li>
+<li><a href="#lifecycles">Lifecycles</a></li>
+<li><a href="#livedata">LiveData</a>
+<ul>
+<li><a href="#livedata-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">LiveData 的基本用法</a></li>
+<li><a href="#map-%E5%92%8C-switchmap">map 和 switchMap</a></li>
+</ul>
+</li>
+<li><a href="#room">Room</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8-room-%E8%BF%9B%E8%A1%8C%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5">使用 Room 进行增删改查</a></li>
+<li><a href="#room-%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8D%87%E7%BA%A7">Room 的数据库升级</a></li>
+</ul>
+</li>
+<li><a href="#workmanager">WorkManager</a>
+<ul>
+<li><a href="#workmanager-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">WorkManager 的基本用法</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-workmanager-%E5%A4%84%E7%90%86%E5%A4%8D%E6%9D%82%E7%9A%84%E4%BB%BB%E5%8A%A1">使用 WorkManager 处理复杂的任务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="jetpack">Jetpack</h1>
+<hr>
+<h2 id="jetpack-简介">Jetpack 简介</h2>
+<p>  长久以来，Android 官方并没有制定一个项目架构的规范，只要能够实现功能，代码怎么编写都是开发者的自由。但是不同的人技术水平不同，最终编写出来的代码质量是千差万别的。<br>
+　　于是在 2017 年，Google 推出了一个官方的架构组件库——Architecture Components，旨在帮助开发者编写出更加符合高质量代码规范、更具有架构设计的应用程序。2018年，Google 又推出了一个全新的开发组件工具集<code>Jetpack</code>，并将 Architecture Components 作为 Jetpack 的一部分纳入其中。</p>
+<h2 id="viewmodel">ViewModel</h2>
+<blockquote>
+<p>  在传统的开发模式下，Activity 的任务实在是太重了，既要负责逻辑处理，又要控制UI展示，甚至还得处理网络回调。<br>
+　　而<code>ViewModel</code>的一个重要作用就是可以帮助 Activity 分担一部分工作，它是专门用于存放与界面相关的数据的。也就是说，只要是界面上能看得到的数据，它的相关变量都应该存放在 ViewModel 中，而不是 Activity 中，这样可以在一定程度上减少 Activity 中的逻辑。</p>
+</blockquote>
+<p>  <code>ViewModel</code>还有一个非常重要的特性。我们都知道，当手机发生横竖屏旋转的时候， Activity 会被重新创建，同时存放在 Activity 中的数据也会丢失。而 ViewModel 的生命周期和 Activity 不同，它可以保证在手机屏幕发生旋转的时候不会被重新创建，只有当 Activity 退出的时候才会跟着 Activity 一起销毁。<br>
+　　因此，将与界面相关的变量存放在<code>ViewModel</code>当中，这样即使旋转手机屏幕，界面上显示的数据也不会丢失。</p>
+<h3 id="viewmodel-的基本用法">ViewModel 的基本用法</h3>
+<p>  通常来讲，比较好的编程规范是给每一个 Activity 和 Fragment 都创建一个对应的<code>ViewModel</code>。下面实现一个简单计数器的功能<br>
+　　因此这里为 MainActivity 创建一个对应的<code>MainViewModel</code>类，并让它继承自<code>ViewModel</code>，同时加入一个<code>counter</code>变量用于计数，代码如下所示：</p>
+<pre><code class="language-java">    class MainViewModel : ViewModel() {
+        var counter = 0
+    }
+</code></pre>
+<p>  在界面上添加一个按钮，每点击一次按钮就让计数器加 1，并且把最新的计数显示在界面上。修改<code>activity_main.xml</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;TextView
+            android:id=&quot;@+id/infoText&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;
+            android:textSize=&quot;32sp&quot; /&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/plusOneBtn&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;
+            android:text=&quot;Plus One&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  下面实现计数器的逻辑，修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        lateinit var viewModel: MainViewModel
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+            plusOneBtn.setOnClickListener {
+                viewModel.counter++
+                refreshCounter()
+            }
+            refreshCounter()
+        }
+        private fun refreshCounter() {
+            infoText.text = viewModel.counter.toString()
+        }
+    }
+</code></pre>
+<blockquote>
+<p>  绝对不可以直接去创建<code>ViewModel</code>的实例，而是一定要通过<code>ViewModelProvider</code>来获取 ViewModel 的实例</p>
+</blockquote>
+<p>  <code>ViewModel</code>有其独立的生命周期，并且其生命周期要长于 Activity。如果在<code>onCreate()</code>方法中创建 ViewModel 的实例，那么每次 onCreate() 方法执行的时候， ViewModel 都会创建一个新的实例，这样当手机屏幕发生旋转的时候，就无法保留其中的数据了。</p>
+<h3 id="向-viewmodel-传递参数">向 ViewModel 传递参数</h3>
+<blockquote>
+<p>  向<code>MainViewModel</code>的构造函数中传递参数需要借助<code>ViewModelProvider.Factory</code>来实现。</p>
+</blockquote>
+<p>  由于退出程序之后再重新打开，之前的计数会被清零，因此需要在退出程序的时候对当前的计数进行保存，然后再次打开程序的时候读取之前保存的计数，并传递给 MainViewModel。<br>
+　　因此，这里修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        var counter = countReserved
+    }
+</code></pre>
+<p>  <code>countReserved</code>参数，这个参数用于记录之前保存的计数值，并在初始化的时候赋值给<code>counter</code>变量。</p>
+<p>  新建一个<code>MainViewModelFactory</code>类，并让它实现<code>ViewModelProvider.Factory</code>接口，代码如下所示：</p>
+<pre><code class="language-java">    class MainViewModelFactory(private val countReserved: Int) : ViewModelProvider.Factory {
+        override fun &lt;T : ViewModel&gt; create(modelClass: Class&lt;T&gt;): T {
+            return MainViewModel(countReserved) as T
+        }
+    }
+</code></pre>
+<p>  <code>MainViewModelFactory</code>的构造函数中接收了一个<code>countReserved</code>参数。</p>
+<blockquote>
+<p>  ViewModelProvider.Factory 接口要求我们必须实现<code>create()</code>方法。</p>
+</blockquote>
+<p>  在<code>create()</code>方法中创建<code>MainViewModel</code>的实例，并传入<code>countReserved</code>参数。</p>
+<blockquote>
+<p>  注意，这里<code>create()</code>方法的执行时机和 Activity 的生命周期无关。</p>
+</blockquote>
+<p>  在界面上添加一个清零按钮，方便用户手动将计数器清零。修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;LinearLayout
+        xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+        ...
+        &lt;Button
+        android:id=&quot;@+id/clearBtn&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_gravity=&quot;center_horizontal&quot;
+        android:text=&quot;Clear&quot;/&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  最后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        lateinit var viewModel: MainViewModel
+        lateinit var sp: SharedPreferences
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            sp = getPreferences(Context.MODE_PRIVATE)
+            val countReserved = sp.getInt(&quot;count_reserved&quot;, 0)
+            viewModel = ViewModelProvider(this, MainViewModelFactory(countReserved))
+                .get(MainViewModel::class.java)
+            ...
+            clearBtn.setOnClickListener {
+                viewModel.counter = 0
+                refreshCounter()
+            }
+            refreshCounter()
+        }
+
+        override fun onPause() {
+            super.onPause()
+            sp.edit {
+                putInt(&quot;count_reserved&quot;, viewModel.counter)
+            }
+        }
+        ...
+    }
+</code></pre>
+<p>  onCreate() 获取到的<code>SharedPreferences</code>实例用于读取之前保存的计数值，在<code>ViewModelProvider</code>中，额外传入了一个<code>MainViewModelFactory</code>参数，并将读取到的计数值传给了它的构造函数。</p>
+<blockquote>
+<p>  注意，只有用这种写法才能将计数值最终传递给<code>MainViewModel</code>的构造函数。</p>
+</blockquote>
+<p>  在<code>onPause()</code>方法中对当前的计数进行保存，这样可以保证不管程序是退出还是进入后台，计数都不会丢失。</p>
+<h2 id="lifecycles">Lifecycles</h2>
+<p>  <code>Lifecycles</code>组件可以让任何一个类都能轻松感知到 Activity 的生命周期，同时又不需要在 Activity 中编写大量的逻辑处理。</p>
+<p>  新建一个<code>MyObserver</code>类，并让其实现<code>DefaultLifecycleObserver</code>接口，然后重写相关方法，代码如下所示：</p>
+<pre><code class="language-java">    class MyObserver : DefaultLifecycleObserver {
+        //此方法会感知到Activity的onStart方法后执行 下面同理
+        override fun onStart(owner: LifecycleOwner) {
+            super.onStart(owner)
+            Log.d(&quot;MyObserver&quot;, &quot;onStart&quot;)
+        }
+
+        override fun onStop(owner: LifecycleOwner) {
+            super.onStop(owner)
+            Log.d(&quot;MyObserver&quot;, &quot;onStop&quot;)
+        }
+    }
+</code></pre>
+<p>  不过现在当 Activity 的生命周期发生变化时，是无法通知到<code>MyObserver</code>的，因此我们需要借助<code>LifecycleOwner</code>来让 MyObserver 得到通知，相关语法结构如下：</p>
+<pre><code class="language-java">    lifecycleOwner.lifecycle.addObserver(MyObserver())
+</code></pre>
+<p>  首先调用<code>LifecycleOwner</code>的<code>getLifecycle()</code>方法，得到一个<code>Lifecycle</code>对象，然后调用它的<code>addObserver()</code>方法来观察 LifecycleOwner 的生命周期，并把 MyObserver 的实例传进去即可。<br>
+　　只要我们的 Activity 是继承自<code>AppCompatActivity</code>，那么它本身就是一个<code>LifecycleOwner</code>的实例，因为 AndroidX 库自动帮我们完成了这部分工作。</p>
+<blockquote>
+<p>  同理，若 Fragment 是继承自<code>androidx.fragment.app.Fragment</code>，那么它本身也是一个<code>LifecycleOwner</code>的实例。</p>
+</blockquote>
+<p>  因此，在 MainActivity 当中写法如下：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        ...
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            ...
+            lifecycle.addObserver(MyObserver())
+        }
+        ...
+    }
+</code></pre>
+<p>  目前<code>MyObserver</code>虽然能够自动感知到 Activity 的生命周期发生了变化，却无法主动去获取当前的生命周期状态。<br>
+　　可以在<code>MyObserver</code>的构造函数中将<code>Lifecycle</code>对象传进来，如下所示：</p>
+<pre><code class="language-java">    class MyObserver(val lifecycle: Lifecycle) : DefaultLifecycleObserver {
+        /*返回值是一个枚举类型 共五种：INITIALIZED、DESTROYED、CREATED、STARTED、RESUMED
+        if(owner.lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)){
+        }*/
+        ...
+    }
+</code></pre>
+<p>  然后可以在任何地方调用<code>lifecycle.currentState</code>来主动获知当前的生命周期状态。<br>
+　　当获取的生命周期状态是<code>CREATED</code>时，说明<code>onCreate()</code>方法已经执行了，但是<code>onStart()</code>方法还没有执行，以此类推。</p>
+<h2 id="livedata">LiveData</h2>
+<blockquote>
+<p>  <code>LiveData</code>是 Jetpack 提供的一种响应式编程组件，它可以包含任何类型的数据，并在数据发生变化的时候通知给观察者，另外 LiveData 特别适合与<code>ViewModel</code>结合在一起使用。</p>
+</blockquote>
+<h3 id="livedata-的基本用法">LiveData 的基本用法</h3>
+<p>  如果在<code>ViewModel</code>的内部开启了线程去执行一些耗时逻辑，那么以之前的写法，响应相关事件后就直接去获取数据，是无法得到最新的数据的。<br>
+　　之前一直都是在 Activity 中手动获取<code>ViewModel</code>中的数据，比如在<code>refreshCounter()</code>方法中获取 ViewModel 里的<code>counter</code>变量值来更新界面，ViewModel 是无法将数据的变化主动通知给 Activity 的。<br>
+　　如果将之前计数器的计数使用<code>LiveData</code>来包装，然后在 Activity 中去观察它，就可以主动将数据变化通知给 Activity 了。首先修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    /**
+    * MutableLiveData可以包含任何类型的数据，并在数据发生变化的时候通知给观察者 具有三种读取数据的写法：
+    * getValue()方法用于获取LiveData中包含的数据。
+    * setValue()方法用于给LiveData设置数据，但是只能在主线程中调用。
+    * postValue()方法用于在非主线程中给LiveData设置数据。
+    * */
+    class MainViewModel(countReserved: Int) : ViewModel() { //countReserved用于记录之前保存的计数值
+        val counter = MutableLiveData&lt;Int&gt;()   //MutableLiveData是一种可变的LiveData
+
+        init {
+            //语法糖写法
+            counter.value = countReserved  //使之前保存的计数值就可以在初始化的时候得到恢复
+        }
+
+        fun plusOne() { //先获取counter中包含的数据，然后给它加1
+            val count = counter.value ?: 0  //getValue()方法所获得的数据可能为空
+            counter.value = count + 1
+        }
+
+        fun clear() {
+            counter.value = 0
+        }
+    }
+</code></pre>
+<p>  然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        plusOneBtn.setOnClickListener { //增加计数
+            viewModel.plusOne()
+        }
+        clearBtn.setOnClickListener {   //清零计数
+            viewModel.clear()
+        }
+        /**
+         * counter现在是一个LiveData对象 任何LiveData对象都可以调用它的observe()方法来观察数据的变化
+         * observe()方法接收两个参数：
+         * 第一个参数是一个LifecycleOwner对象 Activity本身就是一个LifecycleOwner对象，因此直接传this即可
+         * 第二个参数是一个Observer接口 当counter中包含的数据发生变化时就会回调到这里 将最新的计数更新到界面上即可。
+         */
+        viewModel.counter.observe(this, Observer {
+            infoText.text = it.toString()
+        })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sp.edit {
+            //对当前的计数进行保存 保证不管程序是退出还是进入后台 计数都不会丢失
+            putInt(&quot;count_reserved&quot;, viewModel.counter.value ?: 0)
+        }
+    }
+}
+</code></pre>
+<p>  这里调用了<code>viewModel.counter</code>的<code>observe()</code>方法来观察数据的变化。经过对<code>MainViewModel</code>的改造，现在<code>counter</code>变量已经变成了一个<code>LiveData</code>对象。<br>
+　　现在也不用担心 ViewModel 的内部会不会开启线程执行耗时逻辑了·。</p>
+<blockquote>
+<p>  注意，如果需要在子线程中给<code>LiveData</code>设置数据，一定要调用<code>postValue()</code>方法，而不能再使用<code>setValue()</code>方法，否则会发生崩溃。</p>
+</blockquote>
+<p>  不过上面的写法仍然不是最规范的<code>LiveData</code>用法，问题就在于将<code>counter</code>这个可变的 LiveData 暴露给了外部。这样即使是在<code>ViewModel</code>的外面也是可以给 counter 设置数据的，从而破坏了 ViewModel 数据的封装性，同时也可能带来一定的风险。<br>
+　　比较推荐的做法是，永远只暴露不可变的<code>LiveData</code>给外部。这样在非<code>ViewModel</code>中就只能观察 LiveData 的数据变化，而不能给 LiveData 设置数据。<br>
+　　再次修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        private val _counter = MutableLiveData&lt;Int&gt;()
+        /**
+        * 当外部调用counter变量时 实际上获得的就是_counter的实例
+        * 但是无法给counter设置数据 从而保证了ViewModel的数据封装性*/
+        val counter: LiveData&lt;Int&gt;  //不可变的LiveData
+            get() = _counter    //返回_counter变量
+
+        init {
+            _counter.value = countReserved
+        }
+
+        fun plusOne() {
+            val count = _counter.value ?: 0
+            _counter.value = count + 1
+        }
+
+        fun clear() {
+            _counter.value = 0
+        }
+    }
+</code></pre>
+<p>  这里先将原来的 counter 变量改名为<code>_counter</code>变量，并给它加上<code>private</code>修饰符，这样<code>_counter</code>变量对于外部就是不可见的了。<br>
+　　目前这种写法可以说是非常规范的，也是 Android 官方最为推荐的写法。</p>
+<h3 id="map-和-switchmap">map 和 switchMap</h3>
+<blockquote>
+<p>  LiveData 为了能够应对各种不同的需求场景，提供了两种转换方法：<code>map()</code>和<code>switchMap()</code>方法。</p>
+</blockquote>
+<p>  <code>map()</code>方法的作用是将实际包含数据的<code>LiveData</code>和仅用于观察数据的<code>LiveData</code>进行转换。<br>
+　　比如说有一个<code>User</code>类，其中包含用户的姓名和年龄，定义如下：</p>
+<pre><code class="language-java">    data class User(var firstName: String, var lastName: String, var age: Int)
+</code></pre>
+<p>  然后可以在<code>ViewModel</code>中创建一个相应的<code>LiveData</code>来包含<code>User</code>类型的数据，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        val userLiveData = MutableLiveData&lt;User&gt;()
+        ...
+    }
+</code></pre>
+<p>  如果 MainActivity 中明确只会显示用户的姓名，而完全不关心用户的年龄，那么这个时候还将整个<code>User</code>类型的 LiveData 暴露给外部，就显得不合适了。<br>
+　　而<code>map()</code>方法就是专门用于解决这种问题的，它可以将<code>User</code>类型的<code>LiveData</code>自由地转型成任意其他类型的 LiveData，写法如下：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        //private声明以保证数据的封装性
+        private val userLiveData = MutableLiveData&lt;User&gt;()
+        val userName: LiveData&lt;String&gt; = Transformations.map(userLiveData) { user -&gt;
+            &quot;${user.firstName} ${user.lastName}&quot;    //将User对象转换成一个只包含用户姓名的字符串
+        }
+        ...
+    }
+</code></pre>
+<p>  这里调用<code>Transformations</code>的<code>map()</code>方法来对<code>LiveData</code>的数据类型进行转换。<br>
+　　<code>map()</code>方法接收两个参数：第一个参数是原始的 LiveData 对象；第二个参数是一个转换函数，在转换函数里编写具体的转换逻辑即可。<br>
+　　当<code>userLiveData</code>的数据发生变化时，<code>map()</code>方法会监听到变化并执行转换函数中的逻辑，然后再将转换之后的数据通知给<code>userName</code>的观察者。</p>
+<p>  之前所使用的<code>LiveData</code>对象的实例都是在 ViewModel 中创建的，而它也是有可能调用外部的方法获取的。<br>
+　　下面就来模拟一下这种情况，新建一个<code>Repository</code>单例类，代码如下所示：</p>
+<pre><code class="language-java">    object Repository {
+        fun getUser(userId: String): LiveData&lt;User&gt; {
+            val liveData = MutableLiveData&lt;User&gt;()
+            liveData.value = User(userId, userId, 0)
+            return liveData
+        }
+    }
+</code></pre>
+<p>  这里在 Repository 类中添加了一个<code>getUser()</code>方法，这个方法接收一个<code>userId</code>参数。按照正常的编程逻辑，我们应该根据传入的 userId 参数去服务器请求或者到数据库中查找相应的<code>User</code>对象，但这里只是模拟示例，因此每次将传入的 userId 当作用户姓名来创建一个新的 User 对象即可。<br>
+　　需要注意的是，<code>getUser()</code>方法返回的是一个包含<code>User</code>数据的<code>LiveData</code>对象，而且每次调用 getUser() 方法都会返回一个新的 LiveData 实例。<br>
+　　然后在<code>MainViewModel</code>中也定义一个<code>getUser()</code>方法，并且让它调用 Repository 的 getUser() 方法来获取<code>LiveData</code>对象，如下：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        ...
+        fun getUser(userId: String): LiveData&lt;User&gt; {
+            return Repository.getUser(userId)
+        }
+    }
+</code></pre>
+<p>  注意我们不能直接在 MainActivity 中使用如下写法来观察 LiveData 的数据变化：</p>
+<pre><code class="language-java">    viewModel.getUser(userId).observe(this) { user -&gt;
+    }
+</code></pre>
+<p>  因为每次调用<code>getUser()</code>方法返回的都是一个新的<code>LiveData</code>实例，而上述写法会一直观察之前的 LiveData 实例，从而根本无法观察到数据的变化。<br>
+　　此时就需要使用到<code>switchMap()</code>方法，它的使用场景非常固定：如果<code>ViewModel</code>中的某个<code>LiveData</code>对象是调用另外的方法获取的，那么就可以借助<code>switchMap()</code>方法，将这个 LiveData 对象转换成另外一个可观察的 LiveData 对象。<br>
+　　修改<code>MainViewModel</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainViewModel(countReserved: Int) : ViewModel() {
+        ...
+        private val userIdLiveData = MutableLiveData&lt;String&gt;()
+        //Transformations.switchMap()对另一个可观察的LiveData对象进行转换
+        val user: LiveData&lt;User&gt; = Transformations.switchMap(userIdLiveData) { userId -&gt;
+            Repository.getUser(userId)
+        }
+
+        fun getUser(userId: String) {
+            userIdLiveData.value = userId
+        }
+    }
+</code></pre>
+<p>  这里定义了一个新的<code>userIdLiveData</code>对象，用来观察<code>userId</code>的数据变化。<br>
+　　<code>switchMap()</code>方法同样接收两个参数：</p>
+<ul>
+<li>
+<p>第一个参数传入新增的<code>userIdLiveData</code>，switchMap() 方法会对它进行观察。</p>
+</li>
+<li>
+<p>第二个参数是一个转换函数，必须在这个转换函数中返回一个<code>LiveData</code>对象，因为<code>switchMap()</code>方法的工作原理就是要将转换函数中返回的 LiveData 对象转换成另一个可观察的 LiveData 对象。</p>
+</li>
+</ul>
+<blockquote>
+<p>  <code>switchMap()</code>的整体工作流程：<br>
+　　首先，当外部调用 MainViewModel 的<code>getUser()</code>方法来获取用户数据时，并不会发起任何请求或者函数调用，只会将传入的<code>userId</code>值设置到<code>userIdLiveData</code>当中。<br>
+　　一旦 userIdLiveData 的数据发生变化，那么观察 userIdLiveData 的<code>switchMap()</code>方法就会执行，并且调用我们编写的转换函数。然后在转换函数中调用<code>Repository.getUser()</code>方法获取真正的用户数据。同时，<code>switchMap()</code>方法会将 Repository.getUser() 方法返回的<code>LiveData</code>对象转换成一个可观察的 LiveData 对象，对于 Activity 而言，只要去观察这个 LiveData 对象即可。</p>
+</blockquote>
+<p>  在上面的例子中，我们调用 MainViewModel 的<code>getUser()</code>方法时传入了一个<code>userId</code>参数，为了能够观察这个参数的数据变化，又构建了一个<code>userIdLiveData</code>，然后在<code>switchMap()</code>方法中再去观察这个 LiveData 对象。但是<code>ViewModel</code>中某个获取数据的方法有可能是没有参数的。<br>
+　　因此，在没有可观察数据的情况下，需要创建一个空的<code>LiveData</code>对象，写法如下：</p>
+<pre><code class="language-java">    class MyViewModel : ViewModel() {
+        private val refreshLiveData = MutableLiveData&lt;Any?&gt;()
+        val refreshResult = Transformations.switchMap(refreshLiveData) {
+            Repository.refresh() // 假设Repository中已经定义了refresh()方法
+        }
+
+        fun refresh() {
+            refreshLiveData.value = refreshLiveData.value
+        }
+    }
+</code></pre>
+<p>  这里定义了一个不带参数的<code>refresh()</code>方法，又对应地定义了一个<code>refreshLiveData</code>，但是它不需要指定具体包含的数据类型，因此这里将 LiveData 的泛型指定成<code>Any?</code>即可。<br>
+　　在<code>refresh()</code>方法中，我们只是将<code>refreshLiveData</code>原有的数据取出来（默认是空），再重新设置到 refreshLiveData 当中，这样就能触发一次数据变化。</p>
+<blockquote>
+<p>  LiveData 内部不会判断即将设置的数据和原有数据是否相同，只要调用了<code>setValue()</code>或<code>postValue()</code>方法，就一定会触发数据变化事件。</p>
+</blockquote>
+<p>  然后在 Activity 中观察<code>refreshResult</code>这个 LiveData 对象即可，这样只要调用了<code>refresh()</code>方法，观察者的回调函数中就能够得到最新的数据。</p>
+<p>  最后想说的是，LiveData 之所以能够成为<code>Activity</code>与<code>ViewModel</code>之间通信的桥梁，并且还不会有内存泄漏的风险，靠的是<code>Lifecycles</code>组件。<br>
+　　LiveData 在内部使用了<code>Lifecycles</code>组件来自我感知生命周期的变化，从而可以在 Activity 销毁的时候及时释放引用，避免产生内存泄漏的问题。<br>
+　　由于要减少性能消耗，当 Activity 处于不可见状态的时候（比如手机息屏，或者被其他的 Activity 遮挡），如果<code>LiveData</code>中的数据发生了变化，是不会通知给观察者的。只有当 Activity重新恢复可见状态时，才会将数据通知给观察者，而 LiveData 之所以能够实现这种细节的优化，依靠的还是 Lifecycles 组件。<br>
+　　另外，如果在 Activity 处于不可见状态的时候，<code>LiveData</code>发生了多次数据变化，当 Activity 恢复可见状态时，只有最新的那份数据才会通知给观察者，前面的数据在这种情况下相当于已经过期了，会被直接丢弃。</p>
+<h2 id="room">Room</h2>
+<p>  ORM 也叫对象关系映射。简单来讲，我们使用的编程语言是面向对象语言，而使用的数据库则是关系型数据库，将面向对象的语言和面向关系的数据库之间建立一种映射关系，即 ORM。<br>
+　　使用 ORM 框架有就可以用面向对象的思维来和数据库进行交互，绝大多数情况下不用再和 SQL 语句打交道了，同时也不用担心操作数据库的逻辑会让项目的整体代码变得混乱。<br>
+　　Android 官方推出了一个 ORM 框架，并将它加入了 Jetpack 当中，即<code>Room</code>。</p>
+<h3 id="使用-room-进行增删改查">使用 Room 进行增删改查</h3>
+<p>  <code>Room</code>主要由<code>Entity</code>、<code>Dao</code>和<code>Database</code>这 3 部分组成，每个部分都有明确的职责，详细说明如下：</p>
+<ul>
+<li>
+<p><code>Entity</code>：用于定义封装实际数据的实体类，每个实体类都会在数据库中有一张对应的表，并且表中的列是根据实体类中的字段自动生成的。</p>
+</li>
+<li>
+<p><code>Dao</code>：Dao 是数据访问对象的意思，通常会在这里对数据库的各项操作进行封装，在实际编程的时候，逻辑层就不需要和底层数据库打交道了，直接和 Dao 层进行交互即可。</p>
+</li>
+<li>
+<p><code>Database</code>：用于定义数据库中的关键信息，包括数据库的版本号、包含哪些实体类以及提供 Dao 层的访问实例。</p>
+</li>
+</ul>
+<p>  使用<code>Room</code>，需要在<code>app/build.gradle</code>文件中添加如下的依赖：</p>
+<pre><code class="language-java">    plugins {
+        ...
+        id 'kotlin-kapt'
+    }
+    ...
+    dependencies {
+        //room
+        def room_version = &quot;2.2.3&quot;
+        implementation &quot;androidx.room:room-runtime:$room_version&quot;
+        kapt &quot;androidx.room:room-compiler:$room_version&quot;
+        ...
+    }
+</code></pre>
+<p>  这里新增了一个<code>kotlin-kapt</code>插件，同时在<code>dependencies</code>闭包中添加了两个<code>Room</code>的依赖库。<br>
+　　由于 Room 会根据我们在项目中声明的注解来动态生成代码，因此这里一定要使用<code>kapt</code>引入 Room 的编译时注解库，而启用编译时注解功能则一定要先添加<code>kotlin-kapt</code>插件。</p>
+<blockquote>
+<p>  注意，<code>kapt</code>只能在 Kotlin 项目中使用，如果是 Java 项目的话，使用<code>annotationProcessor</code>即可。</p>
+</blockquote>
+<p>  首先是定义<code>Entity</code>，也就是实体类。JetpackTest 项目中已经存在一个实体类了，然而<code>User</code>类目前只包含<code>firstName</code>、<code>lastName</code>和<code>age</code>这 3 个字段，但是一个良好的数据库编程建议是，给每个实体类都添加一个<code>id</code>字段，并将这个字段设为主键。<br>
+　　于是对<code>User</code>类进行如下改造，并完成实体类的声明：</p>
+<pre><code class="language-java">    @Entity
+    data class User(var firstName: String, var lastName: String, var age: Int) {
+        @PrimaryKey(autoGenerate = true)
+        var id: Long = 0
+    }
+</code></pre>
+<p>  这里在<code>User</code>的类名上使用<code>@Entity</code>注解，将它声明成了一个实体类，然后在 User 类中添加了一个<code>id</code>字段，并使用<code>@PrimaryKey</code>注解将它设为了主键，再把<code>autoGenerate</code>参数指定成<code>true</code>，使得主键的值是自动生成的。<br>
+　　这样实体类部分就定义好了，不过这里简单起见，只定义了一个实体类，在实际项目当中，我们需要根据具体的业务逻辑定义很多个实体类。当然，每个实体类定义的方式都是差不多的，最多添加一些实体类之间的关联。<br>
+　　接下来开始定义<code>Dao</code>，这部分也是<code>Room</code>用法中最关键的地方，因为所有访问数据库的操作都是在这里封装的。Dao 要做的事情就是覆盖所有的业务需求，使得业务方永远只需要与 Dao层进行交互，而不必和底层的数据库打交道。<br>
+　　新建一个<code>UserDao</code>接口，注意必须使用接口，这点和<code>Retrofit</code>是类似的，然后在接口中编写如下代码：</p>
+<pre><code class="language-java">    @Dao
+    interface UserDao {
+        //将参数中传入的User对象插入数据库中 插入完成后将自动生成的主键id值返回
+        @Insert
+        fun insertUser(user: User): Long
+
+        //将参数中传入的User对象更新到数据库当中
+        @Update
+        fun updateUser(newUser: User)
+
+        //从数据库中查询所有的用户
+        @Query(&quot;select * from User&quot;)
+        fun loadAllUsers(): List&lt;User&gt;
+
+        //查询所有年龄大于指定参数的用户
+        @Query(&quot;select * from User where age &gt; :age&quot;)
+        fun loadUserOlderThan(age: Int): List&lt;User&gt;
+
+        //会将参数传入的User对象从数据库中删除
+        @Delete()
+        fun deleteUser(user: User)
+
+        //使用非实体类参数来增删改数据
+        @Query(&quot;delete from User where lastName = :lastName&quot;)
+        fun deleteUserByLastName(lastName: String): Int
+    }
+</code></pre>
+<p>  <code>UserDao</code>接口的上面使用了一个<code>@Dao</code>注解，这样<code>Room</code>才能进行识别。数据库操作通常有增删改查这 4 种，因此 Room 也提供了<code>@Insert</code>、<code>@Delete</code>、<code>@Update</code>和<code>@Query</code>这 4 种相应的注解。</p>
+<blockquote>
+<p>  需要注意的是，如果想要从数据库中查询数据，或者使用非实体类参数来增删改数据，那么就必须编写 SQL 语句，不然 Room 将无法知道用户想要操作哪些数据，Room 是支持在编译时动态检查 SQL 语句语法的。</p>
+</blockquote>
+<p>  最后来定义<code>Database</code>。这部分内容的写法是非常固定的，只需要定义好 3 个部分的内容：数据库的版本号、包含哪些实体类，以及提供<code>Dao</code>层的访问实例。<br>
+　　新建一个<code>AppDatabase.kt</code>文件，代码如下所示：</p>
+<pre><code class="language-java">    @Database(version = 1, entities = [User::class])    //多个实体类之间用逗号隔开即可
+    abstract class AppDatabase : RoomDatabase() {
+        abstract fun userDao(): UserDao
+
+        companion object {
+            private var instance: AppDatabase? = null   //缓存AppDatabase的实例
+
+            @Synchronized
+            fun getDatabase(context: Context): AppDatabase {    //返回一个AppDatabase对象
+                instance?.let { //instance变量不为空就直接返回
+                    return it
+                }
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java, &quot;app_database&quot;
+                )
+                    .build().apply {
+                        instance = this //this:AppDatabase
+                    }
+            }
+        }
+    }
+</code></pre>
+<p>  <code>AppDatabase</code>类必须继承自<code>RoomDatabase</code>类，并且一定要使用<code>abstract</code>关键字将它声明成抽象类，然后提供相应的抽象方法，用于获取之前编写的<code>Dao</code>的实例，比如这里提供的<code>userDao()</code>方法。不过只需要进行方法声明就可以了，具体的方法实现是由<code>Room</code>在底层自动完成的。</p>
+<p>  在<code>companion object</code>结构体中编写了一个单例模式，因为原则上全局应该只存在一份<code>AppDatabase</code>的实例。需要注意的是，当<code>instance</code>变量为空时，调用了<code>Room.databaseBuilder()</code>方法来构建一个 AppDatabase 的实例。<br>
+　　<code>databaseBuilder()</code>方法接收 3 个参数：</p>
+<ul>
+<li>
+<p>第一个参数一定要使用<code>applicationContext</code>，而不能使用普通的<code>context</code>，否则容易出现内存泄漏的情况。</p>
+</li>
+<li>
+<p>第二个参数是<code>AppDatabase</code>的<code>Class</code>类型。</p>
+</li>
+<li>
+<p>第三个参数是数据库名。</p>
+</li>
+</ul>
+<p>  最后调用<code>build()</code>方法完成构建，并将创建出来的实例赋值给<code>instance</code>变量，然后返回当前实例即可。<br>
+　　这样就定义好了 Room 所需要的一切，在布局文件中自行添加删改查四个按钮对它进行测试，然后修改 MainActivity 中的代码，分别在这四个按钮的点击事件中实现增删改查的逻辑，如下：</p>
+<pre><code class="language-java">class MainActivity : AppCompatActivity() {
+    ...
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ...
+        val userDao = AppDatabase.getDatabase(this).userDao()
+        //创建两个User对象
+        val user1 = User(&quot;Tom&quot;, &quot;Brady&quot;, 40)
+        val user2 = User(&quot;Tom&quot;, &quot;Hanks&quot;, 63)
+        addDataBtn.setOnClickListener {
+            thread {
+                //将insertUser()方法返回的主键id值赋值给原来的User对象 
+                user1.id = userDao.insertUser(user1)
+                user2.id = userDao.insertUser(user2)
+            }
+        }
+        updateDataBtn.setOnClickListener {
+            thread {
+                user1.age = 42
+                userDao.updateUser(user1)
+            }
+        }
+        deleteDataBtn.setOnClickListener {
+            thread {    //删除所有lastName是Hanks的用户
+                userDao.deleteUserByLastName(&quot;Hanks&quot;)
+            }
+        }
+        queryDataBtn.setOnClickListener {
+            thread {    //查询并打印数据库中所有的用户
+                for (user in userDao.loadAllUsers()) {
+                    Log.d(&quot;MainActivity&quot;, user.toString())
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>  需要注意的是，这里将<code>insertUser()</code>方法返回的主键<code>id</code>值赋值给原来的<code>User</code>对象，是因为使用<code>@Update</code>和<code>@Delete</code>注解去更新和删除数据时都是基于这个<code>id</code>值来操作的。<br>
+　　另外，由于数据库操作属于耗时操作，<code>Room</code>默认是不允许在主线程中进行数据库操作的。不过为了方便测试，Room 还提供了一个更加简单的方法，如下所示：</p>
+<pre><code class="language-java">    Room.databaseBuilder(context.applicationContext, AppDatabase::class.java,&quot;app_database&quot;)
+        .allowMainThreadQueries()
+        .build()
+</code></pre>
+<p>  这里加入了一个<code>allowMainThreadQueries()</code>方法，这样<code>Room</code>就允许在主线程中进行数据库操作了，但这个方法建议只在测试环境下使用。</p>
+<h3 id="room-的数据库升级">Room 的数据库升级</h3>
+<p>  随着需求和版本的变更，数据库也是需要升级的。不过<code>Room</code>在数据库升级方面设计得非常烦琐，每一次升级都需要手动编写升级逻辑。<br>
+　　若应用程序目前还只是在开发测试阶段，不想编写那么烦琐的数据库升级逻辑，<code>Room</code>提供了一个简单粗暴的方法，如下所示：</p>
+<pre><code class="language-java">    Room.databaseBuilder(context.applicationContext, AppDatabase::class.java,&quot;app_database&quot;)
+        .fallbackToDestructiveMigration()
+        .build()
+</code></pre>
+<p>  在构建<code>AppDatabase</code>实例时，加入了一个<code>fallbackToDestructiveMigration()</code>方法。这样只要数据库进行了升级，Room 就会将当前的数据库销毁，然后再重新创建，随之而来的副作用就是之前数据库中的所有数据就全部丢失了。因此下面使用<code>Room</code>升级数据库的正规写法。<br>
+　　<br>
+  随着业务逻辑的升级，现在要在数据库中添加一张<code>Book</code>表，那么首先要做的就是创建一个 Book 的实体类，如下所示：</p>
+<pre><code class="language-java">    @Entity
+    data class Book(var name: String, var pages: Int) { //书名、页数
+        @PrimaryKey(autoGenerate = true)    //主键id
+        var id: Long = 0
+    }
+</code></pre>
+<p>  然后创建一个<code>BookDao</code>接口，并在其中随意定义一些 API：</p>
+<pre><code class="language-java">    @Dao
+    interface BookDao {
+        @Insert
+        fun insertBook(book: Book): Long
+        @Query(&quot;select * from Book&quot;)
+        fun loadAllBooks(): List&lt;Book&gt;
+    }
+</code></pre>
+<p>  接下来修改<code>AppDatabase</code>中的代码，在里面编写数据库升级的逻辑，如下所示：</p>
+<pre><code class="language-java">    @Database(version = 2, entities = [User::class, Book::class])    //多个实体类之间用逗号隔开即可
+    abstract class AppDatabase : RoomDatabase() {
+        abstract fun userDao(): UserDao
+        abstract fun bookDao(): BookDao
+
+        companion object {
+            private val MIGRATION_1_2 = object : Migration(1, 2) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    database.execSQL(
+                        &quot;create table Book (id integer primary key autoincrement not null,name text not null,pages integer not null)&quot;
+                    )
+                }
+            }
+            private var instance: AppDatabase? = null   //缓存AppDatabase的实例
+
+            @Synchronized
+            fun getDatabase(context: Context): AppDatabase {    //返回一个AppDatabase对象
+                instance?.let { //instance变量不为空就直接返回
+                    return it
+                }
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java, &quot;app_database&quot;
+                )
+                    .addMigrations(MIGRATION_1_2)
+                    .build().apply {
+                        instance = this //this:AppDatabase
+                    }
+            }
+        }
+    }
+</code></pre>
+<p>  这里在<code>@Database</code>注解中，将版本号升级成了 2，并将<code>Book</code>类添加到了实体类声明中，然后又提供了一个<code>bookDao()</code>方法用于获取<code>BookDao</code>的实例。<br>
+　　在<code>companion object</code>结构体中，实现了一个<code>Migration</code>的匿名类，并传入了 1 和 2 这两个参数，表示当数据库版本从 1 升级到 2 的时候就执行这个匿名类中的升级逻辑。<br>
+　　由于要新增一张<code>Book</code>表，所以需要在<code>migrate()</code>方法中编写相应的建表语句。另外必须注意的是，Book 表的建表语句必须和 Book 实体类中声明的结构完全一致，否则<code>Room</code>就会抛出异常。<br>
+　　最后在构建<code>AppDatabase</code>实例的时候，加入一个<code>addMigrations()</code>方法，并把<code>MIGRATION_1_2</code>传入即可。<br>
+　　现在当我们进行任何数据库操作时，<code>Room</code>就会自动根据当前数据库的版本号执行这些升级逻辑，从而让数据库始终保证是最新的版本。</p>
+<p>  不过，每次数据库升级并不一定都要新增一张表，也有可能是向现有的表中添加新的列。这种情况只需要使用<code>alter</code>语句修改表结构。<br>
+　　现在<code>Book</code>的实体类中只有<code>id</code>、书名、页数这几个字段，而我们想要再添加一个作者字段，代码如下所示：</p>
+<pre><code class="language-java">    @Entity
+    data class Book(var name: String, var pages: Int, var author: String) {
+        @PrimaryKey(autoGenerate = true)
+        var id: Long = 0
+    }
+</code></pre>
+<p>  既然实体类的字段发生了变动，那么对应的数据库表也必须升级了，所以修改<code>AppDatabase</code>中的代码，如下所示：</p>
+<pre><code class="language-java">    @Database(version = 3, entities = [User::class, Book::class])
+    abstract class AppDatabase : RoomDatabase() {
+        ...
+        companion object {
+            ...
+            val MIGRATION_2_3 = object : Migration(2, 3) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    database.execSQL(&quot;alter table Book add column author text not null default 'unknown'&quot;)
+                }
+            }
+            private var instance: AppDatabase? = null
+            fun getDatabase(context: Context): AppDatabase {
+                ...
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java, &quot;app_database&quot;
+                )
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .build().apply {
+                        instance = this
+                    }
+            }
+        }
+    }
+</code></pre>
+<p>  这里先将版本号升级成了 3，然后编写一个<code>MIGRATION_2_3</code>的升级逻辑并添加到<code>addMigrations()</code>方法中即可。</p>
+<h2 id="workmanager">WorkManager</h2>
+<blockquote>
+<p>  如何编写后台代码才能保证应用程序在不同系统版本上的兼容性呢？为了解决这个问题， Google 推出了<code>WorkManager</code>组件。</p>
+</blockquote>
+<p>  <code>WorkManager</code>很适合用于处理一些要求定时执行的任务，它可以根据操作系统的版本自动选择底层是使用<code>AlarmManager</code>实现还是<code>JobScheduler</code>实现，从而降低了使用成本。另外，它还支持周期性任务、链式任务处理等功能。<br>
+　　不过<code>WorkManager</code>和<code>Service</code>并不相同，也没有直接的联系。Service 是 Android 系统的四大组件之一，在没有被销毁的情况下是一直保持在后台运行。而 WorkManager 只是一个处理定时任务的工具，它保证即使在应用退出甚至手机重启的情况下，之前注册的任务仍然将会得到执行，因此 WorkManager 很适合用于执行一些定期和服务器进行交互的任务，比如周期性地同步数据。<br>
+　　另外，使用<code>WorkManager</code>注册的周期性任务不能保证一定会准时执行，这并不是 bug，而是系统为了减少电量消耗，可能会将触发时间临近的几个任务放在一起执行，这样可以大幅度地减少 CPU 被唤醒的次数，从而有效延长电池的使用时间。</p>
+<h3 id="workmanager-的基本用法">WorkManager 的基本用法</h3>
+<p>  想要使用 WorkManager，需要先在<code>app/build.gradle</code>文件中添加如下的依赖：</p>
+<pre><code class="language-java">    dependencies {
+        ...
+        implementation &quot;androidx.work:work-runtime:2.2.0&quot;
+    }
+</code></pre>
+<p>  <code>WorkManager</code>的基本用法其实比较简单，主要分为以下 3 步：</p>
+<ol>
+<li>定义一个后台任务，并实现具体的任务逻辑。</li>
+<li>配置该后台任务的运行条件和约束信息，并构建后台任务请求。</li>
+<li>将该后台任务请求传入<code>WorkManager</code>的<code>enqueue()</code>方法中，系统会在合适的时间运行。</li>
+</ol>
+<p>  第一步要定义一个后台任务，这里创建一个<code>SimpleWorker</code>类，代码如下所示：</p>
+<pre><code class="language-java">    class SimpleWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+        override fun doWork(): Result {
+            Log.d(&quot;SimpleWorker&quot;, &quot;do work in SimpleWorker&quot;)
+            return Result.success()
+        }
+    }
+</code></pre>
+<p>  首先每一个后台任务都必须继承自<code>Worker</code>类并调用它唯一的构造函数。然后重写父类中的<code>doWork()</code>方法，在这个方法中编写具体的后台任务逻辑即可。<br>
+　　<code>doWork()</code>方法不会运行在主线程当中，因此可以在这里执行耗时逻辑，这里简单地打印了一行日志。doWork() 方法要求返回一个<code>Result</code>对象，用于表示任务的运行结果，成功就返回<code>Result.success()</code>，失败就返回<code>Result.failure()</code>。除此之外，还有一个<code>Result.retry()</code>方法，它其实也代表着失败，只是可以结合<code>WorkRequest.Builder</code>的<code>setBackoffCriteria()</code>方法来重新执行任务</p>
+<p>  这样一个后台任务就定义好了。然后配置该后台任务的运行条件和约束信息。<br>
+　　可配置的内容非常多，这里只进行最基本的配置，代码如下所示：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java).build()
+</code></pre>
+<p>  只需要把刚才创建的后台任务所对应的<code>Class</code>对象传入<code>OneTimeWorkRequest.Builder</code>的构造函数中，然后调用<code>build()</code>方法即可完成构建。<br>
+　　<code>OneTimeWorkRequest.Builder</code>是<code>WorkRequest.Builder</code>的子类，用于构建单次运行的后台任务请求。WorkRequest.Builder 还有另外一个子类<code>PeriodicWorkRequest.Builder</code>，可用于构建周期性运行的后台任务请求，但是为了降低设备性能消耗，PeriodicWorkRequest.Builder 构造函数中传入的运行周期间隔不能短于 15 分钟，示例代码如下：</p>
+<pre><code class="language-java">    val request = PeriodicWorkRequest.Builder(SimpleWorker::class.java, 15,
+    TimeUnit.MINUTES).build()
+</code></pre>
+<p>  最后一步，将构建出的后台任务请求传入<code>WorkManager</code>的<code>enqueue()</code>方法中，系统就会在合适的时间去运行了：</p>
+<pre><code class="language-java">    WorkManager.getInstance(context).enqueue(request)
+</code></pre>
+<p>  可以在布局文件中添加一个<code>doWorkBtn</code>按钮用于测试，然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        ...
+        override fun onCreate(savedInstanceState: Bundle?) {
+            ...
+            doWorkBtn.setOnClickListener {
+                val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java).build()
+                WorkManager.getInstance(this).enqueue(request)
+            }
+        }
+        ...
+    }
+</code></pre>
+<p>  后台任务的具体运行时间是由我们所指定的约束以及系统自身的一些优化所决定的，由于这里没有指定任何约束，因此后台任务基本上会在点击按钮之后立刻运行。</p>
+<h3 id="使用-workmanager-处理复杂的任务">使用 WorkManager 处理复杂的任务</h3>
+<p>  上面虽然成功运行了一个后台任务，但是我们没有设置相关方法来控制它的具体运行时间。事实上除了运行时间之外，<code>WorkManager</code>还允许我们控制许多其他方面的东西。<br>
+　　比如借助<code>setInitialDelay()</code>方法让后台任务在指定的延迟时间后运行，代码如下所示：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java)
+        .setInitialDelay(5, TimeUnit.MINUTES)
+        .build()
+</code></pre>
+<p>  这里表示希望让<code>SimpleWorker</code>这个后台任务在 5 分钟后运行，我们可以自由选择时间的单位。<br>
+　　可以控制运行时间之后，可以再增加一些别的功能，比如说给后台任务请求添加标签：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java)
+        ...
+        .addTag(&quot;simple&quot;)
+        .build()
+</code></pre>
+<p>  标签的主要功能在于我们可以通过标签来取消后台任务请求：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this).cancelAllWorkByTag(&quot;simple&quot;)
+</code></pre>
+<p>  当然，即使没有标签，也可以通过<code>id</code>来取消后台任务请求：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this).cancelWorkById(request.id)
+</code></pre>
+<p>  但是，使用<code>id</code>只能取消单个后台任务请求，而使用标签的话，则可以将同一标签名的所有后台任务请求全部取消，这个功能在逻辑复杂的场景下尤其有用。<br>
+　　除此之外，我们也可以使用如下代码来一次性取消所有后台任务请求：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this).cancelAllWork()
+</code></pre>
+<p>  另外，若后台任务的<code>doWork()</code>方法返回<code>Result.retry()</code>，那么可以结合<code>setBackoffCriteria()</code>方法来重新执行任务，具体代码如下所示：</p>
+<pre><code class="language-java">    val request = OneTimeWorkRequest.Builder(SimpleWorker::class.java)
+        ...
+        .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+        .build()
+</code></pre>
+<p>  <code>setBackoffCriteria()</code>方法接收 3 个参数：第二个和第三个参数用于指定在多久之后重新执行任务，时间最短不能少于 10 秒钟，第一个参数则用于指定如果任务再次执行失败，下次重试的时间应该以什么样的形式延迟。</p>
+<blockquote>
+<p>  假如任务一直执行失败，不断地重新执行似乎并没有什么意义，只会徒增设备的性能消耗。而随着失败次数的增多，下次重试的时间也应该进行适当的延迟，这才是更加合理的机制。第一个参数的可选值有两种，分别是<code>LINEAR</code>和<code>EXPONENTIAL</code>，前者代表下次重试时间以线性的方式延迟，后者代表下次重试时间以指数的方式延迟。</p>
+</blockquote>
+<p>  <code>doWork()</code>的返回值其实就是用于通知任务运行结果的，我们可以使用如下代码对后台任务的运行结果进行监听：</p>
+<pre><code class="language-java">    WorkManager.getInstance(this)
+        .getWorkInfoByIdLiveData(request.id)    //传入后台任务请求的id，会返回一个LiveData对象
+        .observe(this) { workInfo -&gt;    //调用LiveData对象的observe()观察数据变化以监听后台任务的运行结果
+                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    Log.d(&quot;MainActivity&quot;, &quot;do work succeeded&quot;)
+                } else if (workInfo.state == WorkInfo.State.FAILED) {
+                    Log.d(&quot;MainActivity&quot;, &quot;do work failed&quot;)
+                }
+        }
+</code></pre>
+<p>  另外，也可以调用<code>getWorkInfosByTagLiveData()</code>方法，监听同一标签名下所有后台任务请求的运行结果。<br>
+　　<code>WorkManager</code>中有一个比较有特色的功能——链式任务。假设这里定义了 3 个独立的后台任务：同步数据、压缩数据和上传数据。现在想要实现先同步、再压缩、最后上传的功能，就可以借助链式任务来实现，代码示例如下：</p>
+<pre><code class="language-java">    val sync = ...
+    val compress = ...
+    val upload = ...
+    WorkManager.getInstance(this)
+        .beginWith(sync)
+        .then(compress)
+        .then(upload)
+        .enqueue()
+</code></pre>
+<p>  <code>beginWith()</code>方法用于开启一个链式任务，至于后面要接上什么样的后台任务，只需要使用<code>then()</code>方法来连接即可。另外<code>WorkManager</code>还要求，必须在前一个后台任务运行成功之后，下一个后台任务才会运行。也就是说，如果某个后台任务运行失败，或者被取消了，那么接下来的后台任务就都得不到运行了。</p>
+<blockquote>
+<p>  可能由于有太多的恶意应用总是想要无限占用后台，绝大多数的国产手机厂商在进行 Android 系统定制的时候会增加一个一键关闭的功能，允许用户一键杀死所有非白名单的应用程序。而被杀死的应用程序既无法接收广播，也无法运行<code>WorkManager</code>的后台任务。<br>
+　　因此，我们不要依赖<code>WorkManager</code>去实现什么核心功能，因为它在国产手机上可能会非常不稳定。</p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlinbian-xie-hao-yong-de-gong-ju-fang-fa/" class="post-title gt-a-link">
+                    Kotlin：编写好用的工具方法
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

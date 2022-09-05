@@ -1,0 +1,435 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Retrofit 网络库 | Petrichor</title>
+
+<link rel="shortcut icon" href="https://Petrichoroo.github.io/favicon.ico?v=1662363647663">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Petrichoroo.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Petrichor
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://github.com/Petrichoroo?tab=repositories" class="menu gt-a-link" target="_blank">
+                    友链
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1662363647663"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Retrofit 网络库
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-08-23 ·
+                    </time>
+                    
+                        <a href="https://Petrichoroo.github.io/tag/FOpsAg0VJ/" class="post-tags">
+                            # Android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><ul class="markdownIt-TOC">
+<li><a href="#retrofit">Retrofit</a>
+<ul>
+<li><a href="#retrofit-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">Retrofit 的基本用法</a></li>
+<li><a href="#%E5%A4%84%E7%90%86%E5%A4%8D%E6%9D%82%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%9C%B0%E5%9D%80%E7%B1%BB%E5%9E%8B">处理复杂的接口地址类型</a></li>
+<li><a href="#retrofit-%E6%9E%84%E5%BB%BA%E5%99%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E5%86%99%E6%B3%95">Retrofit 构建器的最佳写法</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h1 id="retrofit">Retrofit</h1>
+<hr>
+<h2 id="retrofit-的基本用法">Retrofit 的基本用法</h2>
+<blockquote>
+<p>  OkHttp 侧重的是底层通信的实现，而 Retrofit 侧重的是上层接口的封装。事实上，Retrofit 就是 Square 公司在 OkHttp 的基础上进一步开发出来的应用层网络通信库，使得我们可以用更加面向对象的思维进行网络操作。</p>
+</blockquote>
+<p>  <code>Retrofit</code>的基本设计思想。Retrofit 的设计基于以下几个事实：</p>
+<ul>
+<li>
+<p>同一款应用程序中所发起的网络请求绝大多数指向的是同一个服务器域名。</p>
+</li>
+<li>
+<p>服务器提供的接口通常是可以根据功能来归类的。比如新增用户、修改用户数据等接口可以归为一类，上架新书、销售图书等接口也可以归为一类。将服务器接口合理归类能够让代码结构变得更加合理，从而提高可阅读性和可维护性。</p>
+</li>
+<li>
+<p>开发者更加习惯于“调用一个接口，获取它的返回值”这样的编码方式，但当调用的是服务器接口时，却很难想象该如何使用这样的编码方式。其实大多数人并不关心网络的具体通信细节，但是传统网络库的用法却需要编写太多网络相关的代码。</p>
+</li>
+</ul>
+<p>  而<code>Retrofit</code>的用法就是基于以上几点来设计的，首先我们可以配置好一个根路径，然后在指定服务器接口地址时只需要使用相对路径即可，这样就不用每次都指定完整的<code>URL</code>地址了。</p>
+<p>  另外，<code>Retrofit</code>允许我们对服务器接口进行归类，将功能同属一类的服务器接口定义到同一个接口文件当中，从而让代码结构变得更加合理。</p>
+<p>  最后，我们也不用关心网络通信的细节，只需要在接口文件中声明一系列方法和返回值，然后通过注解的方式指定该方法对应哪个服务器接口，以及需要提供哪些参数。当在程序中调用该方法时，<code>Retrofit</code>会自动向对应的服务器接口发起请求，并将响应的数据解析成返回值声明的类型。这就使得我们可以用更加面向对象的思维来进行网络操作。</p>
+<p>  为了使用<code>Retrofit</code>，我们需要先在项目中添加必要的依赖库，可到<a href="https://github.com/square/retrofit">GitHub</a>查看最新版本，然后编辑<code>app/build.gradle</code>文件，在<code>dependencies</code>闭包中添加如下内容：</p>
+<pre><code class="language-java">    dependencies {
+        ...
+        implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+        implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    }
+</code></pre>
+<p>  由于<code>Retrofit</code>是基于 OkHttp 开发的，因此添加上述第一条依赖会自动将Retrofit、OkHttp 和 Okio这几个库一起下载，我们无须再手动引入<code>OkHttp</code>库。<br>
+　　另外，<code>Retrofit</code>还会将服务器返回的<code>JSON</code>数据自动解析成对象，因此上述第二条依赖就是一个 Retrofit 的转换库，它是借助<code>GSON</code>来解析 JSON 数据的，所以会自动将 GSON 库一起下载下来，这样我们也不用手动引入 GSON 库了。</p>
+<p>  之前在 Apache 安装目录下的 htdocs 中创建了一个名为<code>get_data.json</code>的文件，里面的数据如下：</p>
+<pre><code class="language-json">    [{&quot;id&quot;:&quot;5&quot;,&quot;version&quot;:&quot;5.5&quot;,&quot;name&quot;:&quot;Clash of Clans&quot;},
+    {&quot;id&quot;:&quot;6&quot;,&quot;version&quot;:&quot;7.0&quot;,&quot;name&quot;:&quot;Boom Beach&quot;},
+    {&quot;id&quot;:&quot;7&quot;,&quot;version&quot;:&quot;3.5&quot;,&quot;name&quot;:&quot;Clash Royale&quot;}]
+</code></pre>
+<p>  由于<code>Retrofit</code>会借助 GSON 将 JSON 数据转换成对象，因此这里同样需要新增一个<code>App</code>类，并加入<code>id</code>、<code>name</code>和<code>version</code>这 3 个字段，如下所示：</p>
+<pre><code class="language-java">    class App(val id: String, val name: String, val version: String)
+</code></pre>
+<p>  接下来，我们可以根据服务器接口的功能进行归类，创建不同种类的接口文件，并在其中定义对应具体服务器接口的方法。<br>
+　　不过由于我们的 Apache 服务器上其实只有一个获取<code>JSON</code>数据的接口，因此这里只需要定义一个接口文件，并包含一个方法即可。新建<code>AppService</code>接口，代码如下所示：</p>
+<pre><code class="language-java">    interface AppService {
+        @GET(&quot;get_data.json&quot;)
+        fun getAppData(): Call&lt;List&lt;App&gt;&gt;
+    }
+</code></pre>
+<blockquote>
+<p>  通常<code>Retrofit</code>的接口文件建议以具体的功能种类名开头，并以<code>Service</code>结尾，这是一种比较好的命名习惯。</p>
+</blockquote>
+<p>  上述代码中有两点需要注意。</p>
+<ul>
+<li>
+<p>在<code>getAppData()</code>方法上面添加的注解，这里使用了一个<code>@GET</code>注解，表示当调用 getAppData() 方法时 Retrofit 会发起一条<code>GET</code>请求，请求的地址就是我们在 @GET 注解中传入的具体参数。注意，这里只需要传入请求地址的相对路径即可，根路径我们会在稍后设置。</p>
+</li>
+<li>
+<p><code>getAppData()</code>方法的返回值必须声明成 Retrofit 中内置的<code>Call</code>类型，并通过泛型来指定服务器响应的数据应该转换成什么对象。由于服务器响应的是一个包含<code>App</code>数据的 JSON 数组，因此这里我们将泛型声明成<code>List&lt;App&gt;</code>。当然，Retrofit 还提供了强大的<code>Call Adapters</code>功能来允许我们自定义方法返回值的类型。</p>
+</li>
+</ul>
+<p>  为了使用<code>AppService</code>接口，我们在界面上添加一个按钮用于简单的测试。修改 activity_main.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+    &lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:orientation=&quot;vertical&quot;&gt;
+
+        &lt;Button
+            android:id=&quot;@+id/getAppDataBtn&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;Get App Data&quot;
+            android:textAllCaps=&quot;false&quot; /&gt;
+    &lt;/LinearLayout&gt;
+</code></pre>
+<p>  然后修改 MainActivity 中的代码，如下所示：</p>
+<pre><code class="language-java">    class MainActivity : AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+            val getAppDataBtn: Button = findViewById(R.id.getAppDataBtn)
+            getAppDataBtn.setOnClickListener {
+                //使用Retrofit.Builder()构建一个Retrofit对象
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(&quot;http://10.0.2.2&quot;) //指定所有Retrofit请求的根路径
+                    .addConverterFactory(GsonConverterFactory.create()) //指定Retrofit在解析数据时所使用的转换库
+                    .build()
+                val appService = retrofit.create(AppService::class.java)   //创建一个AppService接口的动态代理对象
+                appService.getAppData().enqueue(object : Callback&lt;List&lt;App&gt;&gt; {  //Retrofit就会根据注解中配置的服务器接口地址去进行网络请求
+                    override fun onResponse(call: Call&lt;List&lt;App&gt;&gt;, response: Response&lt;List&lt;App&gt;&gt;) {
+                        val list = response.body()
+                        if (list != null) {
+                            for (app in list) {
+                                Log.d(&quot;MainActivity&quot;, &quot;id is ${app.id}&quot;)
+                                Log.d(&quot;MainActivity&quot;, &quot;name is ${app.name}&quot;)
+                                Log.d(&quot;MainActivity&quot;, &quot;version is ${app.version}&quot;)
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call&lt;List&lt;App&gt;&gt;, t: Throwable) {
+                        t.printStackTrace()
+                    }
+                })
+            }
+        }
+    }
+</code></pre>
+<p>  通过<code>Retrofit.Builder</code>构建一个<code>Retrofit</code>对象后，调用它的<code>create()</code>方法并传入具体 Service 接口所对应的<code>Class</code>类型，创建一个该接口的动态代理对象。有了动态代理对象之后，我们就可以随意调用接口中定义的所有方法，而 Retrofit 会自动执行具体的处理。<br>
+　　当调用了 AppService 的<code>getAppData()</code>方法时，会返回一个<code>Call&lt;List&lt;App&gt;&gt;</code>对象，这时我们再调用一下它的<code>enqueue()</code>方法，Retrofit 就会根据注解中配置的服务器接口地址去进行网络请求了，服务器响应的数据会回调到<code>enqueue()</code>方法中传入的<code>Callback</code>实现里面。</p>
+<blockquote>
+<p>  需要注意的是，当发起请求的时候，Retrofit 会自动在内部开启子线程，当数据回调到 Callback 中之后，Retrofit 又会自动切换回主线程，整个操作过程中我们都不用考虑线程切换问题。</p>
+</blockquote>
+<p>  在 Callback 的<code>onResponse()</code>方法中，调用<code>response.body()</code>方法将会得到 Retrofit 解析后的对象，也就是<code>List&lt;App&gt;</code>类型的数据，最后遍历 List，将其中的数据打印出来即可。</p>
+<p>  这里使用的服务器接口是 HTTP，因此需要进行网络安全配置，将之前所用到的<code>network_config.xml</code>文件复制到此项目中。然后修改 AndroidManifest.xml 中的代码，如下所示：</p>
+<pre><code class="language-java">    &lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+        package=&quot;com.example.retrofittest&quot;&gt;
+
+        &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+        &lt;application
+            ...
+            android:networkSecurityConfig=&quot;@xml/network_config&quot;&gt;
+        ...
+        &lt;/application&gt;
+
+    &lt;/manifest&gt;
+</code></pre>
+<p>  这里设置了允许使用明文的方式来进行网络请求，同时声明了网络权限。然后运行此项目，然后点击“Get App Data”按钮，观察 Logcat 中的打印日志，如下图所示：<br>
+<img src="https://Petrichoroo.github.io/post-images/1661192091966.png" alt="" loading="lazy"></p>
+<h2 id="处理复杂的接口地址类型">处理复杂的接口地址类型</h2>
+<p>  上面的示例程序只是向一个非常简单的服务器接口地址发送请求，然而在真实的开发环境当中，服务器所提供的接口地址不可能一直如此简单。<br>
+　　为了方便举例，这里先定义一个<code>Data</code>类，并包含<code>id</code>和<code>content</code>这两个字段，如下所示：</p>
+<pre><code class="language-java">    class Data(val id: String, val content: String)
+</code></pre>
+<p>  先从最简单的看起，比如服务器的接口地址如下所示：</p>
+<pre><code class="language-java">    GET http://example.com/get_data.json
+</code></pre>
+<p>  这是最简单的一种情况，接口地址是静态的，永远不会改变。那么对应到 Retrofit 当中，使用如下的写法即可：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;get_data.json&quot;)
+        fun getData(): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  但是显然服务器不可能总是给我们提供静态类型的接口，在很多场景下，接口地址中的部分内容可能会是动态变化的，比如如下的接口地址：</p>
+<pre><code class="language-java">    GET http://example.com/&lt;page&gt;/get_data.json
+</code></pre>
+<p>  在这个接口当中，<code>&lt;page&gt;</code>部分代表页数，我们传入不同的页数，服务器返回的数据也会不同。这种接口地址对应到 Retrofit 中写法如下：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;{page}/get_data.json&quot;)
+        fun getData(@Path(&quot;page&quot;) page: Int): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  在<code>@GET</code>注解指定的接口地址当中，这里使用了一个<code>{page}</code>的占位符，然后又在<code>getData()</code>方法中添加了一个 page 参数，并使用<code>@Path(&quot;page&quot;)</code>注解来声明这个参数。这样当调用 getData() 方法发起请求时，Retrofit 就会自动将<code>page</code>参数的值替换到占位符的位置，从而组成一个合法的请求地址。</p>
+<p>  另外，很多服务器接口还会要求我们传入一系列的参数，格式如下：</p>
+<pre><code class="language-java">    GET http://example.com/get_data.json?u=&lt;user&gt;&amp;t=&lt;token&gt;
+</code></pre>
+<p>  这是一种标准的带参数<code>GET</code>请求的格式。接口地址的最后使用问号来连接参数部分，每个参数都是一个使用等号连接的键值对，多个参数之间使用“&amp;”符号进行分隔。<br>
+　　那么很显然，在上述地址中，服务器要求我们传入<code>user</code>和<code>token</code>这两个参数的值。对于这种格式的服务器接口，我们可以使用<code>@Path</code>注解的方式来解决，但是这样会有些麻烦，Retrofit 针对这种带参数的GET请求，专门提供了一种语法支持：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;get_data.json&quot;)
+        fun getData(@Query(&quot;u&quot;) user: String, @Query(&quot;t&quot;) token: String): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  这里在<code>getData()</code>方法中添加了<code>user</code>和<code>token</code>这两个参数，并使用<code>@Query</code>注解对它们进行声明。这样当发起网络请求的时候，Retrofit 就会自动按照带参数<code>GET</code>请求的格式将这两个参数构建到请求地址当中。</p>
+<p>  <code>HTTP</code>有很多种类型，其中比较常用的有<code>GET</code>、<code>POST</code>、<code>PUT</code>、<code>PATCH</code>、<code>DELETE</code>这几种。它们之间的分工也很明确，简单概括的话，GET 请求用于从服务器获取数据，POST 请求用于向服务器提交数据，PUT 和 PATCH 请求用于修改服务器上的数据，DELETE 请求用于删除服务器上的数据。<br>
+　　而 Retrofit 对所有常用的 HTTP 请求类型都进行了支持，使用<code>@GET</code>、<code>@POST</code>、<code>@PUT</code>、<code>@PATCH</code>、<code>@DELETE</code>注解，就可以让 Retrofit 发出相应类型的请求了。<br>
+　　比如服务器提供了如下接口地址：</p>
+<pre><code class="language-java">    DELETE http://example.com/data/&lt;id&gt;
+</code></pre>
+<p>  这种接口通常意味着要根据<code>id</code>删除一条指定的数据，而我们在 Retrofit 当中想要发出这种请求就可以这样写：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @DELETE(&quot;data/{id}&quot;)
+        fun deleteData(@Path(&quot;id&quot;) id: String): Call&lt;ResponseBody&gt;
+    }
+</code></pre>
+<p>  这里使用了<code>@DELETE</code>注解来发出<code>DELETE</code>类型的请求，并使用了<code>@Path</code>注解来动态指定<code>id</code>。</p>
+<blockquote>
+<p>  但是在返回值声明的时候，将<code>Call</code>的泛型指定成了<code>ResponseBody</code>，这是什么意思呢？</p>
+</blockquote>
+<p>  由于 POST、PUT 、PATCH、DELETE 这几种请求类型与<code>GET</code>请求不同，它们更多是用于操作服务器上的数据，而不是获取服务器上的数据，所以通常它们对于服务器响应的数据并不关心。<br>
+　　这个时候就可以使用<code>ResponseBody</code>，表示 Retrofit 能够接收任意类型的响应数据，并且不会对响应数据进行解析。<br>
+　　那么如果我们需要向服务器提交数据该怎么写呢？比如如下的接口地址：</p>
+<pre><code class="language-java">    POST http://example.com/data/create
+    {&quot;id&quot;: 1, &quot;content&quot;: &quot;The description for this data.&quot;}
+</code></pre>
+<p>  使用<code>POST</code>请求来提交数据，需要将数据放到 HTTP 请求的<code>body</code>部分，这个功能在 Retrofit 中可以借助<code>@Body</code>注解来完成：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @POST(&quot;data/create&quot;)
+        fun createData(@Body data: Data): Call&lt;ResponseBody&gt;
+    }
+</code></pre>
+<p>  这里在<code>createData()</code>方法中声明了一个<code>Data</code>类型的参数，并加上了<code>@Body</code>注解。这样当 Retrofit 发出<code>POST</code>请求时，就会自动将 Data 对象中的数据转换成 JSON 格式的文本，并放到 HTTP 请求的<code>body</code>部分，服务器在收到请求之后只需要从 body 中将这部分数据解析出来即可。这种写法同样也可以用来给 PUT、PATCH、DELETE 类型的请求提交数据。<br>
+　　最后，有些服务器接口还可能会要求我们在<code>HTTP</code>请求的<code>header</code>中指定参数，比如：</p>
+<pre><code class="language-java">    GET http://example.com/get_data.json
+    User-Agent: okhttp
+    Cache-Control: max-age=0
+</code></pre>
+<p>  这些<code>header</code>参数其实就是一个个的键值对，我们可以在 Retrofit 中直接使用<code>@Headers</code>注解来对它们进行声明。</p>
+<pre><code class="language-java">    interface ExampleService {
+        @Headers(&quot;User-Agent: okhttp&quot;, &quot;Cache-Control: max-age=0&quot;)
+        @GET(&quot;get_data.json&quot;)
+        fun getData(): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  但是这种写法只能进行静态<code>header</code>声明，如果想要动态指定 header 的值，则需要使用<code>@Header</code>注解，如下所示：</p>
+<pre><code class="language-java">    interface ExampleService {
+        @GET(&quot;get_data.json&quot;)
+        fun getData(@Header(&quot;User-Agent&quot;) userAgent: String,
+        @Header(&quot;Cache-Control&quot;) cacheControl: String): Call&lt;Data&gt;
+    }
+</code></pre>
+<p>  现在当发起网络请求时，Retrofit 就会自动将参数中传入的值设置到<code>User-Agent</code>和<code>Cache-Control</code>这两个 header 当中，从而实现了动态指定 header 值的功能。</p>
+<h2 id="retrofit-构建器的最佳写法">Retrofit 构建器的最佳写法</h2>
+<p>  获取 Service 接口的动态代理对象的写法是比较麻烦的，比如想要得到<code>AppService</code>的动态代理对象，需要先使用<code>Retrofit.Builder</code>构建出一个<code>Retrofit</code>对象，然后再调用它的<code>create()</code>方法创建动态代理对象。<br>
+　　由于构建出的<code>Retrofit</code>对象是全局通用的，只需要在调用<code>create()</code>方法时针对不同的 Service 接口传入相应的<code>Class</code>类型即可。<br>
+　　因此，我们可以将通用的这部分功能封装起来，从而简化获取 Service 接口动态代理对象的过程。</p>
+<p>  新建一个<code>ServiceCreator</code>单例类，代码如下所示：</p>
+<pre><code class="language-java">    object ServiceCreator {
+        private const val BASE_URL = &quot;http://10.0.2.2/&quot;
+        private val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        fun &lt;T&gt; create(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)
+    }
+</code></pre>
+<p>  这里使用<code>object</code>关键字让<code>ServiceCreator</code>成为了一个单例类，并在它的内部定义了一个<code>BASE_URL</code>常量，用于指定 Retrofit 的根路径。<br>
+　　然后同样是在内部使用<code>Retrofit.Builder</code>构建一个 Retrofit 对象，注意这些都是用 private 修饰符来声明的，相当于对于外部而言它们都是不可见的。<br>
+　　最后，提供了一个外部可见的<code>create()</code>方法，并接收一个<code>Class</code>类型的参数。当在外部调用这个方法时，实际上就是调用了 Retrofit 对象的 create() 方法，从而创建出相应<code>Service</code>接口的动态代理对象。<br>
+　　经过这样的封装之后，Retrofit 的用法将会变得异常简单，比如我们想获取一个<code>AppService</code>接口的动态代理对象，只需要使用如下写法即可：</p>
+<pre><code class="language-java">    val appService = ServiceCreator.create(AppService::class.java)
+</code></pre>
+<p>  之后就可以随意调用 AppService 接口中定义的任何方法了</p>
+<p>  不过上述代码可以通过泛型实化功能来进行优化，修改 ServiceCreator 中的代码，如下所示：</p>
+<pre><code class="language-java">    object ServiceCreator {
+        ...
+        inline fun &lt;reified T&gt; create(): T = create(T::class.java)
+    }
+</code></pre>
+<p>  这里又定义了一个不带参数的<code>create()</code>方法，并使用<code>inline</code>关键字来修饰方法，使用<code>reified</code>关键字来修饰泛型，这是泛型实化的两大前提条件。<br>
+　　接下来就可以使用<code>T::class.java</code>这种语法了，这里调用刚才定义的带有 Class 参数的<code>create()</code>方法即可。<br>
+　　那么现在就又有了一种新的方式来获取<code>AppService</code>接口的动态代理对象，如下所示：</p>
+<pre><code class="language-java">    val appService = ServiceCreator.create&lt;AppService&gt;()
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://Petrichoroo.github.io/post/kotlinfan-xing-de-gao-ji-te-xing/" class="post-title gt-a-link">
+                    Kotlin：泛型的高级特性
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live well,love lots,and laugh often.</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+            <div class="social-container">
+                <a href="https://github.com/Petrichoroo?tab=repositories" 
+target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://Petrichoroo.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
